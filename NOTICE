@@ -1,0 +1,7 @@
+MantenIA v0.2. Adaptación de la identidad visual y navegación del prototipo
+https://github.com/AZL-H/MantenIA (snapshot a8b9908), Apache License 2.0.
+Se conserva el original y su licencia en reference/frontend_original/.
+Cambios: frontend HTML/CSS/JavaScript, seis mediciones AI4I, Random Forest real,
+historial SQLite e instrumentación. Se elimina la lógica de simulación,
+los modelos de texto, las gráficas aleatorias y el uptime fijo.
+Los archivos .pkl del repositorio original no se ejecutan ni se despliegan.

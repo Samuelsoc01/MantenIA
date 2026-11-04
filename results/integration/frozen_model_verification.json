@@ -1,0 +1,11 @@
+{
+  "original_files_checked": 91,
+  "original_files_changed": [],
+  "model_version": "rf-3a9c9f208eef",
+  "threshold": 0.425,
+  "demo_records_compared": 12,
+  "max_probability_difference": 1.1102230246251565e-16,
+  "equivalent": true,
+  "retrained": false,
+  "test_reevaluated": false
+}

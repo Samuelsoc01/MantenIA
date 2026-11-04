@@ -1,0 +1,2 @@
+project,environment,component,resource,cost_rate_mxn,total_billable_units,estimated_cost_mxn
+MantenIA,development,backend,cpu,0.7333,100100,73403.33

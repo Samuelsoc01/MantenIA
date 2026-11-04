@@ -1,0 +1,11 @@
+{
+  "period": "2026-10",
+  "successful_requests": 200,
+  "variable_charge_mxn": 100100.0,
+  "billable_units": 100100,
+  "fixed_fee_mxn": 3500.0,
+  "currency": "MXN",
+  "total_mxn": 103600.0,
+  "variable_rate_mxn": 1.0,
+  "client_id": "cliente_demo_01"
+}

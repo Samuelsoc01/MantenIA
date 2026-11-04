@@ -1,0 +1,102 @@
+[
+  {
+    "source": "models/mantenia_model.joblib",
+    "copy": "edge_service/models/mantenia_model.joblib",
+    "sha256": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e"
+  },
+  {
+    "source": "models/model_metadata.json",
+    "copy": "edge_service/models/model_metadata.json",
+    "sha256": "56b4050d0c42ab8cee1144831dbf3fb49e52fa28ac342952cfe94229d79435ef"
+  },
+  {
+    "source": "models/selection_locked.json",
+    "copy": "edge_service/models/selection_locked.json",
+    "sha256": "8834d6aeebd0963789729198d5717d55e53a183dea813e29d0de04ef55d1dc4b"
+  },
+  {
+    "source": "results/metrics/final_test_metrics.json",
+    "copy": "edge_service/models/final_test_metrics.json",
+    "sha256": "d87bfae21d911153bcaf65be8ec68573bcdc8e394c77047357e067b31762c82a"
+  },
+  {
+    "source": "data/processed/demo_input.csv",
+    "copy": "data/demo/demo_input.csv",
+    "sha256": "2c07f8a37bf05b4712d34bb7cacfbf6ceb0949501dcf4b0010dab8ac246bbc2c"
+  },
+  {
+    "source": "data/processed/split_manifest.json",
+    "copy": "docs/evidence/split_manifest.json",
+    "sha256": "049231cc8bd1c14607ea8460cbd5f81d431975b1b530baa5d482d630683d9e3e"
+  },
+  {
+    "source": "README.md",
+    "copy": "docs/evidence/ML_README.md",
+    "sha256": "80b9d62e063c1535703908dc37dcb8ee2215cdadd3674cf7b66277e537cbbce7"
+  },
+  {
+    "source": "results/metrics/model_comparison.csv",
+    "copy": "docs/evidence/model_comparison.csv",
+    "sha256": "30d39b4c4307da843eace27a52995cf51b2f77a63e232688858ec7e01e432344"
+  },
+  {
+    "source": "results/metrics/cross_validation_results.csv",
+    "copy": "docs/evidence/cross_validation_results.csv",
+    "sha256": "17dd842990a5f1baf4e4cd3b8301f63735a15393f9139270dd94aaee504d6268"
+  },
+  {
+    "source": "results/figures/class_distribution.png",
+    "copy": "docs/evidence/figures/class_distribution.png",
+    "sha256": "b8c3a94ad5bb74a6c8db65d183c9131523019b53f740ee9f715f404bf416c7a4"
+  },
+  {
+    "source": "results/figures/confusion_matrix_baseline.png",
+    "copy": "docs/evidence/figures/confusion_matrix_baseline.png",
+    "sha256": "3be831fcf196bb59eb048c6e04df171510a88822a5e908bc35f0102b1785bf9e"
+  },
+  {
+    "source": "results/figures/confusion_matrix_final.png",
+    "copy": "docs/evidence/figures/confusion_matrix_final.png",
+    "sha256": "6b7bbaed55a1d1725694afdcc65c6e066a3c8a2281f33e6928c8a906df2972e1"
+  },
+  {
+    "source": "results/figures/correlation_matrix.png",
+    "copy": "docs/evidence/figures/correlation_matrix.png",
+    "sha256": "75473126c2c10f0efe6aebdeacfb89918631024c09362e7f1117759a5150069f"
+  },
+  {
+    "source": "results/figures/failure_by_type.png",
+    "copy": "docs/evidence/figures/failure_by_type.png",
+    "sha256": "49654de9eb8560cadf64786d217d32157ce21175eb3ce6d86a7ece1daf7903c0"
+  },
+  {
+    "source": "results/figures/numeric_distributions.png",
+    "copy": "docs/evidence/figures/numeric_distributions.png",
+    "sha256": "7fe2d20745119e58e4b7bb7890c0d84de215f9e3eacc033a3b649baa6b23c509"
+  },
+  {
+    "source": "results/figures/outliers_by_failure.png",
+    "copy": "docs/evidence/figures/outliers_by_failure.png",
+    "sha256": "026472ab3e1f93f8d0568230e6d06b7baf02a3419ce596b5715250e949ff50b0"
+  },
+  {
+    "source": "results/figures/precision_recall_curve.png",
+    "copy": "docs/evidence/figures/precision_recall_curve.png",
+    "sha256": "6915b84bb7f122a670b85c3a0bbc5d2761a21be532988e802756feeb224e73ae"
+  },
+  {
+    "source": "results/figures/roc_curve.png",
+    "copy": "docs/evidence/figures/roc_curve.png",
+    "sha256": "02d6134c3f5c29d99999e1ef3ec59d8c937ce58e65f3eb9f1a9700f02b6cac36"
+  },
+  {
+    "source": "results/figures/threshold_vs_metrics.png",
+    "copy": "docs/evidence/figures/threshold_vs_metrics.png",
+    "sha256": "70a1bd9719b51faf62dbda3c6ff578803473d62a4328215b7df540de7474c3fc"
+  },
+  {
+    "source": "results/figures/type_distribution.png",
+    "copy": "docs/evidence/figures/type_distribution.png",
+    "sha256": "ec96ddad494ee73176c475abd4d160d3e8a5c2706c46b55a044e9a7fb4d38102"
+  }
+]

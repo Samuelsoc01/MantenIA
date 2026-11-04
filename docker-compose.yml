@@ -1,0 +1,66 @@
+name: mantenia-v02
+services:
+  edge:
+    build:
+      context: .
+      target: edge
+    environment:
+      MAX_CSV_ROWS: ${MAX_CSV_ROWS:-1000}
+      MAX_REQUEST_BYTES: ${MAX_REQUEST_BYTES:-2097152}
+    networks: [local_only]
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health',timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+      start_period: 20s
+  backend:
+    build:
+      context: .
+      target: backend
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      EDGE_SERVICE_URL: http://edge:8001
+      DATABASE_URL: sqlite:////app/database/mantenia.db
+      STORE_RAW_INPUTS: ${STORE_RAW_INPUTS:-false}
+      ESTIMATED_COST_PER_INFERENCE_MXN: ${ESTIMATED_COST_PER_INFERENCE_MXN:-0.7333}
+      BILLING_FIXED_FEE_MXN: ${BILLING_FIXED_FEE_MXN:-3500.00}
+      BILLING_RATE_PER_UNIT_MXN: ${BILLING_RATE_PER_UNIT_MXN:-1.00}
+      PROJECT_NAME: ${PROJECT_NAME:-MantenIA}
+      COMPONENT_NAME: ${COMPONENT_NAME:-backend}
+      RESOURCE_NAME: ${RESOURCE_NAME:-cpu}
+      DEFAULT_CLIENT_ID: ${DEFAULT_CLIENT_ID:-cliente_demo_01}
+      MAX_CSV_ROWS: ${MAX_CSV_ROWS:-1000}
+      MAX_REQUEST_BYTES: ${MAX_REQUEST_BYTES:-2097152}
+      RETENTION_DAYS: ${RETENTION_DAYS:-30}
+    volumes: [mantenia_db:/app/database]
+    networks: [local_only, ingress]
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      edge:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+      start_period: 20s
+  tests:
+    profiles: [test]
+    build:
+      context: .
+      target: tests
+    network_mode: none
+volumes:
+  mantenia_db:
+networks:
+  local_only:
+    internal: true
+  ingress:
+    driver: bridge

@@ -1,0 +1,114 @@
+{
+  "measured_at_utc": "2026-10-30T14:03:26.027425+00:00",
+  "environment": "Windows Python 3.11",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "model_info": {
+    "model_name": "RandomForest",
+    "version": "rf-3a9c9f208eef",
+    "threshold": 0.425,
+    "features": [
+      "Type",
+      "Air temperature [K]",
+      "Process temperature [K]",
+      "Rotational speed [rpm]",
+      "Torque [Nm]",
+      "Tool wear [min]"
+    ],
+    "test_metrics": {
+      "Accuracy": 0.986,
+      "Precision": 0.8225806451612904,
+      "Recall": 0.75,
+      "F1": 0.7846153846153846,
+      "ROC_AUC": 0.9726776580197297,
+      "PR_AUC": 0.8384986921947503,
+      "confusion_matrix": [
+        [
+          1921,
+          11
+        ],
+        [
+          17,
+          51
+        ]
+      ],
+      "threshold": 0.425,
+      "n_test": 2000,
+      "recall_requirement_met": true
+    },
+    "model_sha256": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e",
+    "training_date_utc": "2026-09-25T04:37:23.486895+00:00",
+    "dataset": "AI4I 2020 (sintético)",
+    "balancing_strategy": "none"
+  },
+  "method": "Secuencial, HTTP real, respuesta completa leída. Servicio iniciado; sin descartar solicitudes de calentamiento. CSV repetido de demo TRAIN, no prueba de precisión.",
+  "groups": {
+    "individual": {
+      "attempts": 30,
+      "successes": 30,
+      "client": {
+        "count": 30,
+        "mean_ms": 27.30314333845551,
+        "p50_ms": 25.624749978305772,
+        "p95_ms": 36.1824299849104,
+        "max_ms": 42.04179998487234,
+        "percent_le_5s": 100.0
+      },
+      "backend_total": {
+        "count": 30,
+        "mean_ms": 20.65103666779275,
+        "p50_ms": 19.4134000048507,
+        "p95_ms": 27.884810001705752,
+        "max_ms": 33.802199992351234,
+        "percent_le_5s": 100.0
+      },
+      "inference": {
+        "count": 30,
+        "mean_ms": 9.853493333018074,
+        "p50_ms": 8.793699991656467,
+        "p95_ms": 14.916290013934471,
+        "max_ms": 18.109199998434633,
+        "percent_le_5s": 100.0
+      },
+      "percent_success_le_5s": 100.0,
+      "rnf01_pass": true
+    },
+    "csv": {
+      "attempts": 30,
+      "successes": 30,
+      "client": {
+        "count": 30,
+        "mean_ms": 78.35414000437595,
+        "p50_ms": 76.10880001448095,
+        "p95_ms": 89.33969500358215,
+        "max_ms": 118.29070001840591,
+        "percent_le_5s": 100.0
+      },
+      "backend_total": {
+        "count": 30,
+        "mean_ms": 68.68168999596189,
+        "p50_ms": 66.04309999966063,
+        "p95_ms": 79.55085496068929,
+        "max_ms": 108.89400000451133,
+        "percent_le_5s": 100.0
+      },
+      "inference": {
+        "count": 30,
+        "mean_ms": 16.981826662474003,
+        "p50_ms": 16.588449972914532,
+        "p95_ms": 19.396565004717555,
+        "max_ms": 24.248699948657304,
+        "percent_le_5s": 100.0
+      },
+      "percent_success_le_5s": 100.0,
+      "rnf01_pass": true
+    }
+  },
+  "usage_delta": {
+    "total_requests": 60,
+    "successful_requests": 60,
+    "billable_units": 30030,
+    "total_inferences": 30030
+  },
+  "overall_rnf01_pass": true
+}

@@ -1,0 +1,154 @@
+{
+  "health": {
+    "status": "ok",
+    "backend": "ok",
+    "edge": "ok",
+    "database": "ok",
+    "model_version": "rf-3a9c9f208eef"
+  },
+  "model": {
+    "model_name": "RandomForest",
+    "version": "rf-3a9c9f208eef",
+    "threshold": 0.425,
+    "features": [
+      "Type",
+      "Air temperature [K]",
+      "Process temperature [K]",
+      "Rotational speed [rpm]",
+      "Torque [Nm]",
+      "Tool wear [min]"
+    ],
+    "test_metrics": {
+      "Accuracy": 0.986,
+      "Precision": 0.8225806451612904,
+      "Recall": 0.75,
+      "F1": 0.7846153846153846,
+      "ROC_AUC": 0.9726776580197297,
+      "PR_AUC": 0.8384986921947503,
+      "confusion_matrix": [
+        [
+          1921,
+          11
+        ],
+        [
+          17,
+          51
+        ]
+      ],
+      "threshold": 0.425,
+      "n_test": 2000,
+      "recall_requirement_met": true
+    },
+    "model_sha256": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e",
+    "training_date_utc": "2026-09-25T04:37:23.486895+00:00",
+    "dataset": "AI4I 2020 (sintético)",
+    "balancing_strategy": "none"
+  },
+  "finops": {
+    "total_requests": 60,
+    "successful_requests": 60,
+    "failed_requests": 0,
+    "total_inferences": 30030,
+    "records_processed": 30030,
+    "billable_units": 30030,
+    "total_compute_time_ms": 805.0595998647623,
+    "by_request_type": {
+      "individual": {
+        "requests": 30,
+        "billable_units": 30
+      },
+      "csv": {
+        "requests": 30,
+        "billable_units": 30000
+      }
+    },
+    "currency": "MXN",
+    "estimated_cost": 18018.0,
+    "estimated_cost_per_inference_mxn": 0.6,
+    "configured_rate_mxn": 0.6,
+    "historical_estimated_cost": 18018.0,
+    "cost_basis": "Supuesto de planeación de primera entrega, no factura real ni precio de venta.",
+    "latency": {
+      "total": {
+        "count": 60,
+        "mean_ms": 44.666363331877314,
+        "p50_ms": 47.614150011213496,
+        "p95_ms": 73.72886000957806,
+        "max_ms": 108.89400000451133,
+        "percent_le_5s": 100.0
+      },
+      "inference": {
+        "count": 60,
+        "mean_ms": 13.417659997746037,
+        "p50_ms": 15.201100002741441,
+        "p95_ms": 18.395435009733774,
+        "max_ms": 24.248699948657304,
+        "percent_le_5s": 100.0
+      },
+      "all_requests_total": {
+        "count": 60,
+        "mean_ms": 44.666363331877314,
+        "p50_ms": 47.614150011213496,
+        "p95_ms": 73.72886000957806,
+        "max_ms": 108.89400000451133,
+        "percent_le_5s": 100.0
+      },
+      "scope": "Solicitudes de predicción; total medido al generar respuesta, no incluye descarga al navegador ni commit de la propia métrica."
+    }
+  },
+  "usage": {
+    "total_requests": 60,
+    "successful_requests": 60,
+    "failed_requests": 0,
+    "total_inferences": 30030,
+    "records_processed": 30030,
+    "billable_units": 30030,
+    "total_compute_time_ms": 805.0595998647623,
+    "by_request_type": {
+      "individual": {
+        "requests": 30,
+        "billable_units": 30
+      },
+      "csv": {
+        "requests": 30,
+        "billable_units": 30000
+      }
+    }
+  },
+  "history": {
+    "items": [
+      {
+        "request_id": "456fefbb-a9cf-40d5-af42-af17ad113e29",
+        "timestamp": "2026-10-30T14:03:25.991519+00:00",
+        "request_type": "csv",
+        "record_count": 1000,
+        "status": "success",
+        "total_latency_ms": 65.03570004133508,
+        "inference_latency_ms": 17.059799982234836,
+        "model_version": "rf-3a9c9f208eef"
+      },
+      {
+        "request_id": "358dec7e-53ec-4bc2-8b1e-3c91c5b295eb",
+        "timestamp": "2026-10-30T14:03:25.915653+00:00",
+        "request_type": "csv",
+        "record_count": 1000,
+        "status": "success",
+        "total_latency_ms": 74.99349996214733,
+        "inference_latency_ms": 15.206400013994426,
+        "model_version": "rf-3a9c9f208eef"
+      },
+      {
+        "request_id": "24a07982-f134-47d9-9766-b23389ad125a",
+        "timestamp": "2026-10-30T14:03:25.830491+00:00",
+        "request_type": "csv",
+        "record_count": 1000,
+        "status": "success",
+        "total_latency_ms": 73.66230001207441,
+        "inference_latency_ms": 24.248699948657304,
+        "model_version": "rf-3a9c9f208eef"
+      }
+    ],
+    "limit": 3,
+    "offset": 0
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "Accuracy": 0.986,
+  "Precision": 0.8225806451612904,
+  "Recall": 0.75,
+  "F1": 0.7846153846153846,
+  "ROC_AUC": 0.9726776580197297,
+  "PR_AUC": 0.8384986921947503,
+  "confusion_matrix": [
+    [
+      1921,
+      11
+    ],
+    [
+      17,
+      51
+    ]
+  ],
+  "threshold": 0.425,
+  "n_test": 2000,
+  "recall_requirement_met": true
+}

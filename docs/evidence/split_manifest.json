@@ -1,0 +1,25 @@
+{
+  "original_rows": 10000,
+  "clean_rows": 10000,
+  "removed_exact_duplicates": 0,
+  "train_size": 8000,
+  "test_size": 2000,
+  "train_class_counts": {
+    "0": 7729,
+    "1": 271
+  },
+  "test_class_counts": {
+    "0": 1932,
+    "1": 68
+  },
+  "random_state": 42,
+  "test_size_fraction": 0.2,
+  "cv": {
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42
+  },
+  "raw_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
+  "train_sha256": "3e5e17508228d839e98d1ab24d12d452838ebcb32c13260e0a74ce120aa6e615",
+  "test_sha256": "79cdbfeef5b8996a50cb9dc78ad3435c31b199aefbe292e646e9b8864d4ce98b"
+}
