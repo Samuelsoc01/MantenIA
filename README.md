@@ -513,3 +513,7 @@ Ese comando elimina el volumen y la base SQLite persistida.
 - No existe autenticación multiusuario.
 - No es un diagnóstico certificado.
 - No ejecuta acciones automáticas sobre maquinaria.
+
+## Video de demostración
+
+[Ver demostración completa de MantenIA](https://youtu.be/bQtvhumilDU?si=VD8RvKqJkIB_KFAg)
