@@ -318,6 +318,16 @@ unidades procesadas × 0.7333 MXN
 
 Este coste es una estimación operativa y no representa una factura cloud ni el precio comercial al cliente.
 
+## Reproducción ML, latencia y costes
+
+Los scripts originales de entrenamiento y evaluación se encuentran en `scripts/ml_repro/`. Se conservan separados del servicio productivo: Docker utiliza el artefacto congelado de `edge_service/models`.
+
+La medición de latencia se ejecuta con `scripts/benchmark.py`. El cálculo unitario reproducible se ejecuta con:
+
+```powershell
+python scripts/cost_report.py --units 100 --rate 0.7333
+```
+
 ## Pruebas
 
 Ejecutar pruebas locales:
@@ -442,6 +452,7 @@ docs/
 reports/
 results/
 scripts/
+scripts/ml_repro/: entrenamiento, evaluación, EDA y selección de umbral del proyecto ML original.
 tests/
 ```
 
