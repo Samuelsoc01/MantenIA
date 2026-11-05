@@ -382,7 +382,6 @@ Archivos:
 ```text
 reports/latency/latency_results.csv
 reports/latency/latency_summary.json
-reports/latency/latency_plot.png
 results/performance/benchmark.json
 results/performance/benchmark.csv
 ```
