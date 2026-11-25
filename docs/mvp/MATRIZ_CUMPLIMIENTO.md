@@ -4,6 +4,8 @@
 |---|---|---|
 | v1 | 2026-11-25 | Clasificación inicial de la auditoría. |
 | v2 | 2026-11-25 | Cierre de la Fase 0: interpretación académica de los requisitos 1, 4, 6 y 7 (gasto cero, FinOps y facturación simulados) y reclasificación del requisito 10 por evidencia localizada. **No se implementó nada nuevo**: ninguna clasificación mejora por desarrollo. |
+| v4 | 2026-11-25 | Ajustes finales de la Fase 1: D16 implementada (instalaciones v0.2 y v1.0 separadas), 3 defectos de concurrencia corregidos y la interfaz recorrida en Chrome. Las clasificaciones globales no cambian. |
+| v3 | 2026-11-25 | Fase 1 (implementada, pendiente de revisión humana): mejoran subrequisitos de los requisitos 5, 7, 8 y 9 con evidencia en `results/mvp/fase1/`. Las clasificaciones globales siguen parciales. |
 
 Estado al 2026-11-25 (Fase 0), rama `mvp-v1.0` @ `e770e28`. No sustituye a `docs/REQUIREMENTS_COMPLIANCE.md` (v0.2), que se conserva sin cambios.
 
@@ -95,7 +97,7 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Latencia | 🟡 | Media, p50, p95, máximo; sin p99. |
 | Versión del modelo | ✅ | `/model/info`, sección “Modelo y evaluación”. |
 | Alertas | ⛔ | No existen. |
-| Acceso restringido a administradores | ⛔ | No hay roles (H1-H3). |
+| Acceso restringido a administradores | ✅ (Fase 1) | Rol `admin` y dependencia `admin()` en `/finops/summary` y `/admin/*`; 403 para clientes y API keys (`tests/test_isolation.py`, `verificacion_docker.json`). El tablero administrativo visual sigue pendiente (Fase 4). |
 
 ### 6. FinOps operativo — 🟡
 
@@ -115,9 +117,10 @@ Ningún requisito está completo al cierre de la Fase 0.
 |---|---|---|
 | Unidades por análisis válido | ✅ | 1 registro exitoso = 1 unidad; pruebas `test_model_info_and_real_prediction_persistence_usage`, `test_batch_1000_real_sorted_download` (V2, V3, V5). |
 | No facturar solicitudes inválidas | ✅ | `test_invalid_schema_no_charge` (7 casos) (V2, V3, V5). |
-| No facturar errores del servicio | 🔍 | Caso límite H12 sin prueba. |
+| No facturar errores del servicio | ✅ (Fase 1) | H12 reproducido sobre la v0.2 (`h12_reproduccion_previa.json`) y corregido con persistencia atómica; sin eventos de uso ante falla del Edge o de la transacción (`tests/test_transactions.py`, `evidencias_fase1.json`). Pendiente: idempotencia ante respuesta perdida (Fase 5). |
+| Atribución del uso al cliente autenticado | ✅ (Fase 1) | Cliente tomado de la sesión o API key; `X-Client-ID` ignorado; triggers de integridad (`tests/test_isolation.py`). |
 | Tarifa fija + variable | 🟡 | `GET /billing/{client_id}` (`backend/app/main.py:122-128`); sin pruebas. |
-| Dos clientes de prueba | ⛔ | Solo `cliente_demo_01`; identidad no acreditada (H2). |
+| Dos clientes de prueba | 🟡 (Fase 1) | `cliente_demo_01` y `cliente_demo_02` con cuentas autenticadas y aislamiento verificado (`init-demo`, `verificacion_docker.json`); faltan sus estados de cuenta de demostración (Fase 5). |
 | Estados de cuenta de demostración académica (con leyenda y campos requeridos) | 🟡 | Uno solo, sin leyenda de demostración, y CSV mal formado (H11). |
 | Conciliación | ⛔ | No existe. |
 | Sin integraciones monetarias reales | ✅ | No hay pasarelas, cobros ni APIs de facturación en el código (confirmado en la auditoría del backend). |
@@ -127,18 +130,18 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Subrequisito | Estado | Sustento |
 |---|---|---|
 | Minimización y privacidad por diseño | ✅ | `STORE_RAW_INPUTS=false`, sin nombres de archivo, errores sanitizados, retención 30 días (`docs/PRIVACY.md`; pruebas de privacidad V2). |
-| Anonimización en origen | 🟡 | El contrato estricto rechaza columnas extra; no hay eliminación de identificadores en el cliente antes del envío. |
-| Autenticación | ⛔ | No existe (H1). |
-| Autorización y aislamiento | ⛔ | No existe (H2, H3). |
-| Protección de secretos | 🟡 | No hay secretos aún; `.env` está ignorado; falta política para secretos de la v1.0. |
+| Anonimización en origen | ✅ como **minimización en origen** (Fase 1) | `privacy.js` elimina en el navegador las columnas no requeridas antes del envío; evidencia con datos sintéticos (`privacidad/`, `evidencias_fase1.json`). No se afirma anonimización (`FASE1_SEGURIDAD.md` §9). |
+| Autenticación | ✅ en local y Docker (Fase 1) | Sesiones opacas con scrypt, expiración, inactividad, revocación y rotación; API keys; bloqueo por intentos (`tests/test_auth.py`, 19 pruebas). Pendiente de verificación en staging con HTTPS (Fase 6). |
+| Autorización y aislamiento | ✅ (Fase 1) | Denegación por defecto verificada sobre todas las rutas; aislamiento en SQL; 401/403/404 (`tests/test_isolation.py`, `tests/test_security.py`). |
+| Protección de secretos | 🟡 | Sin secretos en el repositorio ni en las evidencias (revisión y sanitización); credenciales generadas fuera de Git; pendiente la gestión de secretos en staging (Fase 6). |
 | Auditoría de licencias | 🟡 | `reports/licenses/` (pip-licenses, 33 paquetes), `LICENSE`, `NOTICE`; faltan imagen base, dataset y GitHub Actions. |
-| Cabeceras de seguridad | 🟡 | CSP, nosniff, no-referrer; falta HSTS cuando haya TLS. |
+| Cabeceras de seguridad | 🟡 | CSP, nosniff, no-referrer; HSTS y cookies `Secure` obligatorios con `APP_ENV=staging\|production` (probado en proceso, `test_staging_emite_cookies_secure_y_hsts`); pendiente en un staging real con HTTPS. |
 
 ### 9. Pruebas automatizadas y manual — 🟡
 
 | Subrequisito | Estado | Sustento |
 |---|---|---|
-| Pruebas de API | ✅ | 25 pruebas de integración; 25/25 el 2026-11-25 (V2, V3, V5). |
+| Pruebas de API | ✅ | Fase 0: 25/25. Fase 1: 110 pruebas (25 históricas + 85 nuevas) en verde en Python 3.11 y 3.12; 108 pasadas y 2 omitidas (JS) en Docker (`results/mvp/fase1/`). |
 | Pruebas de modelo | 🟡 | Integridad, equivalencia con el pipeline y adulteración del hash (`test_edge_endpoints_and_model_integrity`); falta compuerta de métricas. |
 | Ejecución con cada cambio | ⛔ | Sin CI (H6). |
 | Manual de operación y recuperación | ⛔ | Solo “Solución de problemas” en el README. |

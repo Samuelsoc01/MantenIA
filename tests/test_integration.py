@@ -100,7 +100,8 @@ def test_body_limit_and_cross_origin(stack, record):
     assert client.post("/predict",json=record,headers={"Origin":"https://external.invalid"}).status_code==403
 
 def test_finops_real_events_and_repricing(stack):
-    client=stack["client"]; costs=client.get("/finops/summary").json()
+    # Fase 1: el resumen FinOps global es administrativo; se consulta con la sesión de administrador.
+    client=stack["admin"]; costs=client.get("/finops/summary").json()
     assert costs["estimated_cost"] == pytest.approx(costs["billable_units"] * .6)
     assert costs["total_compute_time_ms"] > 0
     assert client.get("/metrics/latency").json()["total"]["p95_ms"] > 0

@@ -2,20 +2,28 @@ import json
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+KNOWN_FIELDS = {"body", "records", "query", "path", "username", "password", "role", "client_id", "display_name",
+                "label", "scopes", "expires_days", "limit", "offset", "year", "month", "key_id"}
+
+
 async def validation_error(request, exc: RequestValidationError):
-    # No devolver input/context de Pydantic: pueden contener datos o nombres sensibles.
+    # No devolver input/context de Pydantic: pueden contener datos, contraseñas o nombres sensibles.
     issues = []
     from common.schemas import FEATURES
     for item in exc.errors()[:20]:
-        location = [str(x) if isinstance(x, int) or str(x) in FEATURES or str(x) in {"body", "records"} else "campo no permitido"
+        location = [str(x) if isinstance(x, int) or str(x) in FEATURES or str(x) in KNOWN_FIELDS else "campo no permitido"
                     for x in item.get("loc", [])]
         issues.append({"location": location, "code": item["type"]})
     return JSONResponse(status_code=422, content={"detail": "Entrada inválida: revise campos, tipos y valores.", "errors": issues})
 
 class PrivacyMiddleware:
-    """ASGI: límites de carga, rechazo de orígenes ajenos y cabeceras locales."""
-    def __init__(self, app, max_bytes=2097152):
-        self.app, self.max_bytes = app, max_bytes
+    """ASGI: límites de carga, rechazo de orígenes ajenos y cabeceras locales.
+
+    hsts=True agrega Strict-Transport-Security; solo debe activarse cuando el servicio
+    se publica exclusivamente por HTTPS (staging/producción).
+    """
+    def __init__(self, app, max_bytes=2097152, hsts=False):
+        self.app, self.max_bytes, self.hsts = app, max_bytes, hsts
 
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http":
@@ -48,10 +56,13 @@ class PrivacyMiddleware:
             limited_receive = receive
         async def secured_send(message):
             if message["type"] == "http.response.start":
-                message.setdefault("headers", []).extend([
+                headers = message.setdefault("headers", [])
+                headers.extend([
                     (b"cache-control", b"no-store"),
                     (b"x-content-type-options", b"nosniff"),
                     (b"referrer-policy", b"no-referrer"),
                     (b"content-security-policy", b"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'")])
+                if self.hsts:
+                    headers.append((b"strict-transport-security", b"max-age=31536000; includeSubDomains"))
             await send(message)
         await self.app(scope, limited_receive, secured_send)

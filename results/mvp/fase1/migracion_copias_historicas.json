@@ -1,0 +1,140 @@
+{
+  "ejecutado_utc": "2026-11-25T21:15:49.273424+00:00",
+  "procedimiento": "Migración aplicada a copias; los originales no se modificaron.",
+  "bases": {
+    "volumen_docker_v0.2": {
+      "antes": {
+        "solicitudes_por_estado": {
+          "failed": 1,
+          "success": 312
+        },
+        "resultados": 157254,
+        "unidades_totales": 157254,
+        "unidades_por_cliente": {
+          "cliente_demo_01": 157254
+        },
+        "eventos_de_uso": 312,
+        "model_info": 1,
+        "columna_client_id_presente": true,
+        "tablas": [
+          "model_info",
+          "prediction_requests",
+          "prediction_results",
+          "usage_events"
+        ]
+      },
+      "despues": {
+        "solicitudes_por_estado": {
+          "failed": 1,
+          "success": 312
+        },
+        "resultados": 157254,
+        "unidades_totales": 157254,
+        "eventos_de_uso": 312,
+        "model_info": 1,
+        "unidades_por_cliente": {
+          "cliente_demo_01": 157254
+        },
+        "columna_client_id_presente": true,
+        "tablas": [
+          "api_keys",
+          "clients",
+          "login_attempts",
+          "model_info",
+          "prediction_requests",
+          "prediction_results",
+          "schema_migrations",
+          "security_events",
+          "sessions",
+          "usage_events",
+          "users"
+        ]
+      },
+      "datos_conservados": true,
+      "unidades_por_cliente_sin_cambios": true,
+      "migraciones_aplicadas": [
+        1,
+        2
+      ],
+      "version_esquema": 2,
+      "respaldo_previo_creado": true,
+      "respaldo_igual_a_original": true,
+      "segunda_ejecucion_migraciones": [],
+      "segunda_ejecucion_respaldo": false,
+      "clientes_registrados": [
+        {
+          "client_id": "cliente_demo_01",
+          "status": "active",
+          "origin": "v0.2"
+        }
+      ],
+      "usuarios_creados_por_la_migracion": 0
+    },
+    "verificacion_windows_v0.2": {
+      "antes": {
+        "solicitudes_por_estado": {
+          "success": 60
+        },
+        "resultados": 30030,
+        "unidades_totales": 30030,
+        "unidades_por_cliente": {
+          "<id-no-estandar>": 30030
+        },
+        "eventos_de_uso": 60,
+        "model_info": 1,
+        "columna_client_id_presente": false,
+        "tablas": [
+          "model_info",
+          "prediction_requests",
+          "prediction_results",
+          "usage_events"
+        ]
+      },
+      "despues": {
+        "solicitudes_por_estado": {
+          "success": 60
+        },
+        "resultados": 30030,
+        "unidades_totales": 30030,
+        "eventos_de_uso": 60,
+        "model_info": 1,
+        "unidades_por_cliente": {
+          "cliente_demo_01": 30030
+        },
+        "columna_client_id_presente": true,
+        "tablas": [
+          "api_keys",
+          "clients",
+          "login_attempts",
+          "model_info",
+          "prediction_requests",
+          "prediction_results",
+          "schema_migrations",
+          "security_events",
+          "sessions",
+          "usage_events",
+          "users"
+        ]
+      },
+      "datos_conservados": true,
+      "unidades_por_cliente_sin_cambios": false,
+      "migraciones_aplicadas": [
+        1,
+        2
+      ],
+      "version_esquema": 2,
+      "respaldo_previo_creado": true,
+      "respaldo_igual_a_original": true,
+      "segunda_ejecucion_migraciones": [],
+      "segunda_ejecucion_respaldo": false,
+      "clientes_registrados": [
+        {
+          "client_id": "cliente_demo_01",
+          "status": "active",
+          "origin": "v0.2"
+        }
+      ],
+      "usuarios_creados_por_la_migracion": 0
+    }
+  }
+}

@@ -1,0 +1,42 @@
+# Inventario Docker de ambas versiones — 2026-11-25T23:21:01Z
+
+## Proyecto mantenia-v02
+### Contenedores (nombre | imagen | estado | puertos)
+mantenia-v02-backend-1 | df0fcbc3e59d | Up 5 hours (healthy) | 127.0.0.1:8000->8000/tcp
+mantenia-v02-edge-1 | 03e870962981 | Up 5 hours (healthy) | 
+### Volúmenes
+mantenia-v02_mantenia_db
+### Redes
+mantenia-v02_ingress (internal=false)
+mantenia-v02_local_only (internal=true)
+### Montajes del backend
+mantenia-v02_mantenia_db -> /app/database
+### Imágenes
+mantenia-v02-tests:latest d407b57bb507
+mantenia-v02-backend:latest 8ab9e201740c
+mantenia-v02-edge:latest 9948b1db2be1
+
+## Proyecto mantenia-v10
+### Contenedores (nombre | imagen | estado | puertos)
+mantenia-v10-backend-1 | mantenia-v10-backend:dev | Up 3 minutes (healthy) | 127.0.0.1:8100->8000/tcp
+mantenia-v10-edge-1 | mantenia-v10-edge:dev | Up 4 minutes (healthy) | 
+### Volúmenes
+mantenia-v10_mantenia_db
+### Redes
+mantenia-v10_ingress (internal=false)
+mantenia-v10_local_only (internal=true)
+### Montajes del backend
+mantenia-v10_mantenia_db -> /app/database
+### Imágenes
+mantenia-v10-tests:dev 19401e2c171c
+mantenia-v10-edge:dev b820eeffe81f
+mantenia-v10-backend:dev 61613859c7b2
+
+## Puertos en escucha del host (8000/8100/8101)
+TCP 127.0.0.1:8000 LISTENING
+TCP 127.0.0.1:8100 LISTENING
+
+## Salud
+127.0.0.1:8000/health -> 200
+127.0.0.1:8100/health -> 200
+## Edge v1.0 publicado en el host: 

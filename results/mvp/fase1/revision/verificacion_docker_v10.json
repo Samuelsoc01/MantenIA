@@ -1,0 +1,42 @@
+{
+  "ejecutado_utc": "2026-11-25T23:17:44.898316+00:00",
+  "objetivo": "http://127.0.0.1:8100",
+  "credenciales": "cuentas de demostración ficticias generadas con init-demo (no incluidas en esta evidencia)",
+  "verificaciones": {
+    "salud_publica": 200,
+    "pagina_con_formulario_de_acceso": true,
+    "historial_sin_credenciales": 401,
+    "login_incorrecto": 401,
+    "login_cliente01": 200,
+    "login_cliente02": 200,
+    "login_admin": 200,
+    "cookie_httponly_samesite_strict": true,
+    "prediccion_individual": 200,
+    "version_modelo": "rf-3a9c9f208eef",
+    "prediccion_csv": 200,
+    "registros_csv": 12,
+    "prediccion_cliente02": 200,
+    "historial_cliente01_solo_propio": true,
+    "cliente01_detalle_de_cliente02": 404,
+    "cliente01_descarga_de_cliente02": 404,
+    "cliente01_facturacion_cliente02": 404,
+    "cliente01_facturacion_propia": 200,
+    "cliente01_finops_admin": 403,
+    "prediccion_sin_csrf": 403,
+    "api_key_identidad": "cliente_demo_02",
+    "api_key_prediccion": 200,
+    "api_key_endpoint_admin": 403,
+    "admin_estado": {
+      "status": "ok",
+      "edge": "ok",
+      "schema_version": 2,
+      "model_version": "rf-3a9c9f208eef",
+      "cookie_secure": false,
+      "clients": 2,
+      "users": 3
+    },
+    "admin_finops": 200,
+    "cierre_de_sesion": 200,
+    "token_tras_cierre": 401
+  }
+}

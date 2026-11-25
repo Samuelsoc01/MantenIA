@@ -135,5 +135,70 @@ Excluido: `.runtime/` (incluye los originales sin sanitizar; Git ya lo ignora). 
 | Contenido | `docs/mvp/` (7 documentos) y `results/mvp/fase0/` (11 evidencias publicables + `SANITIZACION.md`) |
 | Excluido | `.runtime/` (originales sin sanitizar), archivos ZIP, credenciales y temporales |
 | Verificaciones previas | Rama activa `mvp-v1.0`; `main` = `504e7de`; `v0.2` → `504e7de`; búsqueda de secretos e identificadores; revisión del diff preparado |
-| Publicación | Sin push (pendiente de autorización) |
-| Hash | No puede registrarse dentro del propio commit; se informó en la sesión y se anotará en la siguiente actualización de este registro. |
+| Hash | `8ac51016b64eeee66ac69686b714d23b5103aa20` (registrado en la Fase 1; un commit no puede contener su propio hash) |
+| Autor y committer | `Samuelsoc01` (verificado con `git log -1 --format=fuller`; sin trailers) |
+| Publicación | 2026-11-25, `git push -u origin mvp-v1.0` con autorización expresa del responsable. Rama remota `refs/heads/mvp-v1.0` = `8ac51016b64e`; `origin/main` (`e770e28`) y la etiqueta `v0.2` sin cambios. URL: https://github.com/Samuelsoc01/MantenIA/tree/mvp-v1.0 |
+| Efecto local de `-u` | Seguimiento `branch.mvp-v1.0.remote/merge` en `.git/config` (sin cambios de identidad) |
+
+## Fase 1 — Autenticación, roles, privacidad y aislamiento (2026-11-25)
+
+**Estado:** cambios sin confirmar en el árbol de trabajo sobre `8ac51016b64e`; **pendiente de revisión y autorización de commit por el responsable**. No se hizo commit, push, merge ni etiqueta. `main` (`504e7de`) y `v0.2` sin cambios. Detalle técnico: `docs/mvp/FASE1_SEGURIDAD.md`.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `backend/app/main.py` | Dependencias de autorización en todos los endpoints no públicos; `/auth/login`, `/auth/logout`, `/auth/me`; endpoints `/admin/*`; consultas filtradas por cliente; `/health` mínimo; persistencia diferida a la transacción atómica; inyección opcional del transporte hacia el Edge (solo pruebas en proceso). |
+| `backend/app/database.py` | Migraciones versionadas e idempotentes con respaldo previo; tablas de identidad; triggers de integridad; `save_success` atómico con latencia; historial, detalle e instantáneas filtrados por cliente; purga de sesiones y eventos. |
+| `backend/app/telemetry.py` | Cliente tomado de la identidad autenticada (sin `X-Client-ID`); éxito persistido en una sola transacción (corrección de H12); sin registro de solicitudes no autenticadas. |
+| `backend/app/metrics.py` | `reports(..., client_id)` para métricas por cliente. |
+| `common/config.py` | Parámetros de sesión, bloqueo y API keys; validación de entornos; falla cerrada sin cookies `Secure` en staging/producción. |
+| `common/security.py` | HSTS opcional; nombres de campos de autenticación visibles en errores de validación (sin reflejar valores). |
+| `frontend/templates/index.html`, `frontend/static/app.js`, `frontend/static/style.css` | Pantalla de inicio de sesión, usuario activo, cierre de sesión, navegación por rol, envío de CSRF, manejo de sesión expirada, estado de cuenta del cliente, aviso de minimización, columna de cliente para el administrador. Identidad visual conservada. |
+| `docker-compose.yml`, `.env.example` | Variables de sesión, bloqueo y API keys (sin secretos). |
+| `tests/conftest.py`, `tests/test_integration.py` | Siembra de cuentas aleatorias y autenticación del cliente histórico; el resumen FinOps se consulta como administrador. |
+
+### Archivos nuevos
+
+| Archivo | Propósito |
+|---|---|
+| `backend/app/auth.py`, `backend/app/accounts.py`, `backend/app/authz.py`, `backend/app/manage.py` | Primitivas de credenciales, persistencia de identidad, autorización y CLI de cuentas. |
+| `frontend/static/privacy.js` | Minimización en origen del CSV. |
+| `tests/helpers.py`, `tests/test_auth.py`, `tests/test_isolation.py`, `tests/test_security.py`, `tests/test_transactions.py`, `tests/test_migration.py`, `tests/test_privacy.py`, `tests/js/privacy.test.cjs`, `tests/js/minimize_cli.cjs` | 85 pruebas Python nuevas y 4 pruebas JS. |
+| `scripts/mvp/evidencias_fase1.py`, `scripts/mvp/verificar_docker_fase1.py` | Generación reproducible de evidencias (sin secretos). |
+| `docs/mvp/FASE1_SEGURIDAD.md` | Documentación técnica de la fase. |
+| `results/mvp/fase1/*` | Evidencias de la Fase 1 (sanitizadas; manifiesto `SANITIZACION.md`). |
+
+### Efectos fuera del repositorio
+
+| Efecto | Detalle |
+|---|---|
+| Docker | Proyecto temporal `mantenia-f1-validacion` (imágenes, red y volumen propios, puerto 18000 mediante un override temporal fuera del repositorio): se construyó, probó y **eliminó** con `down -v --rmi local`. El stack `mantenia-v02`, que ya estaba en ejecución, y su volumen histórico no se tocaron. |
+| Copias de bases históricas | Copias en el scratchpad de la sesión (fuera del repositorio) para la evidencia de migración; los originales no se modificaron (hash verificado). |
+| Credenciales temporales | Generadas en `.runtime/credenciales/` para la validación Docker y eliminadas al terminar. |
+| Originales de evidencias | `.runtime/evidencias_originales/fase1/` (local, ignorado por Git). |
+| Temporales de pytest | `.runtime/pytest-fase1-*`, `.runtime/pytest-f1-dev` (ignorados). |
+
+### Dependencias
+
+Ninguna nueva. Se usan `hashlib.scrypt`, `secrets` y `hmac` de la biblioteca estándar.
+
+## Fase 1 — Ajustes finales (2026-11-25, sin commit)
+
+| Archivo | Cambio |
+|---|---|
+| `docker-compose.yml` | D16: proyecto `mantenia-v10`; imágenes `mantenia-v10-{edge,backend,tests}:dev`; volumen con nombre explícito (`MANTENIA_V10_VOLUME`); backend en `127.0.0.1:${MANTENIA_BACKEND_PORT:-8100}` |
+| `.env.example` | Variables `MANTENIA_BACKEND_PORT`, `MANTENIA_EDGE_PORT` y `MANTENIA_V10_VOLUME`; base `database/mantenia_v10.db`; Edge local en 8101 |
+| `common/config.py` | Valores por omisión `database/mantenia_v10.db` y `http://127.0.0.1:8101` |
+| `scripts/local_stack.py` | Puertos 8100/8101 configurables y base propia por omisión |
+| `scripts/mvp/verificar_docker_fase1.py` | Ejemplo de uso con el puerto 8100 |
+| `backend/app/accounts.py` | R1: reserva atómica del intento de inicio de sesión antes de verificar |
+| `backend/app/auth.py` | R2: semáforo de 4 cálculos scrypt simultáneos |
+| `backend/app/database.py` | R3: migraciones seguras ante arranques simultáneos; activación de WAL con reintentos |
+| `tests/test_security_review.py` (nuevo) | 4 pruebas de regresión de R1–R3 |
+| `tests/helpers.py` | Usuario de prueba `concurrencia_prueba` |
+| `README.md` | Nota inicial sobre la separación v0.2 / v1.0 |
+| `docs/mvp/*` | `FASE1_SEGURIDAD.md` §13; D16 aprobada en el plan; P-R-E-V F1-07 a F1-09; matriz, pruebas y backlog |
+| `results/mvp/fase1/revision/` (nuevo) | Evidencias de la revisión; las evidencias anteriores no se modificaron |
+
+**Efectos externos (locales):** se crearon el proyecto Docker `mantenia-v10` (2 contenedores en ejecución), el volumen `mantenia-v10_mantenia_db`, las redes `mantenia-v10_*` y las imágenes `mantenia-v10-*:dev`. Se creó `.runtime/credenciales/v10_demo.json` (ignorado por Git). `mantenia-v02` no se modificó. Sin dependencias nuevas, commits ni publicaciones.

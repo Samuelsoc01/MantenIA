@@ -1,0 +1,205 @@
+# Docker Fase 1 — proyecto mantenia-f1-validacion — intento 2 (MSYS_NO_PATHCONV=1) — inicio 2026-11-25T21:21:42Z
+# Intento 1: falló por conversión de rutas de Git Bash en --basetemp (ver docker-intento1-fallido-conversion-rutas-git-bash.txt)
+client=29.7.2 server=29.7.2
+
+## [1/3] build backend y edge
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+ Image mantenia-f1-validacion-backend Building 
+ Image mantenia-f1-validacion-edge Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.09kB 0.0s done
+#1 DONE 0.0s
+
+#2 [edge internal] load build definition from Dockerfile
+#2 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.47kB 0.0s done
+#2 DONE 0.0s
+
+#3 [edge internal] load metadata for docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#3 DONE 0.0s
+
+#4 [backend internal] load .dockerignore
+#4 transferring context: 156B done
+#4 DONE 0.0s
+
+#5 [edge internal] load build context
+#5 transferring context: 914B 0.0s done
+#5 DONE 0.0s
+
+#6 [backend base 1/5] FROM docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#6 resolve docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d 0.0s done
+#6 DONE 0.1s
+
+#7 [edge base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#7 CACHED
+
+#8 [edge base 5/5] COPY common /app/common
+#8 CACHED
+
+#9 [edge base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#9 CACHED
+
+#10 [edge edge 1/3] COPY requirements.txt /tmp/requirements.txt
+#10 CACHED
+
+#11 [edge edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#11 CACHED
+
+#12 [edge edge 3/3] COPY edge_service /app/edge_service
+#12 CACHED
+
+#13 [backend internal] load build context
+#13 transferring context: 1.16kB 0.0s done
+#13 DONE 0.0s
+
+#14 [backend backend 2/4] COPY frontend /app/frontend
+#14 CACHED
+
+#15 [backend base 5/5] COPY common /app/common
+#15 CACHED
+
+#16 [backend base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#16 CACHED
+
+#17 [backend backend 1/4] COPY backend /app/backend
+#17 CACHED
+
+#18 [backend base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#18 CACHED
+
+#19 [backend backend 3/4] COPY data/demo /app/data/demo
+#19 CACHED
+
+#20 [backend base 2/5] WORKDIR /app
+#20 CACHED
+
+#21 [backend backend 4/4] RUN mkdir -p /app/database && chown -R appuser:appuser /app/database
+#21 CACHED
+
+#22 [edge] exporting to image
+#22 exporting layers 0.0s done
+#22 exporting manifest sha256:fd944e8d5567ba61dfaf0ba901ab6fb4784263e869488dd4414578a23066b2a4 done
+#22 exporting config sha256:ef089f37cacce42b3c5ac90105b88a2ff291ea023c5880ffd046396960f21c54 done
+#22 exporting attestation manifest sha256:308f00cde7b0d02e7191a7c2cbba1e6ef41cb07d354d67fe6f17fc272789af60 0.0s done
+#22 exporting manifest list sha256:a54b7750985b7cfb4ede9ac5debbf95d59a6eeff379d79ddd2057424e910650f 0.0s done
+#22 naming to docker.io/library/mantenia-f1-validacion-edge:latest done
+#22 unpacking to docker.io/library/mantenia-f1-validacion-edge:latest 0.0s done
+#22 DONE 0.2s
+
+#23 [backend] exporting to image
+#23 exporting layers 0.0s done
+#23 exporting manifest sha256:86e599303f15702df2fec658fed1538afa2c6466faca3844b5d7e70db205fe63 done
+#23 exporting config sha256:a504b24dfc72528a1932d2d6d2f7e146f8ce4d6820a04549fc38e30f97367aed done
+#23 exporting attestation manifest sha256:1fa488ebf6254636dde739fb6055c1a5876124c0282a7b10677207b983b934aa 0.0s done
+#23 exporting manifest list sha256:809b76e0fd8ee86be0abed8cae7298d65be9c137d3c55a0d1c967b866fd89fe3 0.0s done
+#23 naming to docker.io/library/mantenia-f1-validacion-backend:latest done
+#23 unpacking to docker.io/library/mantenia-f1-validacion-backend:latest 0.0s done
+#23 DONE 0.2s
+
+#24 [edge] resolving provenance for metadata file
+#24 DONE 0.0s
+
+#25 [backend] resolving provenance for metadata file
+#25 DONE 0.0s
+ Image mantenia-f1-validacion-backend Built 
+ Image mantenia-f1-validacion-edge Built 
+# exit_code_build=0
+
+## [2/3] build tests
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+ Image mantenia-f1-validacion-tests Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 588B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.47kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 32B
+#4 transferring context: 156B done
+#4 DONE 0.0s
+
+#5 [base 1/5] FROM docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#5 resolve docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 325.10kB 0.0s done
+#6 DONE 0.1s
+
+#7 [base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#7 CACHED
+
+#8 [tests 2/7] COPY frontend /app/frontend
+#8 CACHED
+
+#9 [edge 1/3] COPY requirements.txt /tmp/requirements.txt
+#9 CACHED
+
+#10 [base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#10 CACHED
+
+#11 [base 5/5] COPY common /app/common
+#11 CACHED
+
+#12 [edge 3/3] COPY edge_service /app/edge_service
+#12 CACHED
+
+#13 [tests 1/7] COPY backend /app/backend
+#13 CACHED
+
+#14 [base 2/5] WORKDIR /app
+#14 CACHED
+
+#15 [tests 6/7] COPY pytest.ini /app/pytest.ini
+#15 CACHED
+
+#16 [tests 3/7] COPY data/demo /app/data/demo
+#16 CACHED
+
+#17 [tests 5/7] COPY tests /app/tests
+#17 CACHED
+
+#18 [edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#18 CACHED
+
+#19 [tests 4/7] COPY scripts /app/scripts
+#19 CACHED
+
+#20 [tests 7/7] RUN mkdir -p /app/.runtime /app/results/integration && chown -R appuser:appuser /app/.runtime /app/results /app/data/demo
+#20 CACHED
+
+#21 exporting to image
+#21 exporting layers 0.0s done
+#21 exporting manifest sha256:ad7a48b6ce377bfae82814356d16b2b6b52d3c7cf0b2cb19837fae0ac6fc262d done
+#21 exporting config sha256:577e9cb09a73b45211b6c1d905a6330c21cf117f2db4b9cc7e1e5df9bda31111 done
+#21 exporting attestation manifest sha256:ea82f8d91f9f36a98829f576753897ff5bc91d969491e3c257be3a99476da5bf 0.0s done
+#21 exporting manifest list sha256:3351dc9f354d5e9954b38bbf97c272d8a26100ed86da62b090e5ed6499d24b01 0.0s done
+#21 naming to docker.io/library/mantenia-f1-validacion-tests:latest
+#21 naming to docker.io/library/mantenia-f1-validacion-tests:latest done
+#21 unpacking to docker.io/library/mantenia-f1-validacion-tests:latest 0.0s done
+#21 DONE 0.2s
+
+#22 resolving provenance for metadata file
+#22 DONE 0.0s
+ Image mantenia-f1-validacion-tests Built 
+# exit_code_build_tests=0
+
+## [3/3] pytest dentro del contenedor (red none)
+ Container mantenia-f1-validacion-tests-run-e3976a89ee45 Creating 
+ Container mantenia-f1-validacion-tests-run-e3976a89ee45 Created 
+........................................................................ [ 65%]
+........ss............................                                   [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_privacy.py:29: Node.js no disponible: las pruebas JS se ejecutan en el entorno local Windows
+SKIPPED [1] tests/test_privacy.py:36: Node.js no disponible: la minimización del navegador se valida en el entorno local
+108 passed, 2 skipped in 11.86s
+# exit_code_run_tests=0
+# fin 2026-11-25T21:22:01Z

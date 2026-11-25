@@ -1,0 +1,5 @@
+# Repeticiones de la suite completa (Python 3.11) para observar el 503 intermitente visto una vez durante el desarrollo — 2026-11-25T21:17:31Z
+repeticion 1: 110 passed in 32.49s
+repeticion 2: 110 passed in 35.38s
+repeticion 3: 110 passed in 34.28s
+# fin 2026-11-25T21:19:17Z

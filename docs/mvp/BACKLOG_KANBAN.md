@@ -100,7 +100,7 @@ Columnas: ID · Objetivo · EDT · Cat. · Criterio de aceptación · Dependenci
 | ID | Objetivo | EDT | Cat. | Criterio de aceptación | Dep. | h | Principal | Colab. |
 |---|---|---|---|---|---|---:|---|---|
 | MVP-F0-01 | Auditoría inicial, rama `mvp-v1.0` y validación sin alterar evidencias | 1.1.1 | C2 | Rama sin commits propios; 7 documentos; evidencias en `results/mvp/fase0/` (sanitizadas, originales locales); `git diff --stat` vacío | — | 5 | Samuel | Aziel, Tonantzin |
-| MVP-F0-02 | Ratificación por el equipo de las decisiones D1–D15 y del backlog | 1.1.1 | C3 | Cada decisión con estado y fecha real registrados por el equipo; E de PREV-F0-* completada por los integrantes | F0-01 | 2 | Aziel | Samuel, Tonantzin |
+| MVP-F0-02 | Ratificación por el equipo de las decisiones D1–D16 y del backlog | 1.1.1 | C3 | Cada decisión con estado y fecha real registrados por el equipo; E de PREV-F0-* completada por los integrantes | F0-01 | 2 | Aziel | Samuel, Tonantzin |
 | MVP-F0-03 | Mapear el trabajo MVP contra la línea base de la Práctica 3.1 y preparar la solicitud de cambio de alcance (1.6.x) | 1.6.4* | C3 | Tabla tarjeta → actividad/ventana de la línea base; solicitud de cambio documentada; la línea base no se modifica | F0-02 | 2 | Tonantzin | Samuel, Aziel |
 | MVP-F0-04 | Preparar la carga de tarjetas MVP en el tablero existente (etiqueta propia, sin duplicar K/L ni alterar T01–T12) | 1.6.4* | C3 | Lista de carga revisada; ejecución en Trello solo con autorización (D7); exportación JSON archivada tras la carga | F0-02 (D7) | 2 | Tonantzin | Aziel |
 
@@ -317,3 +317,22 @@ Las métricas deben derivarse de los movimientos reales del tablero:
 - **Cronograma real vs línea base:** fechas reales por tarjeta y por paquete frente a la línea base P3.1.
 
 La lectura o escritura en Trello mediante el conector solo se hará con autorización expresa (D7).
+
+## 10. Estado de la Fase 1 (2026-11-25) — tarjetas para actualizar en Trello
+
+Ejecución técnica realizada en una sesión asistida por IA, dirigida por el responsable del proyecto. **No hay evidencia de participación de otros integrantes en esta ejecución**: las asignaciones propuestas deben revisarse antes de registrar la autoría en Trello. No se registran horas reales. Ninguna tarjeta pasa a «Hecho» sin la revisión humana.
+
+| Tarjeta | Estado propuesto | Evidencia |
+|---|---|---|
+| MVP-F1-01 Diseño authn/authz | Implementada; en revisión | `docs/mvp/FASE1_SEGURIDAD.md` §1–3 |
+| MVP-F1-02 Migración versionada | Implementada; en revisión | `tests/test_migration.py`, `results/mvp/fase1/migracion_copias_historicas.json` |
+| MVP-F1-03 Contraseñas y sesiones | Implementada; en revisión | `tests/test_auth.py`, `tests/test_security.py` |
+| MVP-F1-04 API keys | Implementada; en revisión | `tests/test_auth.py`, `verificacion_docker.json` |
+| MVP-F1-05 Autorización y aislamiento | Implementada; en revisión | `tests/test_isolation.py`, `evidencias_fase1.json` |
+| MVP-F1-06 Interfaz de inicio de sesión | Implementada; recorrida en Chrome; **evaluación visual del equipo pendiente** | `frontend/*`, `revision/interfaz/` |
+| MVP-F1-07 Auditoría y bloqueo | Implementada; en revisión | tabla `security_events`, `test_bloqueo_por_intentos_repetidos_sin_enumeracion` |
+| MVP-F1-09 Minimización en origen | Implementada; en revisión | `frontend/static/privacy.js`, `results/mvp/fase1/privacidad/` |
+| K03 Pruebas de acceso autorizado | Ejecutada; en revisión | `tests/test_isolation.py`, `tests/test_security.py` |
+| MVP-F5-08 No facturar errores del servicio | Atendida parcialmente en la Fase 1 (H12 corregido); falta la idempotencia | `tests/test_transactions.py`, `h12_reproduccion_previa.json` |
+
+**Ajustes finales (2026-11-25):** D16 implementada (separación de instalaciones; relacionada con MVP-F6 y con la infraestructura local). Además, la revisión de seguridad corrigió 3 defectos de concurrencia en MVP-F1-02, F1-03 y F1-07 (`tests/test_security_review.py`). Ninguna tarjeta pasa a «Hecho» sin revisión humana.

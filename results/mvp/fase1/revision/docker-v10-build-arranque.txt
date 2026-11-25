@@ -1,0 +1,40 @@
+# docker compose (proyecto mantenia-v10) — 2026-11-25T23:16:02Z
+#24 DONE 18.0s
+
+#25 [edge] resolving provenance for metadata file
+#25 DONE 0.0s
+ Image mantenia-v10-edge:dev Built 
+ Image mantenia-v10-backend:dev Built 
+#22 resolving provenance for metadata file
+#22 DONE 0.0s
+ Image mantenia-v10-tests:dev Built 
+ Volume mantenia-v10_mantenia_db Creating 
+ Network mantenia-v10_local_only Creating 
+ Network mantenia-v10_ingress Creating 
+ Volume mantenia-v10_mantenia_db Creating 
+ Network mantenia-v10_local_only Creating 
+ Network mantenia-v10_ingress Creating 
+ Volume mantenia-v10_mantenia_db Created 
+ Volume mantenia-v10_mantenia_db Created 
+ Network mantenia-v10_ingress Created 
+ Network mantenia-v10_ingress Created 
+ Network mantenia-v10_local_only Created 
+ Network mantenia-v10_local_only Created 
+ Container mantenia-v10-edge-1 Creating 
+ Container mantenia-v10-edge-1 Created 
+ Container mantenia-v10-backend-1 Creating 
+ Container mantenia-v10-backend-1 Created 
+ Container mantenia-v10-edge-1 Starting 
+ Container mantenia-v10-edge-1 Started 
+ Container mantenia-v10-edge-1 Waiting 
+ Container mantenia-v10-edge-1 Healthy 
+ Container mantenia-v10-backend-1 Starting 
+ Container mantenia-v10-backend-1 Started 
+ Container mantenia-v10-backend-1 Waiting 
+ Container mantenia-v10-edge-1 Waiting 
+ Container mantenia-v10-edge-1 Healthy 
+ Container mantenia-v10-backend-1 Healthy 
+exit_up=0
+NAME                     IMAGE                      COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+mantenia-v10-backend-1   mantenia-v10-backend:dev   "python -m uvicorn b…"   backend   12 seconds ago   Up 6 seconds (healthy)    127.0.0.1:8100->8000/tcp
+mantenia-v10-edge-1      mantenia-v10-edge:dev      "python -m uvicorn e…"   edge      12 seconds ago   Up 12 seconds (healthy)   

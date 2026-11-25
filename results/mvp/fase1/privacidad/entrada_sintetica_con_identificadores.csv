@@ -1,0 +1,13 @@
+ID máquina,Type,Air temperature [K],Process temperature [K],Rotational speed [rpm],Torque [Nm],Tool wear [min],Operador,Ubicación
+MAQ-FICT-0000,M,301.5,310.7,1336,65.6,0,Operador ficticio 00,"Planta ficticia, nave 0"
+MAQ-FICT-0001,L,301.9,310.9,1567,39.0,214,Operador ficticio 01,"Planta ficticia, nave 1"
+MAQ-FICT-0002,L,302.5,310.3,1523,36.0,72,Operador ficticio 02,"Planta ficticia, nave 2"
+MAQ-FICT-0003,L,300.5,311.8,1368,57.9,191,Operador ficticio 00,"Planta ficticia, nave 3"
+MAQ-FICT-0004,M,302.4,311.9,1439,36.6,212,Operador ficticio 01,"Planta ficticia, nave 0"
+MAQ-FICT-0005,L,300.1,309.6,1541,37.0,96,Operador ficticio 02,"Planta ficticia, nave 1"
+MAQ-FICT-0006,L,295.6,306.3,1636,32.7,56,Operador ficticio 00,"Planta ficticia, nave 2"
+MAQ-FICT-0007,L,299.1,308.8,1329,53.6,207,Operador ficticio 01,"Planta ficticia, nave 3"
+MAQ-FICT-0008,M,304.0,313.1,1450,42.8,101,Operador ficticio 02,"Planta ficticia, nave 0"
+MAQ-FICT-0009,L,301.6,310.1,1326,48.2,77,Operador ficticio 00,"Planta ficticia, nave 1"
+MAQ-FICT-0010,M,297.7,309.2,1732,28.8,152,Operador ficticio 01,"Planta ficticia, nave 2"
+MAQ-FICT-0011,L,302.4,310.3,1374,51.2,163,Operador ficticio 02,"Planta ficticia, nave 3"

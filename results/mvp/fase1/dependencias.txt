@@ -1,0 +1,28 @@
+# Dependencias Fase 1 — 2026-11-25T21:23:42Z
+## Archivos de dependencias modificados respecto al commit base 8ac5101
+(vacío = ninguno; la Fase 1 no incorpora dependencias nuevas: usa hashlib.scrypt, secrets y hmac de la biblioteca estándar)
+
+## pip check (.venv, Python 3.12.14)
+No broken requirements found.
+# exit_code=0
+
+## Módulos importados por el código nuevo de la Fase 1
+- argparse: biblioteca estándar
+- backend.app: módulo del proyecto
+- backend.app.accounts: módulo del proyecto
+- backend.app.database: módulo del proyecto
+- base64: biblioteca estándar
+- common.config: módulo del proyecto
+- dataclasses: biblioteca estándar
+- datetime: biblioteca estándar
+- fastapi: FastAPI (dependencia existente)
+- getpass: biblioteca estándar
+- hashlib: biblioteca estándar
+- hmac: biblioteca estándar
+- json: biblioteca estándar
+- os: biblioteca estándar
+- pathlib: biblioteca estándar
+- re: biblioteca estándar
+- secrets: biblioteca estándar
+- sqlite3: biblioteca estándar
+- sys: biblioteca estándar

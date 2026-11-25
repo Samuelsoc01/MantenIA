@@ -1,0 +1,15 @@
+# pytest Fase 1 — py311 — inicio 2026-11-25T21:16:12Z — rama mvp-v1.0 @ 8ac5101 + cambios sin confirmar
+# comando: PYTHONDONTWRITEBYTECODE=1 .runtime/python311/python.exe -m pytest -q -rs --basetemp=.runtime/pytest-fase1-py311 --junitxml=results/mvp/fase1/pytest-windows-py311.xml
+Python 3.11.9
+v26.13.1
+........................................................................ [ 65%]
+......................................                                   [100%]
+============================== warnings summary ===============================
+.runtime\python311\Lib\site-packages\starlette\testclient.py:37
+  <RAIZ_REPO>\.runtime\python311\Lib\site-packages\starlette\testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: <RAIZ_REPO>\results\mvp\fase1\pytest-windows-py311.xml -
+110 passed, 1 warning in 33.57s
+# exit_code=0 — fin 2026-11-25T21:16:47Z

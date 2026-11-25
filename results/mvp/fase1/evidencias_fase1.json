@@ -1,0 +1,87 @@
+{
+  "ejecutado_utc": "2026-11-25T21:13:36.511536+00:00",
+  "python": "3.11.9",
+  "procedimiento": "Backend en proceso + Edge en proceso con el modelo real; base temporal; credenciales aleatorias no almacenadas.",
+  "privacidad": {
+    "datos": "100 % sintéticos (identificadores ficticios); sin datos personales reales",
+    "columnas_en_origen": [
+      "ID máquina",
+      "Type",
+      "Air temperature [K]",
+      "Process temperature [K]",
+      "Rotational speed [rpm]",
+      "Torque [Nm]",
+      "Tool wear [min]",
+      "Operador",
+      "Ubicación"
+    ],
+    "columnas_eliminadas_en_el_navegador": [
+      "ID máquina",
+      "Operador",
+      "Ubicación"
+    ],
+    "filas": 12,
+    "csv_con_identificadores_enviado_directamente": {
+      "status": 422,
+      "almacenado": false
+    },
+    "csv_minimizado": {
+      "status": 200,
+      "record_count": 12
+    },
+    "identificadores_en_la_base": {
+      "MAQ-FICT": false,
+      "Operador ficticio": false,
+      "Planta ficticia": false
+    },
+    "nombre_de_archivo_en_la_base": false,
+    "mediciones_originales_almacenadas": 0,
+    "clasificacion": "Minimización en origen (eliminación de campos innecesarios). No es anonimización: las seis mediciones se conservan en la respuesta y pueden ser sensibles para la organización."
+  },
+  "aislamiento": {
+    "clientes": [
+      "cliente_demo_01 (A)",
+      "cliente_demo_02 (B)"
+    ],
+    "historial_A_solo_cliente_A": true,
+    "historial_A_contiene_solicitud_de_B": false,
+    "A_consulta_detalle_de_B": 404,
+    "A_descarga_resultado_de_B": 404,
+    "A_consulta_facturacion_de_B": 404,
+    "A_consulta_facturacion_inexistente": 404,
+    "A_consulta_su_facturacion": 200,
+    "A_con_X_Client_ID_de_B_atribuido_a": "cliente_demo_01",
+    "API_key_de_A_en_endpoint_admin": 403,
+    "sin_credenciales_historial": 401,
+    "solicitud_A_registrada_como": "cliente_demo_01",
+    "admin_inicio_sesion": 200,
+    "admin_detalle_de_B": 200
+  },
+  "consistencia_transaccional": {
+    "edge_sin_conexion": {
+      "status": 503,
+      "registro": [
+        [
+          "failed",
+          "503"
+        ]
+      ],
+      "eventos_de_uso": 0
+    },
+    "edge_error_500": {
+      "status": 503,
+      "registro": [
+        [
+          "failed",
+          "503"
+        ]
+      ],
+      "eventos_de_uso": 0
+    },
+    "falla_en_la_transaccion_de_persistencia": {
+      "status": 503,
+      "registros": 0,
+      "eventos_de_uso": 0
+    }
+  }
+}

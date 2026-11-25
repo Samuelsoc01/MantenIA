@@ -1,0 +1,7 @@
+# Pruebas dentro del contenedor mantenia-v10-tests:dev (red none) — 2026-11-25T23:21:14Z
+........................................................................ [ 63%]
+........ss................................                               [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_privacy.py:29: Node.js no disponible: las pruebas JS se ejecutan en el entorno local Windows
+SKIPPED [1] tests/test_privacy.py:36: Node.js no disponible: la minimización del navegador se valida en el entorno local
+112 passed, 2 skipped in 13.31s

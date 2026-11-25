@@ -1,0 +1,29 @@
+{
+  "etiqueta": "v0.2 después de levantar y usar v1.0",
+  "ejecutado_utc": "2026-11-25T23:21:01.584753+00:00",
+  "tablas": [
+    "model_info",
+    "prediction_requests",
+    "prediction_results",
+    "usage_events"
+  ],
+  "migrada_por_v1": false,
+  "datos": {
+    "model_info": {
+      "filas": 1,
+      "sha256_filas": "bc1a80a0a74e5a6ba4c15d6a8c9cac0d2de06c6ee1fe11f5f8ddceba583be0c1"
+    },
+    "prediction_requests": {
+      "filas": 313,
+      "sha256_filas": "6caebdad65507e8fef11692484a534a80b554b3b2dd087fc038cb7ccae37b325"
+    },
+    "prediction_results": {
+      "filas": 157254,
+      "sha256_filas": "b47d8d97b4b62cdc00288a9e396da191f96ca1498aaef893678491928d8594c0"
+    },
+    "usage_events": {
+      "filas": 312,
+      "sha256_filas": "575d61ebd1957ea173c8438fd25fc1713b35964d6e1dcb68e436c4ba7820f7ff"
+    }
+  }
+}

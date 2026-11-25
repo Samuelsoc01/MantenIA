@@ -14,8 +14,9 @@ def summary(values):
             "p95_ms": percentile(.95), "max_ms": max(values),
             "percent_le_5s": sum(v <= 5000 for v in values) / len(values) * 100}
 
-def reports(db, rate):
-    requests, events = db.snapshot()
+def reports(db, rate, client_id=None):
+    """Latencia, uso y costos. Con client_id, los cálculos se limitan a ese cliente (filtro en SQL)."""
+    requests, events = db.snapshot(client_id)
     successful = [r for r in requests if r["status"] == "success"]
     units = sum(e["billable_units"] for e in events)
     historical = sum((Decimal(e["estimated_cost"]) for e in events), Decimal("0"))

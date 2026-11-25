@@ -214,6 +214,173 @@ Destino: actualización del Capítulo XI de la memoria técnica final.
 | P | Autorización del responsable para ejecutar commits locales a solicitud expresa, solo con su identidad (autor y committer), sin `Co-authored-by`, `Signed-off-by` ni atribuciones de IA, sin modificar `git config`, sin reescribir el historial, solo en `mvp-v1.0` y sin push ni etiquetas. Tarea: commit de cierre de la Fase 0 con el mensaje `docs: auditoria y plan de desarrollo del MVP v1.0`, que incluya solo `docs/mvp/` y las evidencias sanitizadas de `results/mvp/fase0/`, tras verificar la rama, `main`, `v0.2`, los archivos, la ausencia de secretos y el diff preparado. |
 | R | Antes del commit: comprobó la rama activa, `main` y `v0.2`; revisó la configuración, las variables de entorno y los hooks que pudieran alterar la autoría (sin hallazgos); buscó secretos e identificadores en los archivos a incluir; preparó solo las rutas autorizadas y revisó el diff preparado. Registró D15 en el plan y en el registro de cambios, y añadió esta entrada. Ejecutó el commit con `git -c user.name=… -c user.email=… commit`, sin modificar la configuración. |
 | E | La autorización, el alcance y el mensaje del commit son **decisiones del responsable**. La evaluación del resultado está **pendiente de evaluación humana**. |
-| V | Verificación posterior al commit (`git log -1 --format=fuller`, `git show --stat HEAD`, `git status`, `git rev-parse main`, `git rev-parse v0.2`) presentada en la sesión del 2026-11-25. El hash del commit no puede figurar dentro del propio commit; se anotará en la siguiente actualización de `REGISTRO_CAMBIOS.md`. Verificación realizada por la herramienta. |
+| V | Verificación posterior al commit (`git log -1 --format=fuller`, `git show --stat HEAD`, `git status`, `git rev-parse main`, `git rev-parse v0.2`) presentada en la sesión del 2026-11-25. Hash registrado en la Fase 1: `8ac51016b64eeee66ac69686b714d23b5103aa20`; autor y committer `Samuelsoc01`; sin trailers ni atribuciones (`REGISTRO_CAMBIOS.md`). Verificación realizada por la herramienta. |
 | Puntos de atención | **Operaciones Git:** confirmar en GitHub, tras el push manual, que el autor y el committer mostrados son los del responsable. |
 | Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F0-14 — Publicación de la rama `mvp-v1.0` a solicitud del responsable
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F0-14 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 0 — Cierre |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Autorización exclusiva para publicar `mvp-v1.0` con `git push -u origin mvp-v1.0`, tras verificar la rama activa, que HEAD fuera `8ac51016b64e`, el árbol limpio y `main` y `v0.2` intactas; sin modificar `main`, fusionar, etiquetar, crear PR, generar commits ni cambiar autoría o configuración. |
+| R | Verificó las precondiciones; ejecutó el comando autorizado; comprobó en el remoto que `refs/heads/mvp-v1.0` apunta a `8ac51016b64e` y que `main` (`e770e28`) y `v0.2` no cambiaron. Informó que `-u` registra el seguimiento de la rama en `.git/config` y que GitHub sugirió crear un PR, que no se creó. |
+| E | La autorización y el comando son **decisiones del responsable**. Evaluación del resultado: **pendiente de evaluación humana**. |
+| V | `git ls-remote origin` antes y después de la publicación; `git status -sb` (`mvp-v1.0...origin/mvp-v1.0`). Verificación realizada por la herramienta. |
+| Puntos de atención | Operaciones Git: confirmar en GitHub la rama publicada y que la rama predeterminada sigue siendo `main`. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+---
+
+## PREV-F1-01 — Inspección de seguridad y plan de implementación de la Fase 1
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-01 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 — Autenticación, roles, privacidad y aislamiento |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Encargo de la Fase 1, secciones 1–4: verificar el estado de Git, inspeccionar backend, frontend, configuración, Docker y pruebas; identificar endpoints públicos, autenticados y administrativos, operaciones a aislar, uso de `X-Client-ID`, persistencia, inconsistencias facturables, riesgos de exposición y comportamiento ante fallos del Edge; presentar un plan antes de modificar. |
+| R | Confirmó el estado inicial (árbol limpio, HEAD = `origin/mvp-v1.0` = `8ac5101`, `main` y `v0.2` intactas). Identificó que todos los endpoints eran públicos, que `X-Client-ID` definía la atribución sin autenticación y que historial, detalle, descarga, métricas, FinOps y facturación eran globales. Presentó un plan de nueve puntos: reproducción de H12, persistencia, credenciales, autorización por dependencias, telemetría atómica, frontend, CLI, pruebas, Docker y documentación. |
+| E | **Pendiente de evaluación humana.** |
+| V | Hallazgos trazables al código de `8ac5101` (`backend/app/main.py`, `telemetry.py`, `database.py`); plan registrado en el informe de la sesión. |
+| Puntos de atención | Seguridad: confirmar que la matriz de permisos (`FASE1_SEGURIDAD.md` §3) corresponde a lo esperado por el equipo. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-02 — Reproducción y corrección del defecto H12 (consistencia facturable)
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-02 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Sección 14: inspeccionar la relación entre solicitudes, resultados, eventos de uso, estado, respuesta y persistencia; no afirmar un defecto sin reproducirlo; distinguir fallos internos del caso ambiguo de respuesta perdida; corregir si afecta la aceptación de la fase sin ampliar el alcance. |
+| R | **Generó un script temporal** que reprodujo H12 sobre el código v0.2 sin modificar, con un Edge en proceso que usa el modelo real: 503 al cliente y 1 unidad facturada. Implementó la persistencia atómica de la operación exitosa en `TelemetryMiddleware` y `Database.save_success`, y agregó pruebas de regresión (falla del Edge, falla de la transacción, entrada inválida, solicitud no autenticada). Documentó el caso ambiguo pendiente de idempotencia para la Fase 5. |
+| E | **Pendiente de evaluación humana.** |
+| V | `results/mvp/fase1/h12_reproduccion_previa.json` (antes); `tests/test_transactions.py` y `results/mvp/fase1/evidencias_fase1.json` (después: 503 y 0 eventos de uso en los tres escenarios de falla). Verificación realizada por la herramienta. |
+| Puntos de atención | **Código generado y cálculos de facturación:** la latencia total ahora excluye la transacción final en SQLite (cambio de semántica respecto a la v0.2). |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-03 — Autenticación, sesiones, API keys, roles y aislamiento
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-03 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Secciones 5–10, 12 y 13: modelo de datos, scrypt, sesiones opacas con expiración, revocación y rotación, cookies protegidas, CSRF, bloqueo por intentos, API keys, roles, denegación por defecto, aislamiento en consultas, frontend autenticado y cuentas de demostración sin secretos en Git. |
+| R | **Generó código de seguridad**: `auth.py` (scrypt N=2^15, r=8, p=1, formato versionado; tokens de 256 bits con digest SHA-256), `accounts.py`, `authz.py`, la CLI `manage.py`, cambios en `main.py`, `config.py`, `security.py` y en el frontend, y 66 pruebas de autenticación, aislamiento y seguridad. Usa solo la biblioteca estándar, sin criptografía propia. |
+| E | **Pendiente de evaluación humana.** |
+| V | `results/mvp/fase1/pytest-windows-py311.xml` y `-py312.xml` (110/110), `docker-build-y-pruebas.txt` (108 pasadas, 2 omitidas), `verificacion_docker.json`, `evidencias_fase1.json`. Verificación realizada por la herramienta; **revisión independiente del código de seguridad pendiente**. |
+| Puntos de atención | **Seguridad:** revisar parámetros de scrypt, política de bloqueo (riesgo de bloqueo malicioso de cuentas), CSRF por token sincronizado y la decisión de usar SHA-256 para secretos aleatorios de alta entropía. Revisar visualmente la interfaz en un navegador. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-04 — Migración de la base de datos y tratamiento del historial
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-04 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Sección 5: migración reproducible e idempotente, sin borrar ni reinicializar bases, con tratamiento explícito de `cliente_demo_01` y pruebas solo sobre copias o bases temporales. |
+| R | Migraciones versionadas con respaldo previo automático y transacciones; `cliente_demo_01` conserva su historial (`origin = v0.2`); otros identificadores históricos quedan como clientes `legacy`. **Generó un script temporal** para migrar copias de dos bases históricas reales; su primera versión falló con el esquema v0.2 temprano (sin `client_id` en `usage_events`) por un error del propio script, no de la migración, y se corrigió. |
+| E | **Pendiente de evaluación humana.** |
+| V | `tests/test_migration.py` (8 pruebas); `results/mvp/fase1/migracion_copias_historicas.json` (157,254 y 30,030 unidades conservadas, respaldo idéntico, idempotente, 0 cuentas creadas); hash del original local sin cambios. Verificación realizada por la herramienta. |
+| Puntos de atención | **Integridad de datos:** decidir el nombre del proyecto Compose del MVP (D16) antes de ejecutar `docker compose up` desde `mvp-v1.0`, porque migraría el volumen histórico de la v0.2 (con respaldo previo). |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-05 — Privacidad: minimización en origen
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-05 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Sección 11: conservar la minimización, mantener `STORE_RAW_INPUTS=false`, implementar o documentar un mecanismo verificable de eliminación de identificadores antes de transmitir, distinguir minimización, seudonimización y anonimización, y generar evidencia con datos sintéticos sin romper los CSV válidos. |
+| R | `privacy.js` elimina en el navegador las columnas distintas de las seis variables del modelo antes del envío y conserva el mapeo solo en memoria; 4 pruebas JS y 4 pruebas Python; evidencia antes y después con identificadores ficticios. La documentación declara que es **minimización, no anonimización**. |
+| E | **Pendiente de evaluación humana.** |
+| V | `results/mvp/fase1/privacidad/` (entrada sintética y salida minimizada), `evidencias_fase1.json` (sin identificadores ni nombre de archivo en la base; 0 mediciones originales almacenadas), `tests/js/privacy.test.cjs`. Verificación realizada por la herramienta. |
+| Puntos de atención | **Interpretaciones de privacidad:** confirmar con el docente la terminología (minimización frente a anonimización) y su relación con el apartado de la LFPDPPP de la memoria. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-06 — Pruebas, validación Docker, evidencias y sanitización
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-06 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Secciones 15–17: conservar las 25 pruebas históricas, agregar las nuevas, ejecutar en Python 3.11, Python 3.12 y Docker, verificar `pip check`, Compose, arranque, salud e integridad del modelo, guardar evidencias solo en `results/mvp/fase1/` sin secretos y documentar la fase. |
+| R | Ejecutó la suite (110/110 en 3.11 y 3.12; 3 repeticiones adicionales en verde; 108 pasadas y 2 omitidas en Docker); levantó un stack Docker de validación separado, creó cuentas con la CLI, verificó los flujos y lo eliminó; sanitizó 5 evidencias conservando los originales en local. Registró los incidentes reales: (a) un 503 intermitente observado una vez y **no reproducido**; (b) un primer intento en Docker que falló por la conversión de rutas de Git Bash, conservado como evidencia; (c) dos ajustes de pruebas propias (cabecera `Bearer` con espacio final, inválida en httpx, y cierre del cliente de sesión). |
+| E | **Pendiente de evaluación humana.** |
+| V | Archivos de `results/mvp/fase1/` y su `SANITIZACION.md`; `docs/mvp/FASE1_SEGURIDAD.md` §11. Verificación realizada por la herramienta. |
+| Puntos de atención | **Código generado por IA:** scripts `scripts/mvp/evidencias_fase1.py` y `verificar_docker_fase1.py`; el 503 intermitente sigue sin causa confirmada. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-07 — Implementación de la decisión D16 y validación de independencia
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-07 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 — Ajustes finales |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | El responsable aprueba D16: separar permanentemente las instalaciones de la v0.2 y de la v1.0 (proyecto `mantenia-v10`, puerto 8100, volumen, imágenes y configuración propios, Edge privado), sin tocar `mantenia-v02`, y validar la independencia. |
+| R | Comprobó que el puerto 8100 estaba libre. Modificó `docker-compose.yml` (nombre del proyecto, imágenes y volumen explícitos, puerto configurable), `.env.example`, `common/config.py` (base y Edge locales por omisión) y `scripts/local_stack.py` (8100/8101). Levantó `mantenia-v10` y calculó la huella de una copia de solo lectura del volumen de la v0.2 antes y después; el inventario Docker muestra recursos disjuntos. |
+| E | La aprobación de D16 es una **decisión del responsable**. Evaluación del resultado: **pendiente de evaluación humana**. |
+| V | `results/mvp/fase1/revision/independencia_docker.txt`, `v02_huella_antes.json`, `v02_huella_despues.json` (idénticas) y `verificacion_docker_v10.json`. Verificación realizada por la herramienta. |
+| Puntos de atención | Infraestructura: la observación sobre las imágenes de la v0.2 reconstruidas en la Fase 0 (`FASE1_SEGURIDAD.md` §13.1). |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-08 — Revisión de seguridad del código generado y corrección de defectos de concurrencia
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-08 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 — Ajustes finales |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Revisar la autenticación, autorización, sesiones, API keys, CSRF, limitación de intentos, aislamiento, migraciones y consistencia transaccional; corregir dentro del alcance con pruebas de regresión; no presentarla como auditoría independiente. |
+| R | **La herramienta revisó su propio código** (no es una auditoría independiente). Encontró y reprodujo 3 defectos de concurrencia: bloqueo eludible con intentos simultáneos, memoria de scrypt sin límite y carrera en migraciones simultáneas. Los corrigió en `accounts.py`, `auth.py` y `database.py` y agregó 4 pruebas en `tests/test_security_review.py`. |
+| E | **Pendiente de evaluación humana.** |
+| V | `results/mvp/fase1/revision/defectos_reproduccion_previa.txt` (fallos antes de corregir), `pytest-revision-py311.xml` y `-py312.xml` (114/114), `docker-v10-pruebas.txt` (112 pasadas y 2 omitidas), `integridad_y_secretos.txt`. Verificación realizada por la herramienta. |
+| Puntos de atención | **Seguridad y código generado:** revisión independiente pendiente; el efecto de la reserva previa de intentos sobre usuarios legítimos durante un ataque. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-09 — Validación de la interfaz en el navegador y rotación de credenciales
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-09 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 — Ajustes finales |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5, con la extensión Claude in Chrome |
+| P | Iniciar solo la v1.0 con su configuración independiente y verificar el inicio de sesión de los tres usuarios, el análisis individual y por CSV, el historial y el estado de cuenta propios, la navegación por rol, el cierre de sesión y la sesión expirada, sin simular capturas ni incluir secretos. |
+| R | Recorrió la interfaz en Chrome con datos sintéticos y guardó 6 capturas sin secretos. **Incidente:** al inspeccionar el archivo de credenciales, la herramienta mostró por error en su propia salida las contraseñas de demostración iniciales (no quedaron en archivos versionados ni en evidencias). Las rotó con `init-demo --rotate` y comprobó que las anteriores responden 401. |
+| E | **Pendiente de evaluación humana** (incluida la revisión visual por el equipo). |
+| V | `results/mvp/fase1/revision/interfaz/*.jpg`; `FASE1_SEGURIDAD.md` §13.5. Verificación realizada por la herramienta. |
+| Puntos de atención | Seguridad: confirmar que basta con la rotación; revisar la usabilidad y la apariencia en otros navegadores. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-F1-10 — Cierre técnico de la Fase 1
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-F1-10 |
+| Fecha real | 2026-11-25 |
+| Fase | Fase 1 — Cierre |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | El responsable aprueba el cierre técnico de la Fase 1 con los resultados obtenidos y las limitaciones documentadas, y autoriza el commit «feat: autenticacion, roles y aislamiento de clientes del MVP» y el push exclusivamente de `mvp-v1.0`. También establece nuevas reglas de desarrollo (Python 3.11 como entorno principal, sin duplicar recursos, regresión completa solo al cerrar cada bloque) y reorganiza el trabajo restante en los bloques A–D. |
+| R | Verificó la rama, la ausencia de secretos, bases de datos y temporales en lo preparado para el commit, y que `main` y `v0.2` siguieran intactas; ejecutó el commit con la identidad del responsable y publicó `mvp-v1.0`. |
+| E | **Aprobación del cierre técnico: decisión del responsable (2026-11-25).** Las limitaciones pendientes se conservan (`FASE1_SEGURIDAD.md` §12–13). La evaluación del resto del equipo no está registrada. |
+| V | Salida de `git log -1 --format=fuller` y de `git ls-remote origin` presentada en la sesión. |
+| Puntos de atención | Operaciones Git. |
+| Estado de la revisión | Cierre técnico aprobado por el responsable |

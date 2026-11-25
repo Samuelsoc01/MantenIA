@@ -1,0 +1,4 @@
+........................................................................ [ 63%]
+..........................................                               [100%]
+- generated xml file: <RAIZ_REPO>\results\mvp\fase1\revision\pytest-revision-py312.xml -
+114 passed in 34.59s

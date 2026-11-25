@@ -1,6 +1,9 @@
-name: mantenia-v02
+# D16 (aprobada 2026-11-25): proyecto, imágenes y volumen propios del MVP v1.0.
+# La v0.2 (rama main) conserva el proyecto mantenia-v02, el puerto 8000 y su volumen histórico.
+name: mantenia-v10
 services:
   edge:
+    image: mantenia-v10-edge:dev
     build:
       context: .
       target: edge
@@ -18,10 +21,12 @@ services:
       retries: 12
       start_period: 20s
   backend:
+    image: mantenia-v10-backend:dev
     build:
       context: .
       target: backend
-    ports: ["127.0.0.1:8000:8000"]
+    # Solo loopback. Puerto del host configurable; el Edge no publica puertos.
+    ports: ["127.0.0.1:${MANTENIA_BACKEND_PORT:-8100}:8000"]
     environment:
       APP_ENV: ${APP_ENV:-development}
       EDGE_SERVICE_URL: http://edge:8001
@@ -37,6 +42,15 @@ services:
       MAX_CSV_ROWS: ${MAX_CSV_ROWS:-1000}
       MAX_REQUEST_BYTES: ${MAX_REQUEST_BYTES:-2097152}
       RETENTION_DAYS: ${RETENTION_DAYS:-30}
+      # Fase 1: sesiones. En staging/producción SESSION_COOKIE_SECURE=true es obligatorio (el backend no arranca sin él).
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+      SESSION_TTL_MINUTES: ${SESSION_TTL_MINUTES:-480}
+      SESSION_IDLE_MINUTES: ${SESSION_IDLE_MINUTES:-60}
+      LOGIN_MAX_FAILURES: ${LOGIN_MAX_FAILURES:-5}
+      LOGIN_WINDOW_MINUTES: ${LOGIN_WINDOW_MINUTES:-15}
+      LOGIN_LOCKOUT_MINUTES: ${LOGIN_LOCKOUT_MINUTES:-15}
+      API_KEY_DEFAULT_DAYS: ${API_KEY_DEFAULT_DAYS:-90}
+      API_KEY_MAX_DAYS: ${API_KEY_MAX_DAYS:-365}
     volumes: [mantenia_db:/app/database]
     networks: [local_only, ingress]
     read_only: true
@@ -53,12 +67,15 @@ services:
       start_period: 20s
   tests:
     profiles: [test]
+    image: mantenia-v10-tests:dev
     build:
       context: .
       target: tests
     network_mode: none
 volumes:
   mantenia_db:
+    # Nombre explícito: ni siquiera con -p mantenia-v02 se usaría el volumen histórico.
+    name: ${MANTENIA_V10_VOLUME:-mantenia-v10_mantenia_db}
 networks:
   local_only:
     internal: true

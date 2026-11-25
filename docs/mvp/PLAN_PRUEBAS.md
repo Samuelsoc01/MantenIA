@@ -103,6 +103,16 @@ Brechas: sin pruebas de `/billing`, aislamiento, autenticación, compuerta de m�
 3. Verificación de RNF-01, RNF-02, recall ≥ 70 % (resultados de F2-05) y conciliación de facturación (F5-07).
 4. Integridad del modelo activo (hash y equivalencia) tras la reconstrucción.
 
+## 7 bis. Resultados de la Fase 1 (2026-11-25)
+
+Suite de 110 pruebas (25 históricas + 85 nuevas: `test_auth` 19, `test_isolation` 28, `test_security` 19, `test_transactions` 7, `test_migration` 8, `test_privacy` 4) más 4 pruebas JS. Resultados: 110/110 en Python 3.11 y 3.12; 108 pasadas y 2 omitidas (JS, sin Node.js) en Docker. Las pruebas históricas conservan sus aserciones: solo se adaptó la autenticación del fixture y el resumen FinOps se consulta como administrador. Detalle: `docs/mvp/FASE1_SEGURIDAD.md` §11 y `results/mvp/fase1/`.
+
+### Ajustes finales de la Fase 1 (2026-11-25)
+
+Se agregó `tests/test_security_review.py` con 4 pruebas de concurrencia, que fallaron contra el código previo y pasan tras las correcciones R1–R3. Resultados de la suite de 114 pruebas: 114/114 en Python 3.11 y 3.12, y 112 pasadas + 2 omitidas en Docker (`mantenia-v10-tests:dev`). También se hizo una verificación funcional HTTP contra `mantenia-v10` (:8100), se recorrió la interfaz en Chrome y se comprobó la independencia de `mantenia-v02` (huella idéntica). Evidencias: `results/mvp/fase1/revision/`; detalle: `FASE1_SEGURIDAD.md` §13.9.
+
+**Para comparar latencias entre versiones (Fase 7):** medir desde el cliente con el mismo script, el mismo equipo y la misma carga en `:8000` (v0.2) y `:8100` (v1.0); ver `FASE1_SEGURIDAD.md` §13.8.
+
 ## 8. Trazabilidad requisito → pruebas
 
 | Requisito | Pruebas |

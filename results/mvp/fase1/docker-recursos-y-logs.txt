@@ -1,0 +1,11 @@
+# Stack de validación mantenia-f1-validacion — 2026-11-25T21:23:05Z
+## docker stats --no-stream (instantánea; no es una medición FinOps)
+mantenia-f1-validacion-backend-1 cpu=10.81% mem=39.82MiB / 7.59GiB (0.51%)
+mantenia-f1-validacion-edge-1 cpu=26.99% mem=132.4MiB / 7.59GiB (1.70%)
+
+## Revisión de logs de los contenedores
+lineas_de_log_revisadas= 9
+secretos_buscados= 7
+secretos_encontrados_en_logs= 0
+## Advertencias de configuración registradas
+advertencias_cookie_sin_secure=1

@@ -1,4 +1,8 @@
-"""Dos procesos reales, solo loopback. Ctrl+C detiene ambos."""
+"""Dos procesos reales, solo loopback. Ctrl+C detiene ambos.
+
+MVP v1.0 (D16): puertos 8100/8101 y base database/mantenia_v10.db por omisión, para no chocar con la v0.2
+(puerto 8000, database/mantenia.db). Configurables con MANTENIA_BACKEND_PORT, MANTENIA_EDGE_PORT y DATABASE_URL.
+"""
 import os
 import socket
 import subprocess
@@ -30,19 +34,22 @@ def start(module, port, env, logfile):
 
 def main():
     runtime = ROOT / ".runtime"; runtime.mkdir(exist_ok=True)
-    for port in (8000, 8001):
+    backend_port = int(os.getenv("MANTENIA_BACKEND_PORT", "8100"))
+    edge_port = int(os.getenv("MANTENIA_EDGE_PORT", "8101"))
+    for port in (backend_port, edge_port):
         with socket.socket() as sock:
             if sock.connect_ex(("127.0.0.1", port)) == 0:
                 raise SystemExit(f"Puerto {port} ocupado. Detenga otra instancia antes de iniciar.")
-    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", EDGE_SERVICE_URL="http://127.0.0.1:8001")
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", EDGE_SERVICE_URL=f"http://127.0.0.1:{edge_port}")
+    env.setdefault("DATABASE_URL", "sqlite:///database/mantenia_v10.db")
     processes = []
     with (runtime / "local.log").open("a", encoding="utf-8") as log:
         try:
-            edge = start("edge_service.app.main:app", 8001, env, log); processes.append(edge)
-            wait_ready("http://127.0.0.1:8001", edge)
-            backend = start("backend.app.main:app", 8000, env, log); processes.append(backend)
-            wait_ready("http://127.0.0.1:8000", backend)
-            print("MantenIA disponible: http://127.0.0.1:8000 — Ctrl+C para detener.", flush=True)
+            edge = start("edge_service.app.main:app", edge_port, env, log); processes.append(edge)
+            wait_ready(f"http://127.0.0.1:{edge_port}", edge)
+            backend = start("backend.app.main:app", backend_port, env, log); processes.append(backend)
+            wait_ready(f"http://127.0.0.1:{backend_port}", backend)
+            print(f"MantenIA v1.0 disponible: http://127.0.0.1:{backend_port} — Ctrl+C para detener.", flush=True)
             while all(p.poll() is None for p in processes):
                 time.sleep(1)
         except KeyboardInterrupt:

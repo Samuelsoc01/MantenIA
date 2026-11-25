@@ -1,0 +1,2473 @@
+# Docker Fase 1 — proyecto mantenia-f1-validacion — inicio 2026-11-25T21:20:15Z
+client=29.7.2 server=29.7.2
+
+## [1/3] build backend y edge
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+ Image mantenia-f1-validacion-backend Building 
+ Image mantenia-f1-validacion-edge Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.09kB 0.0s done
+#1 DONE 0.0s
+
+#2 [edge internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.47kB 0.0s done
+#2 DONE 0.1s
+
+#3 [backend internal] load metadata for docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#3 DONE 1.5s
+
+#4 [backend internal] load .dockerignore
+#4 transferring context: 156B 0.0s done
+#4 DONE 0.1s
+
+#5 [edge internal] load build context
+#5 DONE 0.0s
+
+#6 [backend base 1/5] FROM docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#6 resolve docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d 0.1s done
+#6 DONE 0.1s
+
+#5 [edge internal] load build context
+#5 transferring context: 8.99kB 0.0s done
+#5 DONE 0.1s
+
+#7 [edge base 2/5] WORKDIR /app
+#7 CACHED
+
+#8 [edge base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#8 CACHED
+
+#9 [edge base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#9 CACHED
+
+#10 [backend internal] load build context
+#10 transferring context: 145.03kB 0.2s done
+#10 DONE 0.3s
+
+#9 [backend base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#9 CACHED
+
+#11 [backend base 5/5] COPY common /app/common
+#11 DONE 0.3s
+
+#12 [backend base 5/5] COPY common /app/common
+#12 CACHED
+
+#7 [backend base 2/5] WORKDIR /app
+#7 CACHED
+
+#13 [backend base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#13 CACHED
+
+#14 [backend base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#14 CACHED
+
+#15 [edge edge 1/3] COPY requirements.txt /tmp/requirements.txt
+#15 DONE 0.1s
+
+#16 [backend backend 1/4] COPY backend /app/backend
+#16 DONE 0.1s
+
+#17 [backend backend 2/4] COPY frontend /app/frontend
+#17 DONE 0.1s
+
+#18 [edge edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#18 ...
+
+#19 [backend backend 3/4] COPY data/demo /app/data/demo
+#19 DONE 0.1s
+
+#20 [backend backend 4/4] RUN mkdir -p /app/database && chown -R appuser:appuser /app/database
+#20 DONE 0.4s
+
+#18 [edge edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#18 ...
+
+#21 [backend] exporting to image
+#21 exporting layers 0.3s done
+#21 exporting manifest sha256:86e599303f15702df2fec658fed1538afa2c6466faca3844b5d7e70db205fe63 0.0s done
+#21 exporting config sha256:a504b24dfc72528a1932d2d6d2f7e146f8ce4d6820a04549fc38e30f97367aed 0.0s done
+#21 exporting attestation manifest sha256:fcdaf0919b2108331d49d5cffca167b9ce5b510e6a9efbf8aa92fd90b798eaa9 0.0s done
+#21 exporting manifest list sha256:dedf2e94ecfa2ab347fc7f48a8e3ab6023592051489eae4832ac885fc340ce8a 0.0s done
+#21 naming to docker.io/library/mantenia-f1-validacion-backend:latest done
+#21 unpacking to docker.io/library/mantenia-f1-validacion-backend:latest 0.1s done
+#21 DONE 0.6s
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#18 [edge edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#18 2.678 Requirement already satisfied: fastapi==0.115.12 in /usr/local/lib/python3.11/site-packages (from -r /tmp/requirements.txt (line 1)) (0.115.12)
+#18 2.681 Requirement already satisfied: starlette==0.46.2 in /usr/local/lib/python3.11/site-packages (from -r /tmp/requirements.txt (line 2)) (0.46.2)
+#18 2.687 Requirement already satisfied: pydantic==2.11.4 in /usr/local/lib/python3.11/site-packages (from -r /tmp/requirements.txt (line 3)) (2.11.4)
+#18 2.691 Requirement already satisfied: uvicorn==0.34.2 in /usr/local/lib/python3.11/site-packages (from -r /tmp/requirements.txt (line 4)) (0.34.2)
+#18 2.697 Requirement already satisfied: httpx==0.28.1 in /usr/local/lib/python3.11/site-packages (from -r /tmp/requirements.txt (line 5)) (0.28.1)
+#18 2.702 Requirement already satisfied: python-multipart==0.0.20 in /usr/local/lib/python3.11/site-packages (from -r /tmp/requirements.txt (line 6)) (0.0.20)
+#18 2.707 Requirement already satisfied: python-dotenv==1.1.0 in /usr/local/lib/python3.11/site-packages (from -r /tmp/requirements.txt (line 7)) (1.1.0)
+#18 3.246 Collecting numpy==2.2.6 (from -r /tmp/requirements.txt (line 8))
+#18 3.452   Downloading numpy-2.2.6-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+#18 3.499      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.0/62.0 kB 1.4 MB/s eta 0:00:00
+#18 3.710 Collecting pandas==2.3.3 (from -r /tmp/requirements.txt (line 9))
+#18 3.756   Downloading pandas-2.3.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (91 kB)
+#18 3.794      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.2/91.2 kB 2.7 MB/s eta 0:00:00
+#18 3.990 Collecting scikit-learn==1.7.2 (from -r /tmp/requirements.txt (line 10))
+#18 4.036   Downloading scikit_learn-1.7.2-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (11 kB)
+#18 4.155 Collecting imbalanced-learn==0.14.0 (from -r /tmp/requirements.txt (line 11))
+#18 4.246   Downloading imbalanced_learn-0.14.0-py3-none-any.whl.metadata (8.8 kB)
+#18 4.311 Collecting joblib==1.5.3 (from -r /tmp/requirements.txt (line 12))
+#18 4.354   Downloading joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+#18 4.582 Collecting scipy==1.15.3 (from -r /tmp/requirements.txt (line 13))
+#18 4.623   Downloading scipy-1.15.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (61 kB)
+#18 4.638      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.0/62.0 kB 8.3 MB/s eta 0:00:00
+#18 4.756 Collecting pytest==8.3.5 (from -r /tmp/requirements.txt (line 14))
+#18 4.795   Downloading pytest-8.3.5-py3-none-any.whl.metadata (7.6 kB)
+#18 4.877 Collecting pip-licenses==5.5.0 (from -r /tmp/requirements.txt (line 15))
+#18 4.922   Downloading pip_licenses-5.5.0-py3-none-any.whl.metadata (32 kB)
+#18 4.958 Requirement already satisfied: typing-extensions>=4.8.0 in /usr/local/lib/python3.11/site-packages (from fastapi==0.115.12->-r /tmp/requirements.txt (line 1)) (4.16.0)
+#18 4.966 Requirement already satisfied: anyio<5,>=3.6.2 in /usr/local/lib/python3.11/site-packages (from starlette==0.46.2->-r /tmp/requirements.txt (line 2)) (4.15.1)
+#18 4.978 Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/site-packages (from pydantic==2.11.4->-r /tmp/requirements.txt (line 3)) (0.8.0)
+#18 4.979 Requirement already satisfied: pydantic-core==2.33.2 in /usr/local/lib/python3.11/site-packages (from pydantic==2.11.4->-r /tmp/requirements.txt (line 3)) (2.33.2)
+#18 4.982 Requirement already satisfied: typing-inspection>=0.4.0 in /usr/local/lib/python3.11/site-packages (from pydantic==2.11.4->-r /tmp/requirements.txt (line 3)) (0.4.4)
+#18 4.993 Requirement already satisfied: click>=7.0 in /usr/local/lib/python3.11/site-packages (from uvicorn==0.34.2->-r /tmp/requirements.txt (line 4)) (8.5.0)
+#18 4.998 Requirement already satisfied: h11>=0.8 in /usr/local/lib/python3.11/site-packages (from uvicorn==0.34.2->-r /tmp/requirements.txt (line 4)) (0.16.0)
+#18 5.061 Requirement already satisfied: certifi in /usr/local/lib/python3.11/site-packages (from httpx==0.28.1->-r /tmp/requirements.txt (line 5)) (2026.10.23)
+#18 5.064 Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.11/site-packages (from httpx==0.28.1->-r /tmp/requirements.txt (line 5)) (1.0.9)
+#18 5.069 Requirement already satisfied: idna in /usr/local/lib/python3.11/site-packages (from httpx==0.28.1->-r /tmp/requirements.txt (line 5)) (3.20)
+#18 5.186 Collecting python-dateutil>=2.8.2 (from pandas==2.3.3->-r /tmp/requirements.txt (line 9))
+#18 5.225   Downloading python_dateutil-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+#18 5.317 Collecting pytz>=2020.1 (from pandas==2.3.3->-r /tmp/requirements.txt (line 9))
+#18 5.358   Downloading pytz-2026.6-py2.py3-none-any.whl.metadata (22 kB)
+#18 5.436 Collecting tzdata>=2022.7 (from pandas==2.3.3->-r /tmp/requirements.txt (line 9))
+#18 5.488   Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+#18 5.603 Collecting threadpoolctl>=3.1.0 (from scikit-learn==1.7.2->-r /tmp/requirements.txt (line 10))
+#18 5.650   Downloading threadpoolctl-3.8.0-py3-none-any.whl.metadata (29 kB)
+#18 5.774 Collecting iniconfig (from pytest==8.3.5->-r /tmp/requirements.txt (line 14))
+#18 5.819   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+#18 5.906 Collecting packaging (from pytest==8.3.5->-r /tmp/requirements.txt (line 14))
+#18 5.952   Downloading packaging-26.4-py3-none-any.whl.metadata (3.5 kB)
+#18 6.026 Collecting pluggy<2,>=1.5 (from pytest==8.3.5->-r /tmp/requirements.txt (line 14))
+#18 6.069   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+#18 6.164 Collecting prettytable>=3.12.0 (from pip-licenses==5.5.0->-r /tmp/requirements.txt (line 15))
+#18 6.218   Downloading prettytable-3.19.0-py3-none-any.whl.metadata (37 kB)
+#18 6.342 Collecting wcwidth>=0.3.5 (from prettytable>=3.12.0->pip-licenses==5.5.0->-r /tmp/requirements.txt (line 15))
+#18 6.386   Downloading wcwidth-0.9.5-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (26 kB)
+#18 6.478 Downloading numpy-2.2.6-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+#18 8.162    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.8/16.8 MB 9.7 MB/s eta 0:00:00
+#18 8.208 Downloading pandas-2.3.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.8 MB)
+#18 9.380    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.8/12.8 MB 11.2 MB/s eta 0:00:00
+#18 9.429 Downloading scikit_learn-1.7.2-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (9.7 MB)
+#18 10.34    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.7/9.7 MB 10.8 MB/s eta 0:00:00
+#18 10.38 Downloading imbalanced_learn-0.14.0-py3-none-any.whl (239 kB)
+#18 10.43    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 240.0/240.0 kB 5.1 MB/s eta 0:00:00
+#18 10.48 Downloading joblib-1.5.3-py3-none-any.whl (309 kB)
+#18 10.51    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 309.1/309.1 kB 10.1 MB/s eta 0:00:00
+#18 10.56 Downloading scipy-1.15.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (37.7 MB)
+#18 14.03    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 37.7/37.7 MB 8.9 MB/s eta 0:00:00
+#18 14.11 Downloading pytest-8.3.5-py3-none-any.whl (343 kB)
+#18 14.15    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 343.6/343.6 kB 9.7 MB/s eta 0:00:00
+#18 14.19 Downloading pip_licenses-5.5.0-py3-none-any.whl (21 kB)
+#18 14.24 Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+#18 14.29 Downloading prettytable-3.19.0-py3-none-any.whl (37 kB)
+#18 14.36 Downloading python_dateutil-4.0.0-py3-none-any.whl (92 kB)
+#18 14.58    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 92.9/92.9 kB 381.7 kB/s eta 0:00:00
+#18 14.66 Downloading pytz-2026.6-py2.py3-none-any.whl (506 kB)
+#18 14.93    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 506.3/506.3 kB 1.9 MB/s eta 0:00:00
+#18 14.98 Downloading threadpoolctl-3.8.0-py3-none-any.whl (32 kB)
+#18 15.05 Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+#18 15.27    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 348.2/348.2 kB 1.6 MB/s eta 0:00:00
+#18 15.35 Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+#18 15.40 Downloading packaging-26.4-py3-none-any.whl (140 kB)
+#18 15.45    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 140.0/140.0 kB 2.7 MB/s eta 0:00:00
+#18 15.50 Downloading wcwidth-0.9.5-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (822 kB)
+#18 15.98    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 822.7/822.7 kB 1.7 MB/s eta 0:00:00
+#18 16.31 Installing collected packages: pytz, wcwidth, tzdata, threadpoolctl, pluggy, packaging, numpy, joblib, iniconfig, scipy, python-dateutil, pytest, prettytable, scikit-learn, pip-licenses, pandas, imbalanced-learn
+#18 28.71 Successfully installed imbalanced-learn-0.14.0 iniconfig-2.3.1 joblib-1.5.3 numpy-2.2.6 packaging-26.4 pandas-2.3.3 pip-licenses-5.5.0 pluggy-1.7.0 prettytable-3.19.0 pytest-8.3.5 python-dateutil-4.0.0 pytz-2026.6 scikit-learn-1.7.2 scipy-1.15.3 threadpoolctl-3.8.0 tzdata-2026.6 wcwidth-0.9.5
+#18 28.71 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#18 28.96 
+#18 28.96 [notice] A new release of pip is available: 24.0 -> 26.3
+#18 28.96 [notice] To update, run: pip install --upgrade pip
+#18 DONE 30.3s
+
+#23 [edge edge 3/3] COPY edge_service /app/edge_service
+#23 DONE 0.1s
+
+#24 [edge] exporting to image
+#24 exporting layers
+#24 exporting layers 13.2s done
+#24 exporting manifest sha256:fd944e8d5567ba61dfaf0ba901ab6fb4784263e869488dd4414578a23066b2a4 0.0s done
+#24 exporting config sha256:ef089f37cacce42b3c5ac90105b88a2ff291ea023c5880ffd046396960f21c54 0.0s done
+#24 exporting attestation manifest sha256:39861670b5163a2fd03cfafa38c367e6447a5130ade167c07a5f64579f018b16 0.0s done
+#24 exporting manifest list sha256:5345a21550d248aa747892de8e1756cb79cfc6bca4448b240627107e948d8278 0.0s done
+#24 naming to docker.io/library/mantenia-f1-validacion-edge:latest done
+#24 unpacking to docker.io/library/mantenia-f1-validacion-edge:latest
+#24 unpacking to docker.io/library/mantenia-f1-validacion-edge:latest 3.7s done
+#24 DONE 17.0s
+
+#25 [edge] resolving provenance for metadata file
+#25 DONE 0.0s
+ Image mantenia-f1-validacion-backend Built 
+ Image mantenia-f1-validacion-edge Built 
+# exit_code_build=0
+
+## [2/3] build tests
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+ Image mantenia-f1-validacion-tests Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 588B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.47kB 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 156B 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [base 1/5] FROM docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#6 resolve docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d 0.0s done
+#6 DONE 0.1s
+
+#5 [internal] load build context
+#5 transferring context: 325.10kB 0.2s done
+#5 DONE 0.2s
+
+#7 [base 5/5] COPY common /app/common
+#7 CACHED
+
+#8 [edge 1/3] COPY requirements.txt /tmp/requirements.txt
+#8 CACHED
+
+#9 [edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#9 CACHED
+
+#10 [base 2/5] WORKDIR /app
+#10 CACHED
+
+#11 [base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#11 CACHED
+
+#12 [base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#12 CACHED
+
+#13 [edge 3/3] COPY edge_service /app/edge_service
+#13 CACHED
+
+#14 [tests 1/7] COPY backend /app/backend
+#14 DONE 0.5s
+
+#15 [tests 2/7] COPY frontend /app/frontend
+#15 DONE 0.2s
+
+#16 [tests 3/7] COPY data/demo /app/data/demo
+#16 DONE 0.0s
+
+#17 [tests 4/7] COPY scripts /app/scripts
+#17 DONE 0.0s
+
+#18 [tests 5/7] COPY tests /app/tests
+#18 DONE 0.0s
+
+#19 [tests 6/7] COPY pytest.ini /app/pytest.ini
+#19 DONE 0.0s
+
+#20 [tests 7/7] RUN mkdir -p /app/.runtime /app/results/integration && chown -R appuser:appuser /app/.runtime /app/results /app/data/demo
+#20 DONE 0.2s
+
+#21 exporting to image
+#21 exporting layers
+#21 exporting layers 0.3s done
+#21 exporting manifest sha256:ad7a48b6ce377bfae82814356d16b2b6b52d3c7cf0b2cb19837fae0ac6fc262d 0.0s done
+#21 exporting config sha256:577e9cb09a73b45211b6c1d905a6330c21cf117f2db4b9cc7e1e5df9bda31111 0.0s done
+#21 exporting attestation manifest sha256:d71701113632790510786a95a3e190dcec869248b4205c3605520895b33edeb9 0.0s done
+#21 exporting manifest list sha256:136991b52560d1ea22ec89cfd7f4ecb50a0b90ee2cd4e5123f9978da30f0a394 0.0s done
+#21 naming to docker.io/library/mantenia-f1-validacion-tests:latest done
+#21 unpacking to docker.io/library/mantenia-f1-validacion-tests:latest 0.1s done
+#21 DONE 0.5s
+
+#22 resolving provenance for metadata file
+#22 DONE 0.0s
+ Image mantenia-f1-validacion-tests Built 
+# exit_code_build_tests=0
+
+## [3/3] pytest dentro del contenedor (red none)
+ Container mantenia-f1-validacion-tests-run-c288ff92d4d1 Creating 
+ Container mantenia-f1-validacion-tests-run-c288ff92d4d1 Created 
+EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE.EEEEEEEEEEEEEEEEEEEEEEEEEEEEE [ 65%]
+EEEEEEEEssEEE.EEEEEEEEEEE.....EEEEEEEE                                   [100%]
+==================================== ERRORS ====================================
+______________ ERROR at setup of test_login_correcto_y_identidad _______________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_contrasena_incorrecta_y_usuario_inexistente_responden_igual _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__ ERROR at setup of test_usuario_deshabilitado_rechazado_sin_revelar_estado ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____ ERROR at setup of test_bloqueo_por_intentos_repetidos_sin_enumeracion _____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____________________ ERROR at setup of test_sesion_expira _____________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____________ ERROR at setup of test_sesion_expira_por_inactividad _____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________ ERROR at setup of test_cierre_de_sesion_invalida_el_token ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____________ ERROR at setup of test_revocacion_por_administrador ______________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____ ERROR at setup of test_rotacion_del_identificador_al_iniciar_sesion ______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____________________ ERROR at setup of test_api_key_valida _____________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_api_key_revocada_o_expirada[a_revoked] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_api_key_revocada_o_expirada[a_expired] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_api_key_invalida_o_malformada[Bearer mtk_000000000000_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_api_key_invalida_o_malformada[Bearer no-es-una-clave] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___ ERROR at setup of test_api_key_invalida_o_malformada[Basic YWRtaW46eA==] ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_________ ERROR at setup of test_api_key_invalida_o_malformada[Bearer] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________________ ERROR at setup of test_api_key_alterada ____________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______________ ERROR at setup of test_api_key_respeta_permisos ________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_credenciales_contradictorias_rechazadas ________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________________ ERROR at setup of test_health_and_frontend __________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___ ERROR at setup of test_model_info_and_real_prediction_persistence_usage ____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+______ ERROR at setup of test_invalid_schema_no_charge[Machine failure-1] ______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____________ ERROR at setup of test_invalid_schema_no_charge[UDI-1] ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____________ ERROR at setup of test_invalid_schema_no_charge[TWF-0] ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_invalid_schema_no_charge[Type-unknown] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______ ERROR at setup of test_invalid_schema_no_charge[Torque [Nm]--1] ________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+______ ERROR at setup of test_invalid_schema_no_charge[Torque [Nm]-True] _______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______ ERROR at setup of test_invalid_schema_no_charge[Torque [Nm]-42] ________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____________ ERROR at setup of test_batch_1000_real_sorted_download ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+______________ ERROR at setup of test_invalid_csv[too_many_rows] _______________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______________ ERROR at setup of test_invalid_csv[extra_column] _______________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______________ ERROR at setup of test_invalid_csv[wrong_header] _______________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____________ ERROR at setup of test_invalid_csv[invalid_encoding] _____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________________ ERROR at setup of test_invalid_csv[empty_csv] _________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______________ ERROR at setup of test_invalid_numeric_csv[nan] ________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______________ ERROR at setup of test_invalid_numeric_csv[inf] ________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________________ ERROR at setup of test_invalid_numeric_csv[-3] ________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______________ ERROR at setup of test_invalid_numeric_csv[bad] ________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+______________ ERROR at setup of test_body_limit_and_cross_origin ______________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_finops_real_events_and_repricing ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_persistence_reopen_and_retention ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________ ERROR at setup of test_edge_endpoints_and_model_integrity ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_raw_opt_in_stores_only_validated_fields ________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________ ERROR at setup of test_sin_credenciales_401[/predictions] ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_________ ERROR at setup of test_sin_credenciales_401[/metrics/usage] __________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_sin_credenciales_401[/metrics/latency] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_sin_credenciales_401[/model/info] ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_sin_credenciales_401[/app/config] ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____________ ERROR at setup of test_sin_credenciales_401[/auth/me] _____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____________ ERROR at setup of test_sin_credenciales_401[/demo.csv] ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_sin_credenciales_401[/billing/cliente_demo_01?year=2026&month=11] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_________ ERROR at setup of test_sin_credenciales_401[/finops/summary] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________ ERROR at setup of test_sin_credenciales_401[/admin/users] ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________ ERROR at setup of test_sin_credenciales_401[/admin/status] __________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_________ ERROR at setup of test_sin_credenciales_401[/admin/api-keys] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____ ERROR at setup of test_sin_credenciales_401[/admin/security-events] ______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____ ERROR at setup of test_prediccion_sin_credenciales_401_y_sin_registro _____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____ ERROR at setup of test_cliente_no_accede_a_funciones_administrativas _____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__ ERROR at setup of test_api_key_de_cliente_no_concede_acceso_administrativo __
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_acceso_administrativo_autorizado ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_cada_cliente_ve_solo_su_historial ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___ ERROR at setup of test_cliente_a_no_consulta_ni_descarga_resultados_de_b ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_cliente_a_no_consulta_facturacion_de_b _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____________ ERROR at setup of test_administrador_ve_ambos_clientes ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__ ERROR at setup of test_manipulacion_de_x_client_id_no_cambia_la_atribucion __
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_manipulacion_del_identificador_de_solicitud[00000000-0000-0000-0000-000000000000] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_manipulacion_del_identificador_de_solicitud[' OR '1'='1] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_manipulacion_del_identificador_de_solicitud[..%2F..%2Fadmin] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__ ERROR at setup of test_metricas_de_cliente_limitadas_a_su_establecimiento ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____ ERROR at setup of test_medidor_de_uso_atribuye_al_cliente_autenticado _____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_formula_de_facturacion_conservada ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_migra_base_v02_conservando_datos ____________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_________________ ERROR at setup of test_migracion_idempotente _________________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________________ ERROR at setup of test_base_nueva_sin_respaldo ________________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______ ERROR at setup of test_triggers_impiden_client_id_no_registrado ________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_restricciones_de_usuarios[admin-cliente_demo_01-scrypt$x] _
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____ ERROR at setup of test_restricciones_de_usuarios[client-None-scrypt$x] ____
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_restricciones_de_usuarios[superusuario-None-scrypt$x] _
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_restricciones_de_usuarios[client-cliente_demo_01-texto-plano] _
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_csv_con_identificadores_se_rechaza_en_el_servidor_sin_almacenarlos _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___ ERROR at setup of test_mediciones_originales_no_almacenadas_por_defecto ____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________ ERROR at setup of test_atributos_de_cookies_en_desarrollo ___________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__________ ERROR at setup of test_staging_emite_cookies_secure_y_hsts __________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_csrf_requerido_en_mutaciones_con_sesion ________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______________ ERROR at setup of test_api_key_no_requiere_csrf ________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______ ERROR at setup of test_contrasenas_no_almacenadas_en_texto_plano _______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+______ ERROR at setup of test_secretos_ausentes_de_respuestas_y_registros ______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_validacion_de_entradas_de_inicio_de_sesion[payload0] __
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_validacion_de_entradas_de_inicio_de_sesion[payload1] __
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_validacion_de_entradas_de_inicio_de_sesion[payload2] __
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_validacion_de_entradas_de_inicio_de_sesion[payload3] __
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_politica_de_contrasenas_en_altas ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+____ ERROR at setup of test_alta_de_api_key_entrega_el_secreto_una_sola_vez ____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), _trace=<pluggy._tracing.TagTracerSub object at 0x70e66c9efad0>, _basetemp=None, _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="session")
+    def stack(tmp_path_factory):
+>       folder = tmp_path_factory.mktemp("integration")
+
+tests/conftest.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_politica_de_acceso_denegado_por_defecto ________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_________ ERROR at setup of test_exito_atomico_y_atribuido_al_cliente __________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_____ ERROR at setup of test_csv_exitoso_registra_una_unidad_por_registro ______
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_______ ERROR at setup of test_falla_del_edge_no_genera_cargos[connect] ________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_________ ERROR at setup of test_falla_del_edge_no_genera_cargos[500] __________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_falla_de_la_transaccion_no_deja_cargos_inconsistentes _
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+___________ ERROR at setup of test_entrada_invalida_no_genera_cargos ___________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+________ ERROR at setup of test_solicitud_no_autenticada_no_se_registra ________
+
+self = PosixPath('/app/C:/Program Files/Git/app/.runtime/pytest'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/app/C:/Program Files/Git/app/.runtime/pytest'
+
+/usr/local/lib/python3.11/pathlib.py:1116: FileNotFoundError
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_privacy.py:29: Node.js no disponible: las pruebas JS se ejecutan en el entorno local Windows
+SKIPPED [1] tests/test_privacy.py:36: Node.js no disponible: la minimización del navegador se valida en el entorno local
+7 passed, 2 skipped, 101 errors in 3.10s
+
+# exit_code_run_tests=1
+# CACHED=0
+# fin 2026-11-25T21:21:18Z

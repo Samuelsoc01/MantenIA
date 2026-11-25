@@ -1,0 +1,15 @@
+# Pruebas de regresión de la revisión de seguridad ejecutadas CONTRA EL CÓDIGO PREVIO a las correcciones — 2026-11-25T23:10:57Z
+# Se espera que fallen si los defectos existen.
+E       AssertionError: [401, 401, 401, 401, 401, 401, ...]
+E       assert 12 <= 3
+E       AttributeError: module 'backend.app.auth' has no attribute 'SCRYPT_MAX_CONCURRENCY'
+E           AttributeError: 'Database' object has no attribute '_apply_migration'
+E       AssertionError: assert ['Operational...tegrityError'] == []
+E         Left contains 4 more items, first extra item: 'OperationalError'
+FAILED tests/test_security_review.py::test_intentos_concurrentes_no_eluden_el_bloqueo
+FAILED tests/test_security_review.py::test_calculos_scrypt_simultaneos_acotados
+FAILED tests/test_security_review.py::test_migracion_ya_aplicada_por_otro_proceso_no_falla
+FAILED tests/test_security_review.py::test_arranques_simultaneos_sobre_una_base_nueva
+4 failed in 12.45s
+scrypt_concurrencia_maxima_codigo_previo= 12 (~32 MiB cada uno => 384 MiB)
+errores_migracion_simultanea= ['IntegrityError: UNIQUE constraint failed: schema_migrations.version', 'OperationalError: database is locked']

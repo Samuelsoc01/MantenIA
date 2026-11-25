@@ -1,0 +1,31 @@
+{
+  "ejecutado_utc": "2026-11-25T20:51:34.767917+00:00",
+  "codigo": "v0.2 sin modificar (commit 8ac5101); Edge emulado en proceso con el modelo real",
+  "control": {
+    "status": 200
+  },
+  "con_falla_inyectada": {
+    "status": 503,
+    "detail": "No se pudo registrar la operación.",
+    "request_id_devuelto": "c56e2c8f-57d0-4867-b68e-292bbdf26479"
+  },
+  "filas_prediction_requests": [
+    {
+      "request_id": "918da613-9806-421b-aa0e-56424cbaea03",
+      "status": "success",
+      "total_latency_ms": 24.040000047534704
+    },
+    {
+      "request_id": "c56e2c8f-57d0-4867-b68e-292bbdf26479",
+      "status": "success",
+      "total_latency_ms": null
+    }
+  ],
+  "usage_events_de_la_solicitud_fallida": [
+    {
+      "request_id": "c56e2c8f-57d0-4867-b68e-292bbdf26479",
+      "billable_units": 1
+    }
+  ],
+  "h12_reproducido": true
+}
