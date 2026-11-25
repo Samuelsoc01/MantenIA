@@ -1,0 +1,7 @@
+# pytest — .venv — inicio 2026-11-25T18:32:46Z — rama mvp-v1.0 @ e770e281c81a06b933fabae336850267829b620b
+# comando: PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest -q --basetemp=.runtime/pytest-fase0-py312 --junitxml=results/mvp/fase0/pytest-windows-py312.xml
+Python 3.12.14
+.........................                                                [100%]
+- generated xml file: <RAIZ_REPO>\results\mvp\fase0\pytest-windows-py312.xml -
+25 passed in 23.95s
+# exit_code=0 — fin 2026-11-25T18:33:14Z

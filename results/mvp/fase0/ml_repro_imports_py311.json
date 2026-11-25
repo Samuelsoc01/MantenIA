@@ -1,0 +1,293 @@
+{
+  "ejecutado_utc": "2026-11-25T19:32:30.996409+00:00",
+  "python": "3.11.9",
+  "ejecutable": "<RAIZ_REPO>\\.runtime\\python311\\python.exe",
+  "spec_src_resoluble": false,
+  "dependencias_disponibles": {
+    "numpy": true,
+    "pandas": true,
+    "sklearn": true,
+    "imblearn": true,
+    "joblib": true,
+    "matplotlib": false,
+    "xgboost": false,
+    "nbformat": false,
+    "nbclient": false,
+    "jupyter_client": false,
+    "ipykernel": false,
+    "IPython": false
+  },
+  "utils_ROOT_resuelve_a": "<RAIZ_REPO>\\scripts",
+  "utils_ROOT_es_raiz_repo": false,
+  "analisis_estatico": {
+    "__init__.py": {
+      "imports": [
+        "os",
+        "pathlib"
+      ],
+      "importa_src": []
+    },
+    "data_preprocessing.py": {
+      "imports": [
+        "io",
+        "numpy",
+        "pandas",
+        "sklearn.compose",
+        "sklearn.impute",
+        "sklearn.model_selection",
+        "sklearn.pipeline",
+        "sklearn.preprocessing",
+        "src.utils",
+        "urllib.request",
+        "zipfile"
+      ],
+      "importa_src": [
+        "src.utils"
+      ]
+    },
+    "eda.py": {
+      "imports": [
+        "matplotlib",
+        "matplotlib.pyplot",
+        "pandas",
+        "src.data_preprocessing",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.data_preprocessing",
+        "src.utils"
+      ]
+    },
+    "evaluate_final.py": {
+      "imports": [
+        "datetime",
+        "joblib",
+        "matplotlib.pyplot",
+        "pandas",
+        "sklearn.metrics",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.utils"
+      ]
+    },
+    "notebook.py": {
+      "imports": [
+        "asyncio",
+        "json",
+        "jupyter_client",
+        "jupyter_client.kernelspec",
+        "nbclient",
+        "nbformat",
+        "os",
+        "src.utils",
+        "sys"
+      ],
+      "importa_src": [
+        "src.utils"
+      ]
+    },
+    "optimize_models.py": {
+      "imports": [
+        "pandas",
+        "sklearn.model_selection",
+        "src.data_preprocessing",
+        "src.train_models",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.data_preprocessing",
+        "src.train_models",
+        "src.utils"
+      ]
+    },
+    "predict.py": {
+      "imports": [
+        "argparse",
+        "joblib",
+        "pandas",
+        "src.data_preprocessing",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.data_preprocessing",
+        "src.utils"
+      ]
+    },
+    "report.py": {
+      "imports": [
+        "json",
+        "pandas",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.utils"
+      ]
+    },
+    "run_pipeline.py": {
+      "imports": [
+        "argparse",
+        "datetime",
+        "matplotlib",
+        "os",
+        "shutil",
+        "src.data_preprocessing",
+        "src.eda",
+        "src.evaluate_final",
+        "src.notebook",
+        "src.optimize_models",
+        "src.report",
+        "src.threshold_selection",
+        "src.train_baseline",
+        "src.train_models",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.data_preprocessing",
+        "src.eda",
+        "src.evaluate_final",
+        "src.notebook",
+        "src.optimize_models",
+        "src.report",
+        "src.threshold_selection",
+        "src.train_baseline",
+        "src.train_models",
+        "src.utils"
+      ]
+    },
+    "threshold_selection.py": {
+      "imports": [
+        "datetime",
+        "importlib.metadata",
+        "joblib",
+        "matplotlib.pyplot",
+        "numpy",
+        "pandas",
+        "platform",
+        "sklearn.base",
+        "src.data_preprocessing",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.data_preprocessing",
+        "src.utils"
+      ]
+    },
+    "train_baseline.py": {
+      "imports": [
+        "pandas",
+        "src.data_preprocessing",
+        "src.train_models",
+        "src.utils"
+      ],
+      "importa_src": [
+        "src.data_preprocessing",
+        "src.train_models",
+        "src.utils"
+      ]
+    },
+    "train_models.py": {
+      "imports": [
+        "imblearn.over_sampling",
+        "imblearn.pipeline",
+        "joblib",
+        "numpy",
+        "pandas",
+        "sklearn.base",
+        "sklearn.ensemble",
+        "sklearn.linear_model",
+        "src.data_preprocessing",
+        "src.utils",
+        "xgboost"
+      ],
+      "importa_src": [
+        "src.data_preprocessing",
+        "src.utils"
+      ]
+    },
+    "utils.py": {
+      "imports": [
+        "hashlib",
+        "json",
+        "math",
+        "matplotlib.pyplot",
+        "numpy",
+        "pathlib",
+        "sklearn.metrics",
+        "sklearn.model_selection"
+      ],
+      "importa_src": []
+    }
+  },
+  "carga_por_ruta": {
+    "__init__.py": {
+      "cargado": null,
+      "nota": "No se ejecuta: crea scripts/.runtime y redefine TEMP/TMP."
+    },
+    "data_preprocessing.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'src'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'src'"
+    },
+    "eda.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'matplotlib'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'matplotlib'"
+    },
+    "evaluate_final.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'matplotlib'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'matplotlib'"
+    },
+    "notebook.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'nbformat'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'nbformat'"
+    },
+    "optimize_models.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'src'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'src'"
+    },
+    "predict.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'src'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'src'"
+    },
+    "report.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'src'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'src'"
+    },
+    "run_pipeline.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'src'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'src'"
+    },
+    "threshold_selection.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'matplotlib'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'matplotlib'"
+    },
+    "train_baseline.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'src'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'src'"
+    },
+    "train_models.py": {
+      "cargado": false,
+      "error": "ModuleNotFoundError: No module named 'xgboost'",
+      "ultima_linea": "ModuleNotFoundError: No module named 'xgboost'"
+    },
+    "utils.py": {
+      "cargado": true,
+      "error": null
+    }
+  },
+  "resumen": {
+    "modulos": 12,
+    "cargan": 1,
+    "fallan": 11,
+    "importan_src": 11
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "ejecutado_utc": "2026-11-25T19:31:09.323587+00:00",
+  "python": "3.11.9",
+  "plataforma": "Windows-10-10.0.26200-SP0",
+  "procedimiento": "Script temporal de verificación de solo lectura (Fase 0). No reentrena, no lee TEST.",
+  "artefacto_sha256": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e",
+  "metadata_sha256": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e",
+  "hash_coincide": true,
+  "version_servicio": "rf-3a9c9f208eef",
+  "final_test_metrics_igual_a_metadata": true,
+  "matriz_confusion": [
+    [
+      1921,
+      11
+    ],
+    [
+      17,
+      51
+    ]
+  ],
+  "metricas_vs_enunciado": {
+    "Accuracy": {
+      "archivo": 0.986,
+      "declarado": 0.986,
+      "coincide_4_decimales": true
+    },
+    "Precision": {
+      "archivo": 0.8225806451612904,
+      "declarado": 0.8226,
+      "coincide_4_decimales": true
+    },
+    "Recall": {
+      "archivo": 0.75,
+      "declarado": 0.75,
+      "coincide_4_decimales": true
+    },
+    "F1": {
+      "archivo": 0.7846153846153846,
+      "declarado": 0.7846,
+      "coincide_4_decimales": true
+    },
+    "ROC_AUC": {
+      "archivo": 0.9726776580197297,
+      "declarado": 0.9727,
+      "coincide_4_decimales": true
+    },
+    "PR_AUC": {
+      "archivo": 0.8384986921947503,
+      "declarado": 0.8385,
+      "coincide_4_decimales": true
+    }
+  },
+  "parametros_vs_enunciado": {
+    "n_estimators": {
+      "archivo": 250,
+      "declarado": 250,
+      "coincide": true
+    },
+    "max_depth": {
+      "archivo": 14,
+      "declarado": 14,
+      "coincide": true
+    },
+    "random_state": {
+      "archivo": 42,
+      "declarado": 42,
+      "coincide": true
+    },
+    "threshold": {
+      "archivo": 0.425,
+      "declarado": 0.425,
+      "coincide": true
+    },
+    "train_size": {
+      "archivo": 8000,
+      "declarado": 8000,
+      "coincide": true
+    },
+    "test_size": {
+      "archivo": 2000,
+      "declarado": 2000,
+      "coincide": true
+    },
+    "n_test_metricas": {
+      "archivo": 2000,
+      "declarado": 2000,
+      "coincide": true
+    }
+  },
+  "selection_locked_discrepancias": [],
+  "model_bundle_cargado": true,
+  "model_bundle_error": null,
+  "model_bundle_version": "rf-3a9c9f208eef",
+  "metadata_python_version_entrenamiento": "3.12.14",
+  "demo_equivalencia": {
+    "comparado": true,
+    "registros": 12,
+    "referencia": "MantenIA_ML\\results\\predictions\\demo_predictions.csv",
+    "diferencia_maxima": 1.1102230246251565e-16,
+    "equivalente_1e-12": true,
+    "predicciones_con_umbral": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ]
+  },
+  "procedencia_artefactos": {
+    "total": 20,
+    "coinciden": 20,
+    "no_coinciden": []
+  },
+  "inventario_original": {
+    "carpeta_existe": true,
+    "archivos": 91,
+    "modificados": [],
+    "faltantes": []
+  },
+  "reentrenado": false,
+  "test_reevaluado": false
+}

@@ -1,0 +1,217 @@
+# Docker — inicio 2026-11-25T18:33:30Z — rama mvp-v1.0 @ e770e281c81a06b933fabae336850267829b620b
+client=29.7.2 server=29.7.2
+Docker Compose version v5.4.0
+
+## [1/3] docker compose build (backend, edge)
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+ Image mantenia-v02-edge Building 
+ Image mantenia-v02-backend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.05kB 0.1s done
+#1 DONE 0.1s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.47kB 0.0s done
+#2 DONE 0.1s
+
+#3 [backend internal] load metadata for docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#3 DONE 2.3s
+
+#4 [edge internal] load .dockerignore
+#4 transferring context: 156B done
+#4 DONE 0.0s
+
+#5 [edge base 1/5] FROM docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#5 resolve docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d 0.0s done
+#5 DONE 0.0s
+
+#6 [edge internal] load build context
+#6 ...
+
+#7 [backend internal] load build context
+#7 transferring context: 100.64kB 0.1s done
+#7 DONE 0.1s
+
+#8 [backend backend 2/4] COPY frontend /app/frontend
+#8 CACHED
+
+#9 [backend backend 3/4] COPY data/demo /app/data/demo
+#9 CACHED
+
+#10 [backend base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#10 CACHED
+
+#11 [backend base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#11 CACHED
+
+#12 [backend base 5/5] COPY common /app/common
+#12 CACHED
+
+#13 [backend base 2/5] WORKDIR /app
+#13 CACHED
+
+#14 [backend backend 1/4] COPY backend /app/backend
+#14 CACHED
+
+#6 [edge internal] load build context
+#6 ...
+
+#15 [backend backend 4/4] RUN mkdir -p /app/database && chown -R appuser:appuser /app/database
+#15 CACHED
+
+#6 [edge internal] load build context
+#6 transferring context: 2.84MB 0.3s done
+#6 DONE 0.4s
+
+#16 [edge base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#16 CACHED
+
+#17 [edge base 5/5] COPY common /app/common
+#17 CACHED
+
+#18 [edge edge 1/3] COPY requirements.txt /tmp/requirements.txt
+#18 CACHED
+
+#19 [edge edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#19 CACHED
+
+#13 [edge base 2/5] WORKDIR /app
+#13 CACHED
+
+#20 [edge base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#20 CACHED
+
+#21 [edge edge 3/3] COPY edge_service /app/edge_service
+#21 CACHED
+
+#22 [backend] exporting to image
+#22 exporting layers 0.0s done
+#22 exporting manifest sha256:21314e17723a2eedd44116bce45a4ebfcb21486b39336336c1efb4f4fbb569e1 done
+#22 exporting config sha256:ef4bfe1e450f0f460e194ecd13d9cbfbe875073605ad1f7fd4c9dd7611f6089a done
+#22 exporting attestation manifest sha256:4fc44386510479b1b0d655c8ee77f7f02f77435b3e215e74347bccb43f9d0a32 0.0s done
+#22 exporting manifest list sha256:8ab9e201740cc9678e5a2fa9ef5028a3dcbce3871c1155f24cebd02fc620661b 0.0s done
+#22 naming to docker.io/library/mantenia-v02-backend:latest done
+#22 unpacking to docker.io/library/mantenia-v02-backend:latest
+#22 unpacking to docker.io/library/mantenia-v02-backend:latest 0.0s done
+#22 DONE 0.3s
+
+#23 [edge] exporting to image
+#23 exporting layers 0.0s done
+#23 exporting manifest sha256:2020535a44282fcd0faa51df2138b754a284af95dfe9bc5172e362c3a42107ad done
+#23 exporting config sha256:1c2a1e7188ec241950ed8983996b54d98eaf5894ee8dd16e42959b7660cc1d1d done
+#23 exporting attestation manifest sha256:533b7b3d6c97d6741525e24290acdb1b9a3fa8745506a3edb41e63c70eb5873f 0.0s done
+#23 exporting manifest list sha256:9948b1db2be198995e984c1e7d5209ba31ecccddfbee04b6cea6061d76291b95 0.1s done
+#23 naming to docker.io/library/mantenia-v02-edge:latest 0.0s done
+#23 unpacking to docker.io/library/mantenia-v02-edge:latest 0.1s done
+#23 DONE 0.3s
+
+#24 [backend] resolving provenance for metadata file
+#24 DONE 0.0s
+
+#25 [edge] resolving provenance for metadata file
+#25 DONE 0.0s
+ Image mantenia-v02-edge Built 
+ Image mantenia-v02-backend Built 
+# exit_code_build=0
+
+## [2/3] docker compose --profile test build tests
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+ Image mantenia-v02-tests Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 568B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.47kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 156B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [base 1/5] FROM docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d
+#6 resolve docker.io/library/python:3.11.14-slim-bookworm@sha256:65a93d69fa75478d554f4ad27c85c1e69fa184956261b4301ebaf6dbb0a3543d 0.0s done
+#6 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 184.35kB 0.0s done
+#5 DONE 0.0s
+
+#7 [base 5/5] COPY common /app/common
+#7 CACHED
+
+#8 [edge 1/3] COPY requirements.txt /tmp/requirements.txt
+#8 CACHED
+
+#9 [base 2/5] WORKDIR /app
+#9 CACHED
+
+#10 [base 3/5] COPY backend/requirements.txt /tmp/backend-requirements.txt
+#10 CACHED
+
+#11 [edge 2/3] RUN pip install --no-cache-dir -r /tmp/requirements.txt
+#11 CACHED
+
+#12 [base 4/5] RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt && useradd -u 10001 -m appuser
+#12 CACHED
+
+#13 [edge 3/3] COPY edge_service /app/edge_service
+#13 CACHED
+
+#14 [tests 1/7] COPY backend /app/backend
+#14 DONE 0.0s
+
+#15 [tests 2/7] COPY frontend /app/frontend
+#15 DONE 0.0s
+
+#16 [tests 3/7] COPY data/demo /app/data/demo
+#16 DONE 0.0s
+
+#17 [tests 4/7] COPY scripts /app/scripts
+#17 DONE 0.0s
+
+#18 [tests 5/7] COPY tests /app/tests
+#18 DONE 0.0s
+
+#19 [tests 6/7] COPY pytest.ini /app/pytest.ini
+#19 DONE 0.0s
+
+#20 [tests 7/7] RUN mkdir -p /app/.runtime /app/results/integration && chown -R appuser:appuser /app/.runtime /app/results /app/data/demo
+#20 DONE 0.4s
+
+#21 exporting to image
+#21 exporting layers
+#21 exporting layers 0.3s done
+#21 exporting manifest sha256:460089dc35139e231fc6c5cd715c61750ddf7b5b9c3d8fcfe31ac372542b35a9 0.0s done
+#21 exporting config sha256:8eee2830a7ad3d9089fdc1ddc8f6e97bc48ea46a9d2959c31be4134cd89c85d6 0.0s done
+#21 exporting attestation manifest sha256:5fa9341d6a39bc311ca5a2a5555a9566d2eeb45b2283a28799e6d1e176234663 0.0s done
+#21 exporting manifest list sha256:d407b57bb507546b07356d2446597266a85d697b7fbf1a60aca30db04c3fe465 0.0s done
+#21 naming to docker.io/library/mantenia-v02-tests:latest done
+#21 unpacking to docker.io/library/mantenia-v02-tests:latest
+#21 unpacking to docker.io/library/mantenia-v02-tests:latest 0.2s done
+#21 DONE 0.7s
+
+#22 resolving provenance for metadata file
+#22 DONE 0.1s
+ Image mantenia-v02-tests Built 
+# exit_code_build_tests=0
+
+## [3/3] docker compose --profile test run --rm tests
+ Container mantenia-v02-tests-run-c21b7bc8bd1e Creating 
+ Container mantenia-v02-tests-run-c21b7bc8bd1e Created 
+.........................                                                [100%]
+-------- generated xml file: /app/results/integration/pytest-docker.xml --------
+25 passed in 6.32s
+# exit_code_run_tests=0
+
+## Imágenes resultantes
+mantenia-v02-tests:latest d407b57bb507 725MB 2026-11-25 12:33:38 -0600 CST
+mantenia-v02-backend:latest 8ab9e201740c 221MB 2026-10-31 17:48:54 -0600 CST
+mantenia-v02-edge:latest 9948b1db2be1 725MB 2026-10-31 16:46:02 -0600 CST
+# fin 2026-11-25T18:33:50Z

@@ -1,0 +1,100 @@
+﻿# docker compose config — ejecutado 2026-11-25T18:31:43Z (UTC) en rama mvp-v1.0 @ e770e281c81a06b933fabae336850267829b620b
+# comando: docker compose config
+name: mantenia-v02
+services:
+  backend:
+    build:
+      context: <RAIZ_REPO>
+      dockerfile: Dockerfile
+      target: backend
+    depends_on:
+      edge:
+        condition: service_healthy
+        required: true
+    environment:
+      APP_ENV: development
+      BILLING_FIXED_FEE_MXN: "3500.00"
+      BILLING_RATE_PER_UNIT_MXN: "1.00"
+      COMPONENT_NAME: backend
+      DATABASE_URL: sqlite:////app/database/mantenia.db
+      DEFAULT_CLIENT_ID: cliente_demo_01
+      EDGE_SERVICE_URL: http://edge:8001
+      ESTIMATED_COST_PER_INFERENCE_MXN: "0.7333"
+      MAX_CSV_ROWS: "1000"
+      MAX_REQUEST_BYTES: "2097152"
+      PROJECT_NAME: MantenIA
+      RESOURCE_NAME: cpu
+      RETENTION_DAYS: "30"
+      STORE_RAW_INPUTS: "false"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=3)
+      timeout: 4s
+      interval: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      ingress: null
+      local_only: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 8000
+        published: "8000"
+        protocol: tcp
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+    volumes:
+      - type: volume
+        source: mantenia_db
+        target: /app/database
+        volume: {}
+  edge:
+    build:
+      context: <RAIZ_REPO>
+      dockerfile: Dockerfile
+      target: edge
+    environment:
+      MAX_CSV_ROWS: "1000"
+      MAX_REQUEST_BYTES: "2097152"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health',timeout=3)
+      timeout: 4s
+      interval: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      local_only: null
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+networks:
+  ingress:
+    name: mantenia-v02_ingress
+    driver: bridge
+  local_only:
+    name: mantenia-v02_local_only
+    internal: true
+volumes:
+  mantenia_db:
+    name: mantenia-v02_mantenia_db
+
+# exit_code=0
+# comando: docker compose --profile test config --services
+edge
+backend
+tests
+
+# exit_code=0
