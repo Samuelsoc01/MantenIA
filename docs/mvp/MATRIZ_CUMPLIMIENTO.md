@@ -5,6 +5,7 @@
 | v1 | 2026-11-25 | Clasificación inicial de la auditoría. |
 | v2 | 2026-11-25 | Cierre de la Fase 0: interpretación académica de los requisitos 1, 4, 6 y 7 (gasto cero, FinOps y facturación simulados) y reclasificación del requisito 10 por evidencia localizada. **No se implementó nada nuevo**: ninguna clasificación mejora por desarrollo. |
 | v4 | 2026-11-25 | Ajustes finales de la Fase 1: D16 implementada (instalaciones v0.2 y v1.0 separadas), 3 defectos de concurrencia corregidos y la interfaz recorrida en Chrome. Las clasificaciones globales no cambian. |
+| v8 | 2026-11-26 | Bloque D técnico (sin commit): manual de operación y recuperación, inventario de licencias, README final, índice de evidencias, acciones de GitHub en Node 24. |
 | v7 | 2026-11-26 | Bloque C (sin commit): staging HTTPS gratuito, despliegue controlado de modelos con reversión, evaluación final sobre TEST, estrés con 36,000 análisis, comparación con v0.2 y FinOps bajo carga. |
 | v6 | 2026-11-25 | Bloque B (sin commit): panel de administración, observabilidad con p99 y alertas, deriva PSI, FinOps simulado medido, estados de cuenta, conciliación e idempotencia. |
 | v5 | 2026-11-25 | Bloque A (MLOps y CI/CD, sin commit): pipeline reproducible, compuerta, registro, promoción aislada y workflows de GitHub Actions (pendientes de su primera ejecución en GitHub). |
@@ -35,8 +36,8 @@ Las referencias `Hn` remiten a `AUDITORIA_INICIAL.md`; `Vn` a la validación de 
 | 5 | Tablero administrativo | ✅ (Bloques B y C) | 1, 4 |
 | 6 | FinOps operativo (costos simulados a partir de consumo medido) | ✅ (Bloques B y C; simulado) | 5, 6 |
 | 7 | Medidor de uso facturable con dos clientes, estados de cuenta de demostración y conciliación | ✅ (Bloque B; verificado en staging) | 1, 5 |
-| 8 | Privacidad, anonimización en origen, autenticación, autorización, secretos, licencias | 🟡 (seguridad verificada en staging HTTPS; falta completar la auditoría de licencias, Bloque D) | 1, 6, 8 |
-| 9 | Pruebas automatizadas con cada cambio, manual de operación y recuperación | 🟡 (CI ✅; falta el manual, Bloque D) | 3, 8 |
+| 8 | Privacidad, anonimización en origen, autenticación, autorización, secretos, licencias | ✅ con reserva: minimización en origen (no anonimización formal); licencias inventariadas sin dictamen jurídico | 1, 6, 8 |
+| 9 | Pruebas automatizadas con cada cambio, manual de operación y recuperación | ✅ (CI en cada push; `docs/mvp/MANUAL_OPERACION.md`; recuperación demostrada) | 3, 8 |
 | 10 | Kanban, métricas de flujo, CFD y cronograma real contra línea base | 🟡 (reclasificado en v2 por evidencia localizada) | 0 → 9 (transversal) |
 | — | README, scripts reproducibles, documentación, etiqueta v1.0, video 4–6 min | 🟡 | 8, 9 |
 
@@ -137,7 +138,7 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Autenticación | ✅ en local y Docker (Fase 1) | Sesiones opacas con scrypt, expiración, inactividad, revocación y rotación; API keys; bloqueo por intentos (`tests/test_auth.py`, 19 pruebas). Pendiente de verificación en staging con HTTPS (Fase 6). |
 | Autorización y aislamiento | ✅ (Fase 1) | Denegación por defecto verificada sobre todas las rutas; aislamiento en SQL; 401/403/404 (`tests/test_isolation.py`, `tests/test_security.py`). |
 | Protección de secretos | 🟡 | Sin secretos en el repositorio ni en las evidencias (revisión y sanitización); credenciales generadas fuera de Git; pendiente la gestión de secretos en staging (Fase 6). |
-| Auditoría de licencias | 🟡 | `reports/licenses/` (pip-licenses, 33 paquetes), `LICENSE`, `NOTICE`; faltan imagen base, dataset y GitHub Actions. |
+| Auditoría de licencias | ✅ (Bloque D) | `docs/mvp/LICENCIAS.md` y `reports/licenses/mvp/python311_runtime_licenses.json` (33 paquetes, sin GPL ni AGPL): imagen base, Docker, cloudflared y Quick Tunnel, GitHub Actions, AI4I (CC BY 4.0, atribución) y artefactos del modelo. No es un dictamen jurídico. |
 | Cabeceras de seguridad | 🟡 | CSP, nosniff, no-referrer; HSTS y cookies `Secure` obligatorios con `APP_ENV=staging\|production` (probado en proceso, `test_staging_emite_cookies_secure_y_hsts`); pendiente en un staging real con HTTPS. |
 
 ### 9. Pruebas automatizadas y manual — 🟡
@@ -147,7 +148,7 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Pruebas de API | ✅ | Fase 0: 25/25. Fase 1: 110 pruebas (25 históricas + 85 nuevas) en verde en Python 3.11 y 3.12; 108 pasadas y 2 omitidas (JS) en Docker (`results/mvp/fase1/`). |
 | Pruebas de modelo | 🟡 | Integridad, equivalencia con el pipeline y adulteración del hash (`test_edge_endpoints_and_model_integrity`); falta compuerta de métricas. |
 | Ejecución con cada cambio | ✅ | `ci.yml` y `ml-pipeline.yml` en verde en los commits de los bloques A y B. Regresión del Bloque C: 143/143 en Python 3.11. |
-| Manual de operación y recuperación | ⛔ | Solo “Solución de problemas” en el README. |
+| Manual de operación y recuperación | ✅ (Bloque D) | `docs/mvp/MANUAL_OPERACION.md`. Recuperación demostrada: reversión del modelo (`bloque_c/mlops/despliegue_staging.json`), caída del Edge y respaldo/restauración de SQLite (`bloque_d/recuperacion.json`). |
 
 ### 10. Gestión del trabajo — 🟡 (v1: ⛔)
 
@@ -164,8 +165,8 @@ La reclasificación se debe a la evidencia de gestión localizada fuera del repo
 
 | Entregable | Estado | Sustento |
 |---|---|---|
-| README actualizado | 🟡 | Describe la v0.2. |
+| README actualizado | ✅ (Bloque D) | README del MVP v1.0: arquitectura, ejecución, staging temporal, resultados, limitaciones y diferencias con la v0.2. |
 | Scripts reproducibles | ✅ (Bloque A) | Pipeline ML reproducible; `benchmark`, `generate_evidence` y `verify_runtime` adaptados a la autenticación y con salidas en `.runtime/` (ya no sobrescriben evidencias históricas). |
-| Documentación técnica | 🟡 | `docs/` v0.2 completa para su alcance. |
+| Documentación técnica | ✅ | `docs/mvp/` (manual, seguridad, protocolo, licencias, índice de evidencias, matriz, registro y bitácora). |
 | Etiqueta v1.0 | ⛔ | — |
 | Video 4–6 min | ⛔ | Existe el de la v0.2. |

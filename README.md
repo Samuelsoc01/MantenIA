@@ -1,540 +1,114 @@
-# MantenIA v0.2
+# MantenIA — MVP v1.0 (rama `mvp-v1.0`)
 
-> **Despliegue y validación final (Bloque C, rama `mvp-v1.0`):**
-> - **Staging:** `docker compose --env-file deploy/staging.env up -d` (staging, cookies Secure, HSTS) y `docker compose --env-file deploy/staging.env --profile tunnel up -d tunnel`. La URL HTTPS `*.trycloudflare.com` aparece en `docker compose logs tunnel`. Es **temporal**: cambia con cada reinicio del túnel, funciona solo mientras la computadora y Docker estén encendidos y no tiene garantía de disponibilidad (Cloudflare Quick Tunnel, sin cuenta, máximo 200 peticiones simultáneas). El túnel solo expone el backend; el Edge, SQLite, Docker y la v0.2 no son accesibles. Las credenciales se entregan por un canal autorizado.
-> - **Modelos:** `python -m scripts.mlops.deploy deploy --model-dir <dir>` aplica compuerta, promoción, activación y verificación, y revierte automáticamente si algo falla. `deploy rollback` vuelve a la versión anterior o al congelado y `deploy status` muestra el estado. La bitácora persistente está en `.runtime/deploy/deployments.json`. Las solicitudes de reentrenamiento del panel quedan en cola y se procesan con `python -m scripts.mlops.retrain_worker [--deploy]`.
-> - **Evaluación final única sobre TEST:** `results/mvp/bloque_c/evaluacion/`. **Estrés y comparación con v0.2:** `scripts/mvp/estres_bloque_c.py` contra pilas locales independientes (`results/mvp/bloque_c/rendimiento/`). **FinOps bajo carga:** `results/mvp/bloque_c/finops/`.
->
-> **MLOps (Bloque A, rama `mvp-v1.0`):**
-> - Pipeline reproducible: `python -m scripts.mlops.pipeline`. Obtiene el dataset de UCI o de una ruta local (`--dataset`), verifica su SHA-256 y escribe en `.runtime/mlops/`.
-> - Compuerta: `python -m scripts.mlops.gate --model-dir <dir>`.
-> - Registro y promoción: `python -m scripts.mlops.registry show|register|promote`. Solo se promueven modelos aprobados.
-> - CI: `.github/workflows/ci.yml` y `ml-pipeline.yml`.
-> - Protocolo de evaluación: `docs/mvp/PROTOCOLO_EVALUACION.md`.
-> - Los scripts `benchmark`, `generate_evidence` y `verify_runtime` leen la API key de `MANTENIA_API_KEY`.
->
-> **Administración, observabilidad y FinOps (Bloque B):**
-> - Panel «06 · Administración», solo para el rol administrador (`GET /admin/dashboard`). Muestra estado, modelo, solicitudes, errores 4xx/5xx, p50/p95/p99, uso por cliente, recursos, costos simulados, alertas, deriva y facturación.
-> - **Deriva:** PSI contra TRAIN (`registry/drift_reference.json`, solo agregados). Requiere una muestra mínima de 200 registros. La deriva no demuestra por sí misma una caída de precisión. `POST /admin/drift/retrain-request` **solo registra el evento**; todavía no activa automáticamente el pipeline.
-> - **FinOps:** consumo medido de CPU, memoria y almacenamiento × tarifas de referencia **simuladas**, derivadas del OPEX de 2,200 MXN/mes, con presupuesto de 2,200 y alerta al 80 % (1,760). El reparto 60/30/10 % entre CPU, memoria y almacenamiento es un **supuesto académico**, no una cotización de un proveedor. La proyección multiplica el costo por hora observada por las horas del mes, así que con pocos segundos observados es solo indicativa. Los costos unitarios son preliminares y no actualizan las proyecciones financieras. Los costos son simulados, no facturas; el desembolso adicional es $0.
-> - **Facturación:** estados de cuenta CSV por cliente (`/billing/{id}/statement.csv`), conciliación (`/admin/billing`) e `Idempotency-Key` para evitar cargos duplicados.
-> - Demostración reproducible: `python -m scripts.mvp.demo_bloque_b --hold-seconds 600` (base temporal y cuentas efímeras).
->
-> **Nota (rama `mvp-v1.0`, decisión D16):** este README describe la versión v0.2, que sigue disponible en la rama `main` (proyecto Docker `mantenia-v02`, `http://127.0.0.1:8000`). El MVP v1.0 en desarrollo usa una instalación separada: proyecto `mantenia-v10`, `http://127.0.0.1:8100`, con volumen e imágenes propios y acceso con usuario y contraseña. Consulte `docs/mvp/FASE1_SEGURIDAD.md`. En esta rama, los comandos de este README que mencionan el puerto 8000 corresponden a la v0.2.
+MVP académico de **mantenimiento predictivo** (IPN UPIIT). Estima la probabilidad de falla de una máquina a partir de seis variables de proceso del dataset AI4I 2020, con un modelo Random Forest congelado. Ofrece acceso autenticado por roles, un panel administrativo, FinOps simulado, facturación académica de dos clientes ficticios y un pipeline MLOps con compuerta, despliegue controlado y reversión.
 
-Prototipo de mantenimiento predictivo con:
+> Apoya la revisión humana: no ejecuta acciones automáticas sobre equipos. AI4I 2020 es un dataset sintético; el modelo requiere validación con datos industriales reales antes de cualquier uso productivo. Los costos y la facturación son **simulados**; el desembolso adicional del proyecto es $0.
 
-- Interfaz web local.
-- Backend FastAPI.
-- Servicio Edge de inferencia.
-- Modelo RandomForest congelado.
-- Persistencia SQLite.
-- Procesamiento individual y por CSV.
-- Historial local.
-- Métricas, FinOps y latencia.
-- Facturación por cliente.
-- Evidencias reproducibles.
-- Despliegue con Docker.
+La versión histórica **v0.2** sigue en `main` y en la etiqueta `v0.2`, con su propia instalación (`mantenia-v02`, puerto 8000).
 
-El modelo no se reentrena ni se sustituye durante la ejecución.
+## Arquitectura
 
-## Requisitos
+```
+Navegador / cliente API ──HTTPS (túnel temporal opcional)──► Backend FastAPI (127.0.0.1:8100)
+                                                              │  sesiones, API keys, roles, CSRF
+                                                              │  SQLite (volumen mantenia-v10_mantenia_db)
+                                                              ▼  red interna Docker (sin puertos publicados)
+                                                            Edge FastAPI ── modelo RF verificado por SHA-256
+                                                              ▲  (congelado de la imagen o versión desplegada
+                                                              │   en .runtime/deploy, montada en solo lectura)
+                     scripts/mlops: pipeline → compuerta → registro → deploy / rollback ┘
+```
 
-### Opción recomendada: Docker
+- **Backend:** autenticación (scrypt, sesiones opacas, API keys), aislamiento por cliente, observabilidad (p50/p95/p99, 4xx/5xx, alertas), deriva PSI contra TRAIN, FinOps simulado, facturación, conciliación e idempotencia.
+- **Edge:** inferencia local; no arranca si el hash o la metadata del modelo no coinciden.
+- **MLOps:** pipeline reproducible con dataset verificado por hash, compuerta (Recall de validación ≥ 0.70), registro JSON, despliegue verificado con reversión automática, cola de reentrenamiento y GitHub Actions (CI y pipeline ML).
 
-- Windows 10/11.
-- Docker Desktop.
-- Git.
-
-### Opción local sin Docker
-
-- Python 3.11.
-- PowerShell.
-- Dependencias del proyecto.
-
-## Ejecución rápida con Docker
-
-Desde PowerShell:
+## Ejecución
 
 ```powershell
-cd "$env:USERPROFILE\Downloads\MantenIA_v0.2"
-docker compose up --build -d --wait
+docker compose up -d --wait                                   # desarrollo → http://127.0.0.1:8100
+docker compose --env-file deploy/staging.env up -d --wait     # staging (cookies Secure, HSTS)
+powershell -ExecutionPolicy Bypass -File .\scripts\run_local.ps1   # sin Docker (Python 3.11)
+docker compose exec -T backend python -m backend.app.manage init-demo --stdout > .runtime\credenciales\v10_demo.json
 ```
 
-Abrir:
-
-```text
-http://127.0.0.1:8000
-```
-
-Verificar servicios:
-
-```powershell
-docker compose ps
-docker compose logs --tail 30
-```
-
-Detener la aplicación:
-
-```powershell
-docker compose down
-```
-
-`docker compose down` conserva el volumen SQLite. No utilizar `docker compose down -v` si se desea conservar el historial.
-
-## Flujo de demostración
-
-1. Abrir **Análisis individual**.
-2. Introducir las seis mediciones o utilizar los valores de ejemplo.
-3. Pulsar **Analizar mediciones**.
-4. Abrir **Análisis CSV**.
-5. Descargar y cargar:
-
-   ```text
-   data/demo/demo_input.csv
-   ```
-
-6. Revisar:
-   - Distribución general de riesgo.
-   - Torque frente a velocidad.
-   - Desgaste frente a probabilidad de fallo.
-   - Top 10 registros críticos.
-7. Utilizar los filtros:
-   - Buscar registro.
-   - Requiere revisión.
-   - Sin indicio de falla.
-   - Mayor riesgo.
-   - Menor riesgo.
-   - Número de registro.
-8. Utilizar **Restablecer filtros** para volver a la tabla original.
-9. Consultar **Historial local**.
-10. Consultar **Métricas y uso**.
-11. Consultar **Modelo y evidencia**.
-
-El sistema apoya la revisión humana. No ejecuta acciones automáticas sobre equipos.
-
-## Ejecución local sin Docker
-
-El proyecto incluye un runtime portátil de Python 3.11 dentro de `.runtime/python311`.
-
-```powershell
-cd "$env:USERPROFILE\Downloads\MantenIA_v0.2"
-powershell -ExecutionPolicy Bypass -File .\scripts\run_local.ps1
-```
-
-La aplicación estará disponible en:
-
-```text
-http://127.0.0.1:8000
-```
-
-No iniciar Docker y el modo local simultáneamente porque ambos utilizan el puerto 8000.
-
-### Instalación limpia con Python 3.11
-
-```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --no-cache-dir -r requirements.txt
-Copy-Item .env.example .env
-powershell -ExecutionPolicy Bypass -File .\scripts\run_local.ps1 -PythonExe .\.venv\Scripts\python.exe
-```
-
-No copiar `.venv` entre equipos. Cada equipo debe reconstruir su propio entorno.
-
-## Configuración
-
-Copiar `.env.example` a `.env` para personalizar la ejecución.
-
-| Variable | Predeterminado | Propósito |
-| --- | --- | --- |
-| `STORE_RAW_INPUTS` | `false` | No conservar mediciones originales |
-| `ESTIMATED_COST_PER_INFERENCE_MXN` | `0.7333` | Coste operativo estimado por unidad |
-| `BILLING_FIXED_FEE_MXN` | `3500.00` | Cargo fijo mensual |
-| `BILLING_RATE_PER_UNIT_MXN` | `1.00` | Cargo por análisis válido |
-| `DEFAULT_CLIENT_ID` | `cliente_demo_01` | Cliente utilizado por defecto |
-| `PROJECT_NAME` | `MantenIA` | Tag FinOps del proyecto |
-| `APP_ENV` | `development` | Entorno de ejecución |
-| `COMPONENT_NAME` | `backend` | Componente contabilizado |
-| `RESOURCE_NAME` | `cpu` | Recurso local contabilizado |
-| `MAX_CSV_ROWS` | `1000` | Máximo de filas por CSV |
-| `MAX_REQUEST_BYTES` | `2097152` | Tamaño máximo de carga |
-| `RETENTION_DAYS` | `30` | Retención de operaciones |
-| `EDGE_TIMEOUT_SECONDS` | `30` | Timeout Backend → Edge |
-| `EDGE_SERVICE_URL` | `http://127.0.0.1:8001` | Servicio local de inferencia |
-| `DATABASE_URL` | `sqlite:///database/mantenia.db` | Base SQLite local |
-
-Después de modificar `.env`, recrear los servicios:
-
-```powershell
-docker compose up -d --force-recreate --wait
-```
-
-## API principal
-
-### Salud del sistema
-
-```http
-GET /health
-```
-
-### Modelo activo
-
-```http
-GET /model/info
-```
-
-### Predicción individual
-
-```http
-POST /predict
-```
-
-### Predicción CSV
-
-```http
-POST /predict/csv
-```
-
-### Historial
-
-```http
-GET /predictions
-GET /predictions/{request_id}
-GET /predictions/{request_id}/download
-```
-
-### Facturación
-
-```http
-GET /billing/{client_id}?year=YYYY&month=MM
-```
-
-Ejemplo:
-
-```text
-http://127.0.0.1:8000/billing/cliente_demo_01?year=2026&month=10
-```
-
-La fórmula de facturación es:
-
-```text
-cargo fijo mensual + unidades válidas × tarifa por unidad
-```
-
-Configuración actual:
-
-```text
-3500 MXN mensuales + 1 MXN por análisis válido
-```
-
-Las solicitudes inválidas no generan cargos. Dos solicitudes válidas duplicadas cuentan como dos análisis independientes.
-
-## Modelo de Machine Learning
-
-El modelo activo es:
-
-```text
-RandomForest optimizado
-```
-
-Características:
-
-- Umbral: `0.425`.
-- Sin balanceo de clases.
-- Artefacto congelado.
-- Inferencia local.
-- No se reentrena durante la ejecución.
-- No utiliza simulaciones.
-
-Métricas TEST:
-
-```text
-Accuracy: 0.9860
-Precision: 0.8226
-Recall: 0.7500
-F1: 0.7846
-ROC-AUC: 0.9727
-PR-AUC: 0.8385
-```
-
-Matriz de confusión:
-
-```text
-TN=1921
-FP=11
-FN=17
-TP=51
-```
-
-El dataset AI4I 2020 es sintético. El modelo requiere validación adicional con datos representativos antes de utilizarse en maquinaria industrial real.
-
-## Visualizaciones
-
-El análisis individual muestra un perfil operativo de:
-
-- Temperatura ambiente.
-- Temperatura de proceso.
-- Velocidad de rotación.
-- Torque.
-- Desgaste de herramienta.
-
-El análisis CSV incluye:
-
-- Distribución general de probabilidad de fallo.
-- Torque frente a velocidad.
-- Desgaste frente a probabilidad de fallo.
-- Top 10 registros críticos.
-- Tarjetas de resumen.
-- Filtros y ordenamiento.
-- Paginación filtrada.
-
-Las visualizaciones son descriptivas y no modifican la predicción del modelo.
-
-## Historial local
-
-El historial permite revisar:
-
-- Fecha y hora.
-- Tipo de solicitud.
-- Número de registros.
-- Estado.
-- Latencia total.
-- Resultados descargables.
-
-La persistencia se realiza con SQLite en el volumen Docker:
-
-```text
-mantenia-v02_mantenia_db
-```
-
-## Métricas y FinOps
-
-Se registran:
-
-- Solicitudes totales.
-- Solicitudes exitosas.
-- Solicitudes fallidas.
-- Inferencias realizadas.
-- Unidades facturables.
-- Latencia media.
-- Mediana.
-- p95.
-- Latencia máxima.
-- Coste operativo estimado.
-- Uso por tipo de solicitud.
-
-Tags FinOps:
-
-```text
-project=MantenIA
-environment=development
-component=backend
-resource=cpu
-```
-
-El coste operativo estimado se calcula como:
-
-```text
-unidades procesadas × 0.7333 MXN
-```
-
-Este coste es una estimación operativa y no representa una factura cloud ni el precio comercial al cliente.
-
-## Reproducción ML, latencia y costes
-
-Los scripts originales de entrenamiento y evaluación se encuentran en `scripts/ml_repro/`. Se conservan separados del servicio productivo: Docker utiliza el artefacto congelado de `edge_service/models`.
-
-La medición de latencia se ejecuta con `scripts/benchmark.py`. El cálculo unitario reproducible se ejecuta con:
-
-```powershell
-python scripts/cost_report.py --units 100 --rate 0.7333
-```
-
-## Pruebas
-
-Ejecutar pruebas locales:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\run_tests.ps1
-```
-
-Ejecutar pruebas dentro de Docker:
-
-```powershell
-docker compose --profile test build tests
-docker compose --profile test run --rm tests
-```
-
-La suite valida:
-
-- Salud de servicios.
-- Predicción real.
-- Persistencia.
-- Validación de esquemas.
-- CSV válido e inválido.
-- Límites de carga.
-- Privacidad.
-- Retención.
-- Modelo congelado.
-- Eventos FinOps.
-
-## Benchmark
-
-El benchmark requiere que la aplicación esté iniciada:
-
-```powershell
-docker compose up -d --wait
-```
-
-Ejecutar:
-
-```powershell
-.\.runtime\python311\python.exe -m scripts.benchmark --environment "Docker Desktop"
-```
-
-La evidencia actual contiene:
-
-- 100 solicitudes individuales.
-- 100 lotes CSV de 1,000 registros.
-- 100% de solicitudes por debajo de 5 segundos.
-- 100,100 unidades procesadas.
-
-Archivos:
-
-```text
-reports/latency/latency_results.csv
-reports/latency/latency_summary.json
-results/performance/benchmark.json
-results/performance/benchmark.csv
-```
-
-## Auditoría de licencias
-
-La auditoría se genera con `pip-licenses`.
-
-Reportes:
-
-```text
-reports/licenses/python_licenses.csv
-reports/licenses/python_licenses.json
-```
-
-## Evidencias del proyecto
-
-```text
-docs/ARCHITECTURE.md
-docs/DATABASE_SCHEMA.md
-docs/DEMO_GUIDE.md
-docs/E2E_EVIDENCE.md
-docs/FINOPS.md
-docs/INGESTION_EVIDENCE.md
-docs/LATENCY_EVIDENCE.md
-docs/LICENSE_AUDIT.md
-docs/MODEL_CARD.md
-docs/MODEL_EVIDENCE.md
-docs/PRIVACY.md
-docs/PRIVACY_EVIDENCE.md
-docs/REQUIREMENTS_COMPLIANCE.md
-docs/SEGUNDA_ENTREGA.md
-docs/SEQUENCE_DIAGRAM.md
-```
-
-Reportes:
-
-```text
-reports/billing/
-reports/finops/
-reports/latency/
-reports/licenses/
-results/integration/
-results/performance/
-```
-
-## Estructura principal
-
-```text
-backend/
-  app/
-
-common/
-
-edge_service/
-  app/
-  models/
-
-frontend/
-  static/
-  templates/
-
-data/
-  demo/
-
-docs/
-reports/
-results/
-scripts/
-scripts/ml_repro/: entrenamiento, evaluación, EDA y selección de umbral del proyecto ML original.
-tests/
-```
-
-## Solución de problemas
-
-### Puerto 8000 ocupado
-
-Detener otra instancia de MantenIA:
-
-```powershell
-docker compose down
-```
-
-No detener aplicaciones ajenas sin verificar primero qué proceso utiliza el puerto.
-
-### Edge no inicia
-
-Consultar:
-
-```powershell
-docker compose logs edge
-```
-
-El backend no utiliza simulaciones si Edge no está disponible.
-
-### CSV rechazado
-
-Verificar:
-
-- Codificación UTF-8.
-- Separador por comas.
-- Encabezados exactos.
-- `Type` con valores `L`, `M` o `H`.
-- Valores numéricos finitos.
-- Valores no negativos.
-- Máximo de 1,000 registros.
-- Tamaño máximo de 2 MiB.
-- Sin columnas adicionales.
-
-### Historial desaparecido
-
-No utilizar:
-
-```powershell
-docker compose down -v
-```
-
-Ese comando elimina el volumen y la base SQLite persistida.
-
-## Privacidad y alcance
-
-- El procesamiento es local.
-- No se utilizan APIs externas de inferencia.
-- `STORE_RAW_INPUTS=false` por defecto.
-- Las mediciones originales no se guardan por defecto.
-- Se aplican límites de tamaño y validación estricta.
-- La aplicación es local y de un usuario.
-- No existe autenticación multiusuario.
-- No es un diagnóstico certificado.
-- No ejecuta acciones automáticas sobre maquinaria.
-
-## Video de demostración
-
-[Ver demostración completa de MantenIA](https://youtu.be/bQtvhumilDU?si=VD8RvKqJkIB_KFAg)
+Las cuentas de demostración tienen contraseñas aleatorias y se guardan solo en `.runtime/` (ignorada por Git); se entregan por un canal autorizado. Para detener: `docker compose down`. No use `-v`, porque borraría el volumen.
+
+La operación completa (usuarios, roles, panel, FinOps, reentrenamiento, reversión, caída del Edge, respaldo de SQLite y túnel) está en **[docs/mvp/MANUAL_OPERACION.md](docs/mvp/MANUAL_OPERACION.md)**.
+
+## Acceso al staging (temporal)
+
+1. `docker compose --env-file deploy/staging.env --profile tunnel up -d --pull never tunnel`
+2. La URL `https://<aleatoria>.trycloudflare.com` aparece en `docker compose logs tunnel`.
+
+El staging **no es un servicio permanente**:
+- La URL cambia con cada inicio.
+- Solo funciona mientras la computadora del equipo y Docker estén encendidos.
+- No tiene garantía de disponibilidad (Cloudflare Quick Tunnel: sin cuenta, para pruebas, hasta 200 peticiones simultáneas).
+- Solo se expone el backend.
+- Para cerrarlo: `docker compose --profile tunnel stop tunnel`.
+
+## Funcionalidades
+
+| Rol | Funciones |
+|---|---|
+| Cliente | Análisis individual y CSV (hasta 1,000 filas, minimización en el navegador), historial propio, métricas, estado de cuenta CSV, API (`/predict`, `/predict/csv`, `Idempotency-Key`) |
+| Administrador | Panel «06 · Administración»: estado, modelo activo, solicitudes y errores, latencias, uso por cliente, deriva, FinOps (consumo y proyección), facturación y conciliación, solicitudes de reentrenamiento; gestión de usuarios y API keys |
+| Operador | `scripts/mlops/retrain_worker.py` y `deploy.py` (promoción, verificación y reversión) |
+
+## Resultados definitivos
+
+Fuente de cada cifra: [docs/mvp/INDICE_EVIDENCIAS.md](docs/mvp/INDICE_EVIDENCIAS.md).
+
+- **Evaluación final sobre TEST (una sola vez, 2,000 registros):**
+  - El modelo congelado v0.2 y el reproducido v1.0 obtienen Accuracy 0.986, Precision 0.8226, Recall 0.75 (cumple ≥ 0.70), F1 0.7846, ROC-AUC 0.9727 y PR-AUC 0.8385, con matriz de confusión VN 1921, FP 11, FN 17, VP 51. Sus predicciones son idénticas y sus hashes distintos.
+  - La línea base (regresión logística sin balanceo) obtiene Recall 0.1029 y F1 0.1772.
+  - La mayoría de los falsos negativos son fallas por desgaste de herramienta (TWF).
+  - TEST es la partición retenida del dataset original, la misma de la evaluación de la v0.2, no un conjunto externo.
+- **Estrés (local):**
+  - 36,000 análisis (el doble del volumen del primer año) en 3,600 peticiones, con 4, 8 y 16 conexiones concurrentes. 0 errores y 100 % de los CSV en ≤ 5 s.
+  - Rendimiento de unos 36–39 peticiones/s (unos 360–390 análisis/s); el límite lo marca el Edge, que corre en un solo proceso.
+- **v0.2 contra v1.0:** latencias equivalentes; no se observa un costo medible de la autenticación.
+- **FinOps:** se reportan dos costos distintos.
+  - *Por consumo* (recursos medidos × tarifas simuladas): unos 1×10⁻⁶ MXN por análisis.
+  - *Por capacidad contratada* (VM de referencia de 2,200 MXN/mes): 0.7333 MXN por análisis con 3,000 análisis/mes.
+  - No se suman: una VM se paga completa aunque se use parcialmente.
+- **MLOps:** candidato rechazado bloqueado; candidato aprobado desplegado y verificado en staging y **después revertido**. El modelo activo es el congelado `rf-3a9c9f208eef`.
+- **Pruebas:** 143/143 en la regresión completa; CI y pipeline ML en verde en GitHub Actions.
+
+## Privacidad: minimización frente a anonimización
+
+Lo implementado es **minimización de datos en origen**:
+- El navegador envía solo las seis variables técnicas.
+- El servidor rechaza las columnas no esperadas y no guarda las mediciones originales por omisión (`STORE_RAW_INPUTS=false`).
+- La retención es de 30 días.
+
+No es **anonimización** en sentido estricto, porque no se analizó formalmente el riesgo de reidentificación de las mediciones ni de los metadatos de uso. Ver `docs/mvp/FASE1_SEGURIDAD.md` §9 y §13.6.
+
+## Diferencias respecto a v0.2
+
+| Aspecto | v0.2 | MVP v1.0 |
+|---|---|---|
+| Acceso | Sin autenticación; `X-Client-ID` libre | Usuarios, roles, API keys, CSRF y aislamiento por cliente |
+| Instalación | `mantenia-v02`, puerto 8000 | `mantenia-v10`, puerto 8100, volumen e imágenes propios |
+| Observabilidad | Media, p50 y p95 | p50/p95/p99, 4xx/5xx, alertas, panel administrativo |
+| Modelo | Congelado, sin pipeline operativo | Pipeline reproducible, compuerta, registro, despliegue, reversión, deriva y cola de reentrenamiento |
+| FinOps y facturación | Costo estimado; un estado de cuenta con un CSV mal formado | Consumo medido × tarifas simuladas, presupuesto y alertas, dos clientes, conciliación e idempotencia |
+| Despliegue | Solo local | Staging HTTPS temporal y gratuito |
+| Pruebas | 25 de integración | 143 y CI en cada push |
+
+## Limitaciones
+
+- El staging es temporal (URL variable, depende del equipo encendido) y no es apto como producción.
+- El despliegue automatizado de modelos se ejecuta en el staging local; GitHub Actions genera el paquete, pero no despliega en remoto (no hay runner propio ni se expone Docker).
+- El reentrenamiento usa el mismo dataset AI4I (no hay datos nuevos etiquetados); la deriva no mide por sí misma la precisión.
+- El estrés se midió en la misma laptop que el cliente de carga. La proyección FinOps se basa en ventanas cortas y en tarifas que son supuestos académicos.
+- Incidencia: un **503 intermitente** observado en fases anteriores **no se reprodujo** y sigue sin diagnóstico.
+- Falta completar la gestión del trabajo (Kanban, CFD y cronograma real). La etiqueta `v1.0` la crea el responsable.
+
+## Documentación y licencias
+
+- Manual: `docs/mvp/MANUAL_OPERACION.md`; índice de evidencias: `docs/mvp/INDICE_EVIDENCIAS.md`.
+- Matriz de cumplimiento: `docs/mvp/MATRIZ_CUMPLIMIENTO.md`; seguridad: `docs/mvp/FASE1_SEGURIDAD.md`; protocolo de evaluación: `docs/mvp/PROTOCOLO_EVALUACION.md`.
+- Licencias: código Apache-2.0 (`LICENSE`, `NOTICE`); dependencias y condiciones en `docs/mvp/LICENCIAS.md`.
+- Dataset: S. Matzka, «AI4I 2020 Predictive Maintenance Dataset», UCI Machine Learning Repository, 2020, https://doi.org/10.24432/C5HS5C (CC BY 4.0).

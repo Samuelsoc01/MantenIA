@@ -473,3 +473,17 @@ Destino: actualización del Capítulo XI de la memoria técnica final.
 | E | **Aprobación técnica del responsable (Samuelsoc01) de los resultados del Bloque C, conservando las limitaciones identificadas** (URL temporal, despliegue automatizado local, reentrenamiento con el mismo dataset, estrés en la misma laptop, proyección FinOps indicativa, 503 no reproducido). |
 | V | `results/mvp/bloque_c/`; GitHub Actions del commit. |
 | Estado de la revisión | Aprobado por el responsable |
+
+## PREV-D-01 — Bloque D técnico: manual, licencias, README e índice de evidencias
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-D-01 |
+| Fecha real | 2026-11-26 |
+| Fase | Bloque D (parte técnica) |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Manual de operación y recuperación, inventario de licencias, README final, índice de evidencias y correcciones menores, sin ampliar el alcance. |
+| R | **Generó documentación y un script de demostración** (`demo_recuperacion.py`). Demostró sobre la pila de prueba la caída del Edge y el respaldo/restauración de SQLite. Actualizó las acciones de GitHub a versiones con Node.js 24 tras comprobar el runtime en el `action.yml` de cada versión. Interpretaciones de licencias (certifi MPL-2.0, imagen base Debian, términos de Docker y Cloudflare) **sin valor de dictamen jurídico**. |
+| E | **Aprobado por el responsable (Samuelsoc01) el 2026-11-26: cierre técnico del Bloque D con las limitaciones documentadas.** |
+| V | `results/mvp/bloque_d/recuperacion.json`, `docs/mvp/LICENCIAS.md`, `docs/mvp/INDICE_EVIDENCIAS.md`; las acciones actualizadas se validarán en GitHub Actions al publicar. Verificación realizada por la herramienta. |
+| Estado de la revisión | Aprobado por el responsable |

@@ -51,5 +51,6 @@
         "registered_utc": "2026-11-26T02:19:17.917876+00:00"
       }
     ]
-  }
+  },
+  "aclaracion": "La solicitud de reentrenamiento #1 desplegó rf-718303950825 y después se revirtió; el modelo activo es el congelado rf-3a9c9f208eef."
 }

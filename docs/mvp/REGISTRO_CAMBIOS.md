@@ -254,3 +254,15 @@ Sin dependencias nuevas. Docker no se reconstruyó: los cambios se incorporan a 
 | `results/mvp/bloque_c/` (nuevo) | Evidencias |
 
 Sin dependencias nuevas. Se reconstruyeron solo las imágenes `mantenia-v10-backend:dev` y `mantenia-v10-edge:dev`.
+
+## Bloque D técnico — documentación final y correcciones menores (2026-11-26, sin commit)
+
+| Archivo | Cambio |
+|---|---|
+| `docs/mvp/MANUAL_OPERACION.md` (nuevo) | Instalación, ejecución, usuarios, roles, predicción, panel, FinOps, facturación, reentrenamiento, reversión, caída del Edge, respaldo de SQLite y túnel |
+| `scripts/mvp/demo_recuperacion.py` (nuevo), `results/mvp/bloque_d/recuperacion.json` | Demostración sobre la pila de prueba: caída del Edge (503 sin cargo; recuperación en 3.5 s) y respaldo/restauración de SQLite (integridad y conteos coinciden) |
+| `docs/mvp/LICENCIAS.md`, `reports/licenses/mvp/python311_runtime_licenses.json` (nuevos) | Inventario con `pip-licenses` existente y componentes no Python |
+| `docs/mvp/INDICE_EVIDENCIAS.md` (nuevo) | Índice por tema, ejecuciones de Actions y datos definitivos para los entregables |
+| `README.md` | README del MVP v1.0 (sustituye al de la v0.2, que sigue en `main` y en la etiqueta `v0.2`) |
+| `.github/workflows/*.yml` | `checkout@v5`, `setup-python@v6`, `cache@v5`, `upload-artifact@v6`, `download-artifact@v7`: versiones mayores estables más bajas que corren en Node.js 24; sin cambios de arquitectura |
+| Documentación | La solicitud de reentrenamiento #1 se desplegó y después se revirtió (el modelo activo es el congelado); el 503 queda como incidencia no reproducida; se distingue minimización de anonimización y costo por consumo de costo por capacidad |

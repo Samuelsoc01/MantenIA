@@ -1,0 +1,44 @@
+{
+  "ejecutado_utc": "2026-11-26T02:50:35.675586+00:00",
+  "pila": "mantenia-v10-stress",
+  "nota": "Pila y volumen de prueba; staging y v0.2 no se tocan.",
+  "caida_edge": {
+    "prediccion_previa": 200,
+    "con_edge_detenido": {
+      "health": 503,
+      "predict": 503,
+      "usage_events_sin_cambio": true
+    },
+    "recuperado": true,
+    "segundos_hasta_health_200": 3.5,
+    "prediccion_tras_recuperar": 200,
+    "usage_events_al_final": 2,
+    "interpretacion": "Con el Edge caído el backend responde 503 y no factura; al reiniciar el Edge se recupera sin intervenir la base (1 cargo antes + 1 después = 2)."
+  },
+  "respaldo_restauracion": {
+    "metodo": "API de respaldo en línea de sqlite3 (consistente con WAL), sin detener el servicio",
+    "respaldo_en_volumen_de_prueba": "/app/database/respaldo_20261126T025046Z.db",
+    "conteos_respaldo": {
+      "prediction_requests": 8443,
+      "prediction_results": 84204,
+      "usage_events": 8442,
+      "users": 0,
+      "clients": 10,
+      "integrity": "ok"
+    },
+    "conteos_copia_restaurada": {
+      "prediction_requests": 8443,
+      "prediction_results": 84204,
+      "usage_events": 8442,
+      "users": 0,
+      "clients": 10,
+      "integrity": "ok"
+    },
+    "coinciden": true,
+    "servicio_sobre_copia_restaurada": {
+      "health": 200,
+      "historial_del_cliente": 3,
+      "api_key_restaurada_valida": 200
+    }
+  }
+}
