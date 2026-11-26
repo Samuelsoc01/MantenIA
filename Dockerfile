@@ -8,6 +8,8 @@ FROM base AS backend
 COPY backend /app/backend
 COPY frontend /app/frontend
 COPY data/demo /app/data/demo
+# Bloque B: referencia agregada de deriva (TRAIN) y registro de modelos.
+COPY registry /app/registry
 RUN mkdir -p /app/database && chown -R appuser:appuser /app/database
 USER appuser
 CMD ["python","-m","uvicorn","backend.app.main:app","--host","0.0.0.0","--port","8000","--no-access-log"]
@@ -22,6 +24,7 @@ USER root
 COPY backend /app/backend
 COPY frontend /app/frontend
 COPY data/demo /app/data/demo
+COPY registry /app/registry
 COPY scripts /app/scripts
 COPY tests /app/tests
 COPY pytest.ini /app/pytest.ini

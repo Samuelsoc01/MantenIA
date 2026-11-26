@@ -1,0 +1,45 @@
+{
+  "ejecutado_utc": "2026-11-26T00:32:48.138581+00:00",
+  "solicitudes": [
+    [
+      "A individual",
+      200
+    ],
+    [
+      "A individual",
+      200
+    ],
+    [
+      "A individual",
+      200
+    ],
+    [
+      "A individual",
+      200
+    ],
+    [
+      "A individual",
+      200
+    ],
+    [
+      "A CSV demo (12)",
+      200
+    ],
+    [
+      "A entrada inválida",
+      422
+    ],
+    [
+      "B CSV sintético sin deriva (300)",
+      200
+    ],
+    [
+      "B reintento misma Idempotency-Key",
+      "200 replay=true"
+    ],
+    [
+      "B CSV sintético CON deriva (400)",
+      200
+    ]
+  ]
+}

@@ -1,0 +1,4 @@
+day,project,environment,component,cpu_seconds,ram_gib_hours,storage_gib_hours,covered_hours,cpu_mxn,ram_mxn,storage_mxn,total_mxn
+2026-11-26,MantenIA,test,almacenamiento,0.0,0.0,1e-06,0.003872,0.0,0.0,0.0,0.0
+2026-11-26,MantenIA,test,backend,0.65625,0.000205,0.0,0.003872,0.000165,4.6e-05,0.0,0.000211
+2026-11-26,MantenIA,test,edge,0.21875,0.000662,0.0,0.003872,5.5e-05,0.00015,0.0,0.000204

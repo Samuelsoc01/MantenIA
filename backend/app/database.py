@@ -4,7 +4,7 @@ import time
 from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 # Valor por defecto de client_id en el esquema v0.2: todo el historial previo quedó registrado así.
 LEGACY_DEFAULT_CLIENT = "cliente_demo_01"
 TAG_DEFAULTS = {"project": "MantenIA", "environment": "development", "component": "backend", "resource": "cpu"}
@@ -152,7 +152,30 @@ def _migration_v2(conn):
         conn.execute(trigger)
 
 
-MIGRATIONS = [(1, "esquema_base_v0_2", _migration_v1), (2, "identidad_y_autorizacion", _migration_v2)]
+# v3: observabilidad, FinOps, deriva e idempotencia (Bloque B). Solo agregados: sin datos de clientes.
+V3_TABLES = [
+    """CREATE TABLE IF NOT EXISTS drift_counts (
+        day TEXT NOT NULL, feature TEXT NOT NULL, bin INTEGER NOT NULL, count INTEGER NOT NULL,
+        PRIMARY KEY(day, feature, bin))""",
+    """CREATE TABLE IF NOT EXISTS resource_samples (
+        sample_id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT NOT NULL, component TEXT NOT NULL,
+        instance_id TEXT NOT NULL, cpu_seconds REAL, rss_bytes INTEGER, storage_bytes INTEGER,
+        project TEXT NOT NULL, environment TEXT NOT NULL)""",
+    "CREATE INDEX IF NOT EXISTS resource_component_time ON resource_samples(component, timestamp)",
+    """CREATE TABLE IF NOT EXISTS idempotency_keys (
+        client_id TEXT NOT NULL REFERENCES clients(client_id), idem_key TEXT NOT NULL,
+        request_hash TEXT NOT NULL, request_id TEXT NOT NULL, response_json TEXT NOT NULL,
+        created_at TEXT NOT NULL, PRIMARY KEY(client_id, idem_key))""",
+]
+
+
+def _migration_v3(conn):
+    for ddl in V3_TABLES:
+        conn.execute(ddl)
+
+
+MIGRATIONS = [(1, "esquema_base_v0_2", _migration_v1), (2, "identidad_y_autorizacion", _migration_v2),
+              (3, "observabilidad_finops_idempotencia", _migration_v3)]
 
 
 class Database:
@@ -262,8 +285,9 @@ class Database:
 
     # -------------------------------------------------------------- operaciones
     def save_success(self, request_id, kind, result, records, store_raw, rate, client_id=LEGACY_DEFAULT_CLIENT,
-                     tags=None, total_latency=None):
-        """Registra solicitud, resultados y evento de uso en UNA transacción (todo o nada)."""
+                     tags=None, total_latency=None, drift_counts=None, idempotency=None):
+        """Registra solicitud, resultados, evento de uso, agregados de deriva y clave de idempotencia en UNA
+        transacción (todo o nada). Una clave de idempotencia repetida aborta la transacción (sin cargo doble)."""
         n = len(result["results"])
         tags = {**TAG_DEFAULTS, **(tags or {})}
         with self.connect() as db:
@@ -277,6 +301,72 @@ class Database:
             db.execute("INSERT INTO usage_events(request_id,timestamp,billable_units,inference_count,compute_time_ms,cost_rate_mxn,estimated_cost,client_id,project,environment,component,resource) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                        (request_id, utcnow(), n, n, result["inference_latency_ms"], str(rate), str(rate * n), client_id,
                         tags["project"], tags["environment"], tags["component"], tags["resource"]))
+            if drift_counts:
+                day = utcnow()[:10]
+                db.executemany("INSERT INTO drift_counts(day,feature,bin,count) VALUES (?,?,?,?) "
+                               "ON CONFLICT(day,feature,bin) DO UPDATE SET count=count+excluded.count",
+                               [(day, feature, b, c) for feature, counts in drift_counts.items()
+                                for b, c in enumerate(counts) if c])
+            if idempotency:
+                db.execute("INSERT INTO idempotency_keys(client_id,idem_key,request_hash,request_id,response_json,created_at) "
+                           "VALUES (?,?,?,?,?,?)", (client_id, idempotency["key"], idempotency["hash"], request_id,
+                                                    idempotency["response"], utcnow()))
+
+    def idempotent_response(self, client_id, key):
+        with self.connect() as db:
+            row = db.execute("SELECT request_hash, response_json FROM idempotency_keys WHERE client_id=? AND idem_key=?",
+                             (client_id, key)).fetchone()
+        return dict(row) if row else None
+
+    # -------------------------------------------------------------- deriva y recursos
+    def drift_totals(self, since_day):
+        with self.connect() as db:
+            rows = db.execute("SELECT feature, bin, SUM(count) c, MIN(day) first_day, MAX(day) last_day "
+                              "FROM drift_counts WHERE day >= ? GROUP BY feature, bin", (since_day,)).fetchall()
+        return [dict(r) for r in rows]
+
+    def add_resource_sample(self, component, instance_id, cpu_seconds, rss_bytes, storage_bytes, tags, timestamp=None):
+        with self.connect() as db:
+            db.execute("INSERT INTO resource_samples(timestamp,component,instance_id,cpu_seconds,rss_bytes,storage_bytes,"
+                       "project,environment) VALUES (?,?,?,?,?,?,?,?)",
+                       (timestamp or utcnow(), component, instance_id, cpu_seconds, rss_bytes, storage_bytes,
+                        tags["project"], tags["environment"]))
+
+    def resource_samples(self, since):
+        with self.connect() as db:
+            return [dict(r) for r in db.execute("SELECT * FROM resource_samples WHERE timestamp >= ? "
+                                                "ORDER BY component, timestamp", (since,))]
+
+    def operations(self, since=None):
+        """Solicitudes de predicción (sin datos de entrada) para observabilidad; opcionalmente desde una fecha."""
+        query = ("SELECT client_id, request_type, status, error_code, total_latency_ms, record_count, timestamp "
+                 "FROM prediction_requests")
+        with self.connect() as db:
+            rows = db.execute(query + (" WHERE timestamp >= ?" if since else ""), (since,) if since else ())
+            return [dict(r) for r in rows]
+
+    def reconcile(self, start, end):
+        """Conciliación por cliente: resultados procesados = eventos de uso = unidades facturadas."""
+        with self.connect() as db:
+            rows = db.execute("""
+                SELECT r.client_id,
+                       COUNT(DISTINCT r.request_id) AS successful_requests,
+                       (SELECT COUNT(*) FROM prediction_results pr JOIN prediction_requests q USING(request_id)
+                         WHERE q.client_id=r.client_id AND q.status='success' AND q.timestamp>=? AND q.timestamp<?) AS result_rows,
+                       (SELECT COALESCE(SUM(u.billable_units),0) FROM usage_events u JOIN prediction_requests q USING(request_id)
+                         WHERE q.client_id=r.client_id AND q.timestamp>=? AND q.timestamp<?) AS usage_units,
+                       (SELECT COUNT(*) FROM prediction_requests q WHERE q.client_id=r.client_id AND q.status='success'
+                         AND q.timestamp>=? AND q.timestamp<?
+                         AND NOT EXISTS (SELECT 1 FROM usage_events u WHERE u.request_id=q.request_id)) AS success_without_usage,
+                       (SELECT COUNT(*) FROM usage_events u JOIN prediction_requests q USING(request_id)
+                         WHERE q.client_id=r.client_id AND q.status<>'success' AND q.timestamp>=? AND q.timestamp<?) AS usage_on_failed,
+                       (SELECT COUNT(*) FROM usage_events u JOIN prediction_requests q USING(request_id)
+                         WHERE q.client_id=r.client_id AND q.timestamp>=? AND q.timestamp<?
+                         AND u.billable_units <> (SELECT COUNT(*) FROM prediction_results pr WHERE pr.request_id=u.request_id))
+                         AS units_mismatch
+                FROM prediction_requests r WHERE r.timestamp>=? AND r.timestamp<? GROUP BY r.client_id""",
+                (start, end) * 6).fetchall()
+        return [dict(r) for r in rows]
 
     def finish(self, request_id, kind, status, latency, error_code=None, client_id=LEGACY_DEFAULT_CLIENT):
         """Registra una operación fallida (sin unidades facturables) o actualiza la latencia de una existente."""
@@ -340,6 +430,9 @@ class Database:
             # e intentos de acceso caducados.
             db.execute("DELETE FROM sessions WHERE expires_at < ? OR (revoked_at IS NOT NULL AND revoked_at < ?)", (stale, stale))
             db.execute("DELETE FROM security_events WHERE timestamp < ?", (cutoff,))
+            db.execute("DELETE FROM idempotency_keys WHERE created_at < ?", (cutoff,))
+            db.execute("DELETE FROM drift_counts WHERE day < ?", ((now - timedelta(days=90)).date().isoformat(),))
+            db.execute("DELETE FROM resource_samples WHERE timestamp < ?", ((now - timedelta(days=400)).isoformat(),))
             db.execute("DELETE FROM login_attempts WHERE window_started_at < ? AND (locked_until IS NULL OR locked_until < ?)",
                        (stale, now.isoformat()))
         with self.connect() as db:

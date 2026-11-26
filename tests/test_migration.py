@@ -5,7 +5,7 @@ from contextlib import closing
 
 import pytest
 
-from backend.app.database import Database
+from backend.app.database import SCHEMA_VERSION, Database
 
 # DDL tal como lo creaba backend/app/database.py en la v0.2 (commit 8ac5101).
 V02_DDL = """
@@ -75,7 +75,7 @@ def test_migra_base_v02_conservando_datos(tmp_path):
     before = snapshot(path)
     db = Database(path)
     assert snapshot(path) == before
-    assert db.schema_version() == 2 and db.applied_migrations == [1, 2]
+    assert db.schema_version() == SCHEMA_VERSION and db.applied_migrations == list(range(1, SCHEMA_VERSION + 1))
     assert db.backup_path is not None and db.backup_path.exists()
     assert snapshot(db.backup_path) == before
     with closing(sqlite3.connect(db.backup_path)) as backup:
@@ -102,7 +102,7 @@ def test_migracion_idempotente(tmp_path):
 
 def test_base_nueva_sin_respaldo(tmp_path):
     db = Database(tmp_path / "nueva.db")
-    assert db.backup_path is None and db.schema_version() == 2
+    assert db.backup_path is None and db.schema_version() == SCHEMA_VERSION
 
 
 def test_triggers_impiden_client_id_no_registrado(tmp_path):

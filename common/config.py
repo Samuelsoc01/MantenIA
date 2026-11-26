@@ -44,6 +44,24 @@ class Settings:
     login_lockout_minutes: int = int(os.getenv("LOGIN_LOCKOUT_MINUTES", "15"))
     api_key_default_days: int = int(os.getenv("API_KEY_DEFAULT_DAYS", "90"))
     api_key_max_days: int = int(os.getenv("API_KEY_MAX_DAYS", "365"))
+    # Bloque B: alertas operativas (configurables).
+    alert_min_requests: int = int(os.getenv("ALERT_MIN_REQUESTS", "20"))
+    alert_error_rate: float = float(os.getenv("ALERT_ERROR_RATE", "0.05"))
+    alert_p95_ms: float = float(os.getenv("ALERT_P95_MS", "2000"))
+    alert_window_hours: int = int(os.getenv("ALERT_WINDOW_HOURS", "24"))
+    # Bloque B: deriva de datos (PSI contra TRAIN).
+    drift_window_days: int = int(os.getenv("DRIFT_WINDOW_DAYS", "7"))
+    drift_min_sample: int = int(os.getenv("DRIFT_MIN_SAMPLE", "200"))
+    drift_reference: Path = Path(os.getenv("DRIFT_REFERENCE", str(ROOT / "registry/drift_reference.json")))
+    # Bloque B: FinOps simulado. Tarifas de referencia derivadas del OPEX del modelo financiero
+    # (2,200 MXN/mes ~ VM de referencia 2 vCPU, 4 GiB, 50 GB, 730 h; reparto 60/30/10 %). Ver FinOps en README.
+    budget_monthly_mxn: Decimal = Decimal(os.getenv("BUDGET_MONTHLY_MXN", "2200"))
+    budget_alert_ratio: Decimal = Decimal(os.getenv("BUDGET_ALERT_RATIO", "0.80"))
+    rate_vcpu_hour_mxn: Decimal = Decimal(os.getenv("FINOPS_RATE_VCPU_HOUR_MXN", "0.9041"))
+    rate_gb_ram_hour_mxn: Decimal = Decimal(os.getenv("FINOPS_RATE_GB_RAM_HOUR_MXN", "0.2260"))
+    rate_gb_storage_month_mxn: Decimal = Decimal(os.getenv("FINOPS_RATE_GB_STORAGE_MONTH_MXN", "4.40"))
+    rates_date: str = os.getenv("FINOPS_RATES_DATE", "2026-11-25")
+    finops_sample_seconds: int = int(os.getenv("FINOPS_SAMPLE_SECONDS", "60"))
 
     def __post_init__(self):
         target = urlparse(self.edge_url)

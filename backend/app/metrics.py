@@ -9,9 +9,10 @@ def summary(values):
         lo, hi = math.floor(position), math.ceil(position)
         return values[lo] + (values[hi] - values[lo]) * (position - lo)
     if not values:
-        return {"count": 0, "mean_ms": None, "p50_ms": None, "p95_ms": None, "max_ms": None, "percent_le_5s": None}
+        return {"count": 0, "mean_ms": None, "p50_ms": None, "p95_ms": None, "p99_ms": None, "max_ms": None,
+                "percent_le_5s": None}
     return {"count": len(values), "mean_ms": mean(values), "p50_ms": percentile(.5),
-            "p95_ms": percentile(.95), "max_ms": max(values),
+            "p95_ms": percentile(.95), "p99_ms": percentile(.99), "max_ms": max(values),
             "percent_le_5s": sum(v <= 5000 for v in values) / len(values) * 100}
 
 def reports(db, rate, client_id=None):

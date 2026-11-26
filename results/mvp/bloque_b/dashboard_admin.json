@@ -1,0 +1,252 @@
+{
+  "status": {
+    "status": "ok",
+    "edge": "ok",
+    "database": "ok",
+    "schema_version": 3,
+    "model_version": "rf-3a9c9f208eef",
+    "model_sha256": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e",
+    "threshold": 0.425,
+    "environment": "test",
+    "cookie_secure": false,
+    "clients": 2,
+    "users": 1,
+    "active_sessions": 2
+  },
+  "model": {
+    "model_name": "RandomForest",
+    "version": "rf-3a9c9f208eef",
+    "threshold": 0.425,
+    "training_date_utc": "2026-09-25T04:37:23.486895+00:00"
+  },
+  "operations": {
+    "generated_utc": "2026-11-26T00:32:48.579447+00:00",
+    "totals": {
+      "requests": 9,
+      "successful": 8,
+      "failed": 1,
+      "service_errors_5xx": 0,
+      "rejected_inputs_4xx": 1,
+      "analyses": 717,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "count": 8,
+        "mean_ms": 32.36620005918667,
+        "p50_ms": 20.29595000203699,
+        "p95_ms": 71.17028016364199,
+        "p99_ms": 83.49397619022055,
+        "max_ms": 86.5749001968652,
+        "percent_le_5s": 100.0
+      }
+    },
+    "window": {
+      "hours": 24,
+      "requests": 9,
+      "successful": 8,
+      "failed": 1,
+      "service_errors_5xx": 0,
+      "rejected_inputs_4xx": 1,
+      "analyses": 717,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "count": 8,
+        "mean_ms": 32.36620005918667,
+        "p50_ms": 20.29595000203699,
+        "p95_ms": 71.17028016364199,
+        "p99_ms": 83.49397619022055,
+        "max_ms": 86.5749001968652,
+        "percent_le_5s": 100.0
+      }
+    },
+    "by_client": {
+      "cliente_demo_01": {
+        "requests": 7,
+        "successful": 6,
+        "analyses": 17,
+        "failed": 1
+      },
+      "cliente_demo_02": {
+        "requests": 2,
+        "successful": 2,
+        "analyses": 700,
+        "failed": 0
+      }
+    },
+    "alerts": [],
+    "thresholds": {
+      "min_requests": 20,
+      "error_rate": 0.05,
+      "p95_ms": 2000.0,
+      "window_hours": 24
+    },
+    "latency_methodology": "Servidor: entrada al middleware → respuesta del Edge, antes de la transacción de persistencia; percentiles con interpolación lineal (v0.2 incluía parte de la persistencia)."
+  },
+  "drift": {
+    "window_days": 7,
+    "period_start": "2026-11-20",
+    "period_end": "2026-11-26",
+    "first_observation": "2026-11-26",
+    "last_observation": "2026-11-26",
+    "sample_size": 717,
+    "min_sample": 200,
+    "reference": "TRAIN original (8,000 filas; SHA-256 LF 17cc0b4ca843…)",
+    "method": "PSI por variable contra TRAIN (10 intervalos por cuantiles; Type por categoría)",
+    "thresholds": {
+      "moderada": 0.1,
+      "significativa": 0.25
+    },
+    "note": "La deriva de datos no demuestra por sí misma una disminución de la precisión del modelo.",
+    "status": "deriva_significativa",
+    "features": {
+      "Type": {
+        "psi": 0.004,
+        "level": "estable"
+      },
+      "Air temperature [K]": {
+        "psi": 0.0051,
+        "level": "estable"
+      },
+      "Process temperature [K]": {
+        "psi": 0.0077,
+        "level": "estable"
+      },
+      "Rotational speed [rpm]": {
+        "psi": 0.0281,
+        "level": "estable"
+      },
+      "Torque [Nm]": {
+        "psi": 0.8293,
+        "level": "significativa"
+      },
+      "Tool wear [min]": {
+        "psi": 0.5127,
+        "level": "significativa"
+      }
+    },
+    "affected": [
+      "Torque [Nm]",
+      "Tool wear [min]"
+    ],
+    "alert": true,
+    "recommendation": "Revisar el desempeño con datos etiquetados recientes y, si procede, solicitar el pipeline de reentrenamiento (POST /admin/drift/retrain-request). Ningún candidato se promueve sin superar la compuerta."
+  },
+  "finops": {
+    "currency": "MXN",
+    "period": "2026-11",
+    "generated_utc": "2026-11-26T00:32:48.579447+00:00",
+    "measured_consumption": {
+      "almacenamiento": {
+        "cpu_seconds": 0.0,
+        "ram_gib_hours": 0.0,
+        "storage_gib_hours": 1e-06,
+        "covered_hours": 0.0039
+      },
+      "backend": {
+        "cpu_seconds": 0.609,
+        "ram_gib_hours": 0.000204,
+        "storage_gib_hours": 0.0,
+        "covered_hours": 0.0039
+      },
+      "edge": {
+        "cpu_seconds": 0.219,
+        "ram_gib_hours": 0.000659,
+        "storage_gib_hours": 0.0,
+        "covered_hours": 0.0039
+      }
+    },
+    "simulated_cost_month_to_date": 0.000403,
+    "simulated_cost_by_component": {
+      "almacenamiento": 0.0,
+      "backend": 0.000199,
+      "edge": 0.000204
+    },
+    "simulated_cost_projected_month": 75.2685,
+    "billable_units_month": 717,
+    "simulated_unit_cost_per_analysis": 5.6e-07,
+    "budget": {
+      "monthly_mxn": 2200.0,
+      "alert_ratio": 0.8,
+      "alert_threshold_mxn": 1760.0,
+      "projected_ratio": 0.034213
+    },
+    "alerts": [],
+    "historical_reference": {
+      "unit_cost_mxn": 0.7333,
+      "optimized_unit_cost_mxn": 0.6,
+      "projection_with_historical_rate_mxn": 630.36,
+      "note": "Valores de planeación de la primera entrega; no se suman al costo simulado medido."
+    },
+    "rates": {
+      "vcpu_hour_mxn": 0.9041,
+      "gb_ram_hour_mxn": 0.226,
+      "gb_storage_month_mxn": 4.4,
+      "date": "2026-11-25",
+      "origin": "Supuesto académico derivado del OPEX de 2,200 MXN/mes del modelo financiero (VM de referencia 2 vCPU / 4 GiB / 50 GB, 730 h; reparto 60/30/10 %). No es cotización de proveedor.",
+      "units": {
+        "cpu": "MXN por vCPU-hora",
+        "memoria": "MXN por GiB-hora",
+        "almacenamiento": "MXN por GiB-mes"
+      }
+    },
+    "effective_additional_spend_mxn": 0,
+    "disclaimer": "Costos económicos SIMULADOS a partir de consumo medido; no son facturas ni pagos reales."
+  },
+  "billing": {
+    "period": "2026-11",
+    "statements": [
+      {
+        "client_id": "cliente_demo_01",
+        "period_start": "2026-11-01T00:00:00+00:00",
+        "period_end": "2026-12-01T00:00:00+00:00",
+        "successful_requests": 6,
+        "billable_units": 17,
+        "fixed_fee_mxn": 3500.0,
+        "variable_rate_mxn": 1.0,
+        "variable_charge_mxn": 17.0,
+        "total_mxn": 3517.0,
+        "currency": "MXN",
+        "client_name": "Cliente demo 01 (ficticio)",
+        "period": "2026-11",
+        "legend": "DEMOSTRACIÓN ACADÉMICA: estado de cuenta hipotético de un cliente ficticio del escenario empresarial simulado. No constituye un cobro real ni un comprobante fiscal."
+      },
+      {
+        "client_id": "cliente_demo_02",
+        "period_start": "2026-11-01T00:00:00+00:00",
+        "period_end": "2026-12-01T00:00:00+00:00",
+        "successful_requests": 2,
+        "billable_units": 700,
+        "fixed_fee_mxn": 3500.0,
+        "variable_rate_mxn": 1.0,
+        "variable_charge_mxn": 700.0,
+        "total_mxn": 4200.0,
+        "currency": "MXN",
+        "client_name": "Cliente demo 02 (ficticio)",
+        "period": "2026-11",
+        "legend": "DEMOSTRACIÓN ACADÉMICA: estado de cuenta hipotético de un cliente ficticio del escenario empresarial simulado. No constituye un cobro real ni un comprobante fiscal."
+      }
+    ],
+    "reconciliation": [
+      {
+        "client_id": "cliente_demo_01",
+        "result_rows": 17,
+        "usage_units": 17,
+        "billed_units": 17,
+        "success_without_usage": 0,
+        "usage_on_failed": 0,
+        "units_mismatch": 0,
+        "consistent": true
+      },
+      {
+        "client_id": "cliente_demo_02",
+        "result_rows": 700,
+        "usage_units": 700,
+        "billed_units": 700,
+        "success_without_usage": 0,
+        "usage_on_failed": 0,
+        "units_mismatch": 0,
+        "consistent": true
+      }
+    ],
+    "all_consistent": true
+  }
+}

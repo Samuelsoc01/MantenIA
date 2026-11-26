@@ -1,0 +1,70 @@
+{
+  "nota": "Datos sintéticos generados por scripts/mvp/demo_bloque_b.py; referencia = TRAIN.",
+  "tras_300_registros_sin_deriva": {
+    "status": "estable",
+    "sample_size": 317,
+    "features": {
+      "Type": {
+        "psi": 0.0011,
+        "level": "estable"
+      },
+      "Air temperature [K]": {
+        "psi": 0.0197,
+        "level": "estable"
+      },
+      "Process temperature [K]": {
+        "psi": 0.0256,
+        "level": "estable"
+      },
+      "Rotational speed [rpm]": {
+        "psi": 0.0428,
+        "level": "estable"
+      },
+      "Torque [Nm]": {
+        "psi": 0.0326,
+        "level": "estable"
+      },
+      "Tool wear [min]": {
+        "psi": 0.0608,
+        "level": "estable"
+      }
+    },
+    "affected": []
+  },
+  "tras_agregar_400_con_deriva": {
+    "status": "deriva_significativa",
+    "sample_size": 717,
+    "features": {
+      "Type": {
+        "psi": 0.004,
+        "level": "estable"
+      },
+      "Air temperature [K]": {
+        "psi": 0.0051,
+        "level": "estable"
+      },
+      "Process temperature [K]": {
+        "psi": 0.0077,
+        "level": "estable"
+      },
+      "Rotational speed [rpm]": {
+        "psi": 0.0281,
+        "level": "estable"
+      },
+      "Torque [Nm]": {
+        "psi": 0.8293,
+        "level": "significativa"
+      },
+      "Tool wear [min]": {
+        "psi": 0.5127,
+        "level": "significativa"
+      }
+    },
+    "affected": [
+      "Torque [Nm]",
+      "Tool wear [min]"
+    ],
+    "period_start": "2026-11-20",
+    "period_end": "2026-11-26"
+  }
+}

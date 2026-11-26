@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from common.config import Settings
+from common import resources
 from common.schemas import MachineRecord, BatchInput
 from common.security import PrivacyMiddleware, validation_error
 from edge_service.app.model_loader import ModelBundle
@@ -21,6 +22,11 @@ def create_app(settings=None):
     @app.get("/health")
     def health():
         return {"status": "ok", "model_loaded": True, "model_version": app.state.bundle.version}
+
+    @app.get("/resources")
+    def resources_snapshot():
+        # Solo agregados del proceso (CPU acumulada y memoria); el Edge no publica puertos (red interna).
+        return resources.snapshot()
 
     @app.get("/model-info")
     def model_info():

@@ -8,6 +8,13 @@
 > - Protocolo de evaluación: `docs/mvp/PROTOCOLO_EVALUACION.md`.
 > - Los scripts `benchmark`, `generate_evidence` y `verify_runtime` leen la API key de `MANTENIA_API_KEY`.
 >
+> **Administración, observabilidad y FinOps (Bloque B):**
+> - Panel «06 · Administración», solo para el rol administrador (`GET /admin/dashboard`). Muestra estado, modelo, solicitudes, errores 4xx/5xx, p50/p95/p99, uso por cliente, recursos, costos simulados, alertas, deriva y facturación.
+> - **Deriva:** PSI contra TRAIN (`registry/drift_reference.json`, solo agregados). Requiere una muestra mínima de 200 registros. La deriva no demuestra por sí misma una caída de precisión. `POST /admin/drift/retrain-request` **solo registra el evento**; todavía no activa automáticamente el pipeline.
+> - **FinOps:** consumo medido de CPU, memoria y almacenamiento × tarifas de referencia **simuladas**, derivadas del OPEX de 2,200 MXN/mes, con presupuesto de 2,200 y alerta al 80 % (1,760). El reparto 60/30/10 % entre CPU, memoria y almacenamiento es un **supuesto académico**, no una cotización de un proveedor. La proyección multiplica el costo por hora observada por las horas del mes, así que con pocos segundos observados es solo indicativa. Los costos unitarios son preliminares y no actualizan las proyecciones financieras. Los costos son simulados, no facturas; el desembolso adicional es $0.
+> - **Facturación:** estados de cuenta CSV por cliente (`/billing/{id}/statement.csv`), conciliación (`/admin/billing`) e `Idempotency-Key` para evitar cargos duplicados.
+> - Demostración reproducible: `python -m scripts.mvp.demo_bloque_b --hold-seconds 600` (base temporal y cuentas efímeras).
+>
 > **Nota (rama `mvp-v1.0`, decisión D16):** este README describe la versión v0.2, que sigue disponible en la rama `main` (proyecto Docker `mantenia-v02`, `http://127.0.0.1:8000`). El MVP v1.0 en desarrollo usa una instalación separada: proyecto `mantenia-v10`, `http://127.0.0.1:8100`, con volumen e imágenes propios y acceso con usuario y contraseña. Consulte `docs/mvp/FASE1_SEGURIDAD.md`. En esta rama, los comandos de este README que mencionan el puerto 8000 corresponden a la v0.2.
 
 Prototipo de mantenimiento predictivo con:

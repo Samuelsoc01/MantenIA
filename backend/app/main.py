@@ -1,6 +1,8 @@
 import asyncio
 import csv
+import hashlib
 import io
+import json
 import logging
 import math
 import re
@@ -10,9 +12,9 @@ from datetime import datetime, timezone
 from typing import Literal
 
 import httpx
-from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request, Response
+from fastapi import Depends, FastAPI, Header, HTTPException, Path, Query, Request, Response
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.datastructures import UploadFile
@@ -25,10 +27,16 @@ from backend.app.accounts import AccountError, AccountStore
 from backend.app.authz import CSRF_COOKIE, SESSION_COOKIE, AuthDependencies
 from backend.app.csv_input import parse_csv
 from backend.app.database import Database
+from backend.app import drift, observability
+from backend.app import finops as finops_sim
 from backend.app.metrics import reports
+from common import resources
 from backend.app.telemetry import TelemetryMiddleware
 
 logger = logging.getLogger("mantenia")
+IDEMPOTENCY_RE = re.compile(r"[A-Za-z0-9_-]{8,128}")
+ACADEMIC_LEGEND = ("DEMOSTRACIÓN ACADÉMICA: estado de cuenta hipotético de un cliente ficticio del escenario "
+                   "empresarial simulado. No constituye un cobro real ni un comprobante fiscal.")
 # Rutas públicas (sin credenciales). Todo lo demás exige una dependencia de autorización.
 PUBLIC_PATHS = {"/", "/health", "/auth/login", "/openapi.json"}
 CLIENT_ID_REGEX = f"^{auth.CLIENT_ID_PATTERN}$"
@@ -103,12 +111,19 @@ def create_app(settings=None, edge_transport=None):
                     await asyncio.sleep(3600)
                     await asyncio.to_thread(app.state.db.purge, settings.retention_days)
             retention_task = asyncio.create_task(retention_loop())
+
+            async def sampling_loop():
+                while True:
+                    await sample_resources()
+                    await asyncio.sleep(settings.finops_sample_seconds)
+            sampling_task = asyncio.create_task(sampling_loop())
             try:
                 yield
             finally:
-                retention_task.cancel()
-                with suppress(asyncio.CancelledError):
-                    await retention_task
+                for task in (retention_task, sampling_task):
+                    task.cancel()
+                    with suppress(asyncio.CancelledError):
+                        await task
 
     app = FastAPI(title="MantenIA API", version="1.0.0-dev", lifespan=lifespan, docs_url=None, redoc_url=None,
                   openapi_url=None if settings.secure_environment else "/openapi.json")
@@ -134,11 +149,49 @@ def create_app(settings=None, edge_transport=None):
         response.delete_cookie(SESSION_COOKIE, httponly=True, **cookie_options())
         response.delete_cookie(CSRF_COOKIE, httponly=False, **cookie_options())
 
+    tags = {"project": settings.project, "environment": settings.environment}
+
+    async def sample_resources():
+        """Muestra de consumo del backend, del Edge y del almacenamiento (FinOps). Nunca interrumpe el servicio."""
+        try:
+            db = app.state.db
+            own = resources.snapshot()
+            await asyncio.to_thread(db.add_resource_sample, "backend", own["instance_id"], own["cpu_seconds"],
+                                    own["rss_bytes"], None, tags)
+            try:
+                response = await app.state.edge.get("/resources")
+                response.raise_for_status()
+                edge = response.json()
+                await asyncio.to_thread(db.add_resource_sample, "edge", edge["instance_id"], edge["cpu_seconds"],
+                                        edge["rss_bytes"], None, tags)
+            except (httpx.HTTPError, ValueError, KeyError):
+                pass
+            storage = sum(f.stat().st_size for f in db.path.parent.glob(db.path.name + "*")
+                          if ".backup-before-" not in f.name)
+            await asyncio.to_thread(db.add_resource_sample, "almacenamiento", "sqlite", None, None, storage, tags)
+        except Exception as exc:  # FinOps es secundario: se registra el tipo de error y se continúa
+            logger.warning("No se pudo muestrear recursos: %s", type(exc).__name__)
+
+    def drift_reference():
+        return settings.drift_reference if settings.drift_reference.is_file() else None
+
+    def month_range(year, month):
+        start = f"{year:04d}-{month:02d}-01T00:00:00+00:00"
+        end = datetime(year + (month == 12), 1 if month == 12 else month + 1, 1, tzinfo=timezone.utc)
+        return start, end.isoformat()
+
+    def statement(client_id, year, month):
+        start, end = month_range(year, month)
+        data = app.state.db.billing(client_id, start, end, settings.billing_fixed_fee, settings.billing_rate)
+        client = app.state.accounts.get_client(client_id) or {}
+        return {**data, "client_name": client.get("display_name"), "period": f"{year:04d}-{month:02d}",
+                "legend": ACADEMIC_LEGEND}
+
     def scope_client(identity):
         """None para el administrador (vista global); el propio client_id para un cliente."""
         return None if identity.is_admin else identity.client_id
 
-    async def execute(request, records, kind):
+    async def execute(request, records, kind, idempotency=None):
         payload = [r.model_dump(by_alias=True) for r in records]
         try:
             response = await app.state.edge.post("/infer/batch", json={"records": payload})
@@ -164,8 +217,11 @@ def create_app(settings=None, edge_transport=None):
             row["input"] = payload[row["row_index"] - 1]
         # La persistencia (solicitud + resultados + uso + latencia) la hace TelemetryMiddleware en una
         # sola transacción antes de responder; si falla, la respuesta es 503 y no hay cargo.
+        reference = drift_reference()
         request.state.pending_success = {
             "result": result, "payload": payload, "store_raw": settings.store_raw, "rate": settings.cost_rate,
+            "drift_counts": drift.bin_counts(drift.load_reference(str(reference)), payload) if reference else None,
+            "idempotency": idempotency,
             "tags": {"project": settings.project, "environment": settings.environment,
                      "component": settings.component, "resource": settings.resource}}
         return {"request_id": request.state.request_id, "request_type": kind,
@@ -273,9 +329,26 @@ def create_app(settings=None, edge_transport=None):
             raise HTTPException(404, "Recurso no encontrado")  # no se revela si existe otro cliente
         if identity.is_admin and not app.state.db.client_exists(client_id):
             raise HTTPException(404, "Recurso no encontrado")
-        start = f'{year:04d}-{month:02d}-01T00:00:00+00:00'
-        end_dt = datetime(year + (month == 12), 1 if month == 12 else month + 1, 1, tzinfo=timezone.utc)
-        return app.state.db.billing(client_id, start, end_dt.isoformat(), settings.billing_fixed_fee, settings.billing_rate)
+        return statement(client_id, year, month)
+
+    @app.get('/billing/{client_id}/statement.csv')
+    def billing_csv(client_id: str, year: int = Query(..., ge=2020, le=2100), month: int = Query(..., ge=1, le=12),
+                    identity=Depends(authenticated)):
+        data = billing(client_id, year, month, identity)
+        buffer = io.StringIO()
+        writer = csv.writer(buffer, lineterminator="\r\n")
+        writer.writerow(["concepto", "valor"])
+        for label, key in [("Establecimiento", "client_name"), ("Identificador", "client_id"), ("Periodo", "period"),
+                           ("Inicio", "period_start"), ("Fin (exclusivo)", "period_end"),
+                           ("Solicitudes exitosas", "successful_requests"), ("Unidades válidas", "billable_units"),
+                           ("Cuota fija MXN", "fixed_fee_mxn"), ("Tarifa por análisis MXN", "variable_rate_mxn"),
+                           ("Cargo variable MXN", "variable_charge_mxn"), ("Importe total MXN", "total_mxn"),
+                           ("Moneda", "currency"), ("Leyenda", "legend")]:
+            value = data[key]
+            writer.writerow([label, f"{value:.2f}" if isinstance(value, float) else value])
+        name = f"estado_cuenta_{client_id}_{year:04d}_{month:02d}.csv"
+        return Response(buffer.getvalue(), media_type="text/csv; charset=utf-8",
+                        headers={"Content-Disposition": f'attachment; filename="{name}"'})
 
     @app.get("/metrics/latency")
     def latency(identity=Depends(authenticated)):
@@ -286,13 +359,33 @@ def create_app(settings=None, edge_transport=None):
         return reports(app.state.db, settings.cost_rate, scope_client(identity))[1]
 
     # ------------------------------------------------------------------ solo clientes
+    def idempotency_check(request, identity, key, body_hash):
+        """Clave de idempotencia por cliente: un reintento con la misma clave devuelve la respuesta original
+        sin generar otro cargo; la misma clave con otro contenido se rechaza (409)."""
+        if key is None:
+            return None, None
+        if not IDEMPOTENCY_RE.fullmatch(key):
+            raise HTTPException(422, "Idempotency-Key inválida (8-128 caracteres: letras, dígitos, - o _).")
+        stored = app.state.db.idempotent_response(identity.client_id, key)
+        if stored is None:
+            return {"key": key, "hash": body_hash}, None
+        if stored["request_hash"] != body_hash:
+            raise HTTPException(409, "La Idempotency-Key ya se usó con otro contenido.")
+        request.state.idempotent_replay = True
+        return None, JSONResponse(json.loads(stored["response_json"]), headers={"Idempotent-Replay": "true"})
+
     @app.post("/predict")
-    async def predict(request: Request, record: MachineRecord, identity=Depends(client_predict)):
-        result = await execute(request, [record], "individual")
+    async def predict(request: Request, record: MachineRecord, identity=Depends(client_predict),
+                      idempotency_key: str | None = Header(None)):
+        body_hash = hashlib.sha256(json.dumps(record.model_dump(by_alias=True), sort_keys=True).encode()).hexdigest()
+        idem, replay = idempotency_check(request, identity, idempotency_key, body_hash)
+        if replay is not None:
+            return replay
+        result = await execute(request, [record], "individual", idem)
         return {**result, **result["results"][0]}
 
     @app.post("/predict/csv")
-    async def predict_csv(request: Request, identity=Depends(client_predict)):
+    async def predict_csv(request: Request, identity=Depends(client_predict), idempotency_key: str | None = Header(None)):
         try:
             async with request.form(max_files=1, max_fields=0, max_part_size=settings.max_bytes) as form:
                 upload = form.get("file")
@@ -305,8 +398,11 @@ def create_app(settings=None, edge_transport=None):
             raise HTTPException(422, "Carga multipart inválida.")
         if len(content) > settings.max_bytes:
             raise HTTPException(413, "Archivo demasiado grande.")
+        idem, replay = idempotency_check(request, identity, idempotency_key, hashlib.sha256(content).hexdigest())
+        if replay is not None:
+            return replay
         records = parse_csv(content, settings.max_rows)
-        return await execute(request, records, "csv")
+        return await execute(request, records, "csv", idem)
 
     # ------------------------------------------------------------------ solo administrador
     @app.get("/finops/summary")
@@ -330,6 +426,87 @@ def create_app(settings=None, edge_transport=None):
                 "threshold": app.state.model_info["threshold"], "environment": settings.environment,
                 "cookie_secure": settings.cookie_secure, "clients": len(clients), "users": len(users),
                 "active_sessions": await asyncio.to_thread(accounts.active_session_count)}
+
+    def admin_billing_data(year, month):
+        start, end = month_range(year, month)
+        rows = {r["client_id"]: r for r in app.state.db.reconcile(start, end)}
+        clients = [c for c in app.state.accounts.list_clients() if c["status"] == "active"]
+        statements, reconciliation = [], []
+        for c in clients:
+            st = statement(c["client_id"], year, month)
+            statements.append(st)
+            r = rows.get(c["client_id"], {"result_rows": 0, "usage_units": 0, "success_without_usage": 0,
+                                          "usage_on_failed": 0, "units_mismatch": 0, "successful_requests": 0})
+            ok = (r["result_rows"] == r["usage_units"] == st["billable_units"] and not r["success_without_usage"]
+                  and not r["usage_on_failed"] and not r["units_mismatch"])
+            reconciliation.append({"client_id": c["client_id"], "result_rows": r["result_rows"],
+                                   "usage_units": r["usage_units"], "billed_units": st["billable_units"],
+                                   "success_without_usage": r["success_without_usage"],
+                                   "usage_on_failed": r["usage_on_failed"], "units_mismatch": r["units_mismatch"],
+                                   "consistent": ok})
+        return {"period": f"{year:04d}-{month:02d}", "statements": statements, "reconciliation": reconciliation,
+                "all_consistent": all(r["consistent"] for r in reconciliation)}
+
+    def drift_data():
+        reference = drift_reference()
+        if reference is None:
+            return {"status": "sin_referencia", "alert": False, "features": {}, "affected": [], "sample_size": 0}
+        return drift.evaluate(app.state.db, reference, settings.drift_window_days, settings.drift_min_sample)
+
+    def finops_data():
+        now = datetime.now(timezone.utc)
+        start, end = month_range(now.year, now.month)
+        units = sum(app.state.db.billing(c["client_id"], start, end, 0, 0)["billable_units"]
+                    for c in app.state.accounts.list_clients())
+        return finops_sim.summary(app.state.db, settings, units, now)
+
+    @app.get("/admin/observability")
+    def admin_observability(identity=Depends(admin_only)):
+        return observability.operations(app.state.db, settings)
+
+    @app.get("/admin/drift")
+    def admin_drift(identity=Depends(admin_only)):
+        return drift_data()
+
+    @app.post("/admin/drift/retrain-request", status_code=202)
+    def admin_retrain_request(identity=Depends(admin_only)):
+        state = drift_data()
+        app.state.accounts.log_event("solicitud_reentrenamiento", "ok", user_id=identity.user_id,
+                                     detail=f"deriva={state['status']}")
+        return {"requested": True, "drift_status": state["status"],
+                "next_step": "Ejecutar el workflow 'Pipeline ML' (GitHub Actions) o `python -m scripts.mlops.pipeline`; "
+                             "el candidato solo se promueve si supera la compuerta. El modelo activo no cambia automáticamente."}
+
+    @app.get("/admin/finops")
+    async def admin_finops(identity=Depends(admin_only)):
+        await sample_resources()
+        return await asyncio.to_thread(finops_data)
+
+    @app.get("/admin/finops/report.csv")
+    async def admin_finops_csv(identity=Depends(admin_only)):
+        await sample_resources()
+        data = await asyncio.to_thread(finops_data)
+        return Response(finops_sim.daily_csv(data["daily"]), media_type="text/csv; charset=utf-8",
+                        headers={"Content-Disposition": f'attachment; filename="finops_simulado_{data["period"]}.csv"'})
+
+    @app.get("/admin/billing")
+    def admin_billing(year: int = Query(..., ge=2020, le=2100), month: int = Query(..., ge=1, le=12),
+                      identity=Depends(admin_only)):
+        return admin_billing_data(year, month)
+
+    @app.get("/admin/dashboard")
+    async def admin_dashboard(identity=Depends(admin_only)):
+        """Vista consolidada del administrador (solo agregados; sin datos de entrada de clientes)."""
+        status = await admin_status(identity)
+        await sample_resources()
+        now = datetime.now(timezone.utc)
+        ops, drift_state, costs, bills = await asyncio.gather(
+            asyncio.to_thread(observability.operations, app.state.db, settings),
+            asyncio.to_thread(drift_data), asyncio.to_thread(finops_data),
+            asyncio.to_thread(admin_billing_data, now.year, now.month))
+        return {"status": status, "model": {k: app.state.model_info.get(k) for k in ("model_name", "version", "threshold",
+                                                                                     "training_date_utc")},
+                "operations": ops, "drift": drift_state, "finops": costs, "billing": bills}
 
     @app.get("/admin/clients")
     def admin_clients(identity=Depends(admin_only)):

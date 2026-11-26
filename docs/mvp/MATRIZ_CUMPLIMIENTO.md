@@ -5,6 +5,7 @@
 | v1 | 2026-11-25 | Clasificación inicial de la auditoría. |
 | v2 | 2026-11-25 | Cierre de la Fase 0: interpretación académica de los requisitos 1, 4, 6 y 7 (gasto cero, FinOps y facturación simulados) y reclasificación del requisito 10 por evidencia localizada. **No se implementó nada nuevo**: ninguna clasificación mejora por desarrollo. |
 | v4 | 2026-11-25 | Ajustes finales de la Fase 1: D16 implementada (instalaciones v0.2 y v1.0 separadas), 3 defectos de concurrencia corregidos y la interfaz recorrida en Chrome. Las clasificaciones globales no cambian. |
+| v6 | 2026-11-25 | Bloque B (sin commit): panel de administración, observabilidad con p99 y alertas, deriva PSI, FinOps simulado medido, estados de cuenta, conciliación e idempotencia. |
 | v5 | 2026-11-25 | Bloque A (MLOps y CI/CD, sin commit): pipeline reproducible, compuerta, registro, promoción aislada y workflows de GitHub Actions (pendientes de su primera ejecución en GitHub). |
 | v3 | 2026-11-25 | Fase 1 (implementada, pendiente de revisión humana): mejoran subrequisitos de los requisitos 5, 7, 8 y 9 con evidencia en `results/mvp/fase1/`. Las clasificaciones globales siguen parciales. |
 
@@ -63,8 +64,8 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Compuerta de aceptación | ✅ (Bloque A) | `scripts/mlops/gate.py`: Recall ≥ 0.70, SHA-256, variables, artefacto, metadata; aceptación y 6 tipos de rechazo probados (`tests/test_mlops.py`, `compuerta.json`). |
 | Registro del modelo | ✅ (Bloque A) | `registry/model_registry.json` (versión, hash, parámetros, hash del dataset, métricas, fecha, estado y modelo activo) y `scripts/mlops/registry.py`. |
 | Despliegue automatizado | 🟡 (Bloque A) | Promoción solo de modelos aprobados, demostrada en un destino aislado y automatizada en `.github/workflows/ml-pipeline.yml`; el despliegue remoto corresponde al Bloque C. |
-| Monitoreo de deriva | ⛔ | No existe (H16). |
-| Procedimiento de reentrenamiento | ⛔ | No documentado (H16). |
+| Monitoreo de deriva | ✅ (Bloque B) | PSI por variable contra TRAIN, con muestra mínima y alerta; demostrado con datos sintéticos (`tests/test_bloque_b.py`, `results/mvp/bloque_b/deriva_sintetica.json`). |
+| Procedimiento de reentrenamiento | 🟡 (Bloque B) | `POST /admin/drift/retrain-request` registra la solicitud y remite al pipeline del Bloque A, con compuerta y sin promoción automática; el reentrenamiento con datos nuevos etiquetados no está disponible. |
 
 ### 3. Evaluación final — 🟡 / 🔍
 
@@ -118,11 +119,11 @@ Ningún requisito está completo al cierre de la Fase 0.
 |---|---|---|
 | Unidades por análisis válido | ✅ | 1 registro exitoso = 1 unidad; pruebas `test_model_info_and_real_prediction_persistence_usage`, `test_batch_1000_real_sorted_download` (V2, V3, V5). |
 | No facturar solicitudes inválidas | ✅ | `test_invalid_schema_no_charge` (7 casos) (V2, V3, V5). |
-| No facturar errores del servicio | ✅ (Fase 1) | H12 reproducido sobre la v0.2 (`h12_reproduccion_previa.json`) y corregido con persistencia atómica; sin eventos de uso ante falla del Edge o de la transacción (`tests/test_transactions.py`, `evidencias_fase1.json`). Pendiente: idempotencia ante respuesta perdida (Fase 5). |
+| No facturar errores del servicio | ✅ | H12 corregido (Fase 1). Desde el Bloque B, `Idempotency-Key` por cliente evita los cargos duplicados por reintentos (`test_idempotencia_evita_cargos_duplicados`). |
 | Atribución del uso al cliente autenticado | ✅ (Fase 1) | Cliente tomado de la sesión o API key; `X-Client-ID` ignorado; triggers de integridad (`tests/test_isolation.py`). |
 | Tarifa fija + variable | 🟡 | `GET /billing/{client_id}` (`backend/app/main.py:122-128`); sin pruebas. |
-| Dos clientes de prueba | 🟡 (Fase 1) | `cliente_demo_01` y `cliente_demo_02` con cuentas autenticadas y aislamiento verificado (`init-demo`, `verificacion_docker.json`); faltan sus estados de cuenta de demostración (Fase 5). |
-| Estados de cuenta de demostración académica (con leyenda y campos requeridos) | 🟡 | Uno solo, sin leyenda de demostración, y CSV mal formado (H11). |
+| Dos clientes de prueba | ✅ (Bloque B) | Estados de cuenta CSV de los dos clientes, con leyenda académica y conciliación consistente (`results/mvp/bloque_b/estado_cuenta_*.csv`). |
+| Estados de cuenta de demostración académica (con leyenda y campos requeridos) | ✅ (Bloque B) | Periodo, unidades, cuota fija, cargo variable, total y leyenda; CSV generado con el módulo `csv`, que corrige el defecto H11 (el archivo histórico de `reports/` se conserva sin cambios). |
 | Conciliación | ⛔ | No existe. |
 | Sin integraciones monetarias reales | ✅ | No hay pasarelas, cobros ni APIs de facturación en el código (confirmado en la auditoría del backend). |
 

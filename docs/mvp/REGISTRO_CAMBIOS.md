@@ -218,3 +218,22 @@ Ninguna nueva. Se usan `hashlib.scrypt`, `secrets` y `hmac` de la biblioteca est
 | `results/mvp/bloque_a/` (nuevo) | Evidencias concisas |
 
 Sin dependencias nuevas; el modelo congelado y `edge_service/models` no se modificaron.
+
+## Bloque B — Administración, observabilidad y FinOps (fases 4 y 5, 2026-11-25, sin commit)
+
+| Archivo | Cambio |
+|---|---|
+| `backend/app/observability.py`, `drift.py`, `finops.py` (nuevos) | Conteos y alertas configurables (4xx/5xx, tasa de errores, p95); deriva PSI contra TRAIN; FinOps simulado a partir de consumo medido |
+| `common/resources.py` (nuevo) | CPU y memoria del proceso sin dependencias (`/proc` o `psapi` en Windows) |
+| `backend/app/database.py` | Migración v3 con tablas agregadas `drift_counts`, `resource_samples` e `idempotency_keys`; conciliación; operaciones; purga |
+| `backend/app/main.py`, `telemetry.py` | `/admin/dashboard`, `/admin/observability`, `/admin/drift`, `/admin/drift/retrain-request`, `/admin/finops`, `/admin/finops/report.csv`, `/admin/billing`, `/billing/{id}/statement.csv`; muestreo de recursos; `Idempotency-Key` con persistencia atómica |
+| `backend/app/metrics.py` | p99 |
+| `edge_service/app/main.py` | `/resources` interno (CPU y memoria del Edge; sin puerto publicado) |
+| `common/config.py`, `.env.example`, `Dockerfile` | Umbrales, presupuesto y tarifas configurables; `registry/` incluido en las imágenes |
+| `registry/drift_reference.json`, `scripts/mlops/drift_reference.py` (nuevos) | Referencia agregada generada desde TRAIN verificado |
+| `frontend/*` | Sección «06 · Administración»; descarga del estado de cuenta del cliente |
+| `scripts/mvp/demo_bloque_b.py`, `tests/test_bloque_b.py` (nuevos) | Demostración con base temporal y 13 pruebas |
+| `tests/test_migration.py` | Usa `SCHEMA_VERSION` en lugar de la versión 2 fija |
+| `results/mvp/bloque_b/` (nuevo) | Evidencias |
+
+Sin dependencias nuevas. Docker no se reconstruyó: los cambios se incorporan a las imágenes en la próxima reconstrucción.

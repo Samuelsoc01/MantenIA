@@ -1,0 +1,14 @@
+concepto,valor
+Establecimiento,Cliente demo 01 (ficticio)
+Identificador,cliente_demo_01
+Periodo,2026-11
+Inicio,2026-11-01T00:00:00+00:00
+Fin (exclusivo),2026-12-01T00:00:00+00:00
+Solicitudes exitosas,6
+Unidades válidas,17
+Cuota fija MXN,3500.00
+Tarifa por análisis MXN,1.00
+Cargo variable MXN,17.00
+Importe total MXN,3517.00
+Moneda,MXN
+Leyenda,DEMOSTRACIÓN ACADÉMICA: estado de cuenta hipotético de un cliente ficticio del escenario empresarial simulado. No constituye un cobro real ni un comprobante fiscal.

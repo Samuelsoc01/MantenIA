@@ -414,3 +414,33 @@ Destino: actualización del Capítulo XI de la memoria técnica final.
 | V | URLs y resultados de las ejecuciones de GitHub Actions presentados en la sesión. |
 | Puntos de atención | CI/CD. |
 | Estado de la revisión | Resultados locales aprobados por el responsable |
+
+## PREV-B-01 — Bloque B: administración, observabilidad, deriva, FinOps y facturación
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-B-01 |
+| Fecha real | 2026-11-25 |
+| Fase | Bloque B (fases 4 y 5) |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Completar el panel de administración, observabilidad (p99, errores, alertas), deriva sobre TRAIN, FinOps simulado medido, estados de cuenta de dos clientes, conciliación e idempotencia, reutilizando lo existente y sin plataformas nuevas. |
+| R | **Generó código** (`observability.py`, `drift.py`, `finops.py`, `resources.py`, la migración v3, endpoints, panel y pruebas). **Supuesto económico propuesto por la herramienta:** las tarifas de referencia se derivan del OPEX de 2,200 MXN/mes (VM de 2 vCPU, 4 GiB y 50 GB; reparto 60/30/10 %); no son cotizaciones de un proveedor. En la primera demostración, el generador sintético «sin deriva» no seguía la distribución de TRAIN (PSI 0.29 en temperatura de proceso); se corrigió para muestrear la referencia agregada. No se tomaron capturas del panel porque el sistema de permisos impidió leer la contraseña efímera. |
+| E | **Pendiente de evaluación humana**, en especial el reparto 60/30/10 % de las tarifas. |
+| V | `tests/test_bloque_b.py`; `results/mvp/bloque_b/*`; regresión completa del bloque. Verificación realizada por la herramienta. |
+| Puntos de atención | **Cálculos FinOps y facturación** (supuestos de tarifas); interpretación de la deriva; revisión visual del panel. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-B-02 — Cierre del Bloque B
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-B-02 |
+| Fecha real | 2026-11-25 |
+| Fase | Bloque B — Cierre |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | El responsable aprueba preliminarmente los resultados técnicos y pide verificar la coherencia de FinOps ($0.0004 acumulados frente a $75.27 proyectados), conservar las tarifas como supuesto académico (reparto 60/30/10), mantener los costos unitarios como preliminares, documentar que la solicitud de reentrenamiento no activa el pipeline, y autoriza el commit y el push en `mvp-v1.0`. |
+| R | El cálculo es coherente; el error estaba en el informe: la ventana observada fue de **14 segundos** (0.0039 h), no de 14 minutos. 0.103 MXN/h × 720 h ≈ $74–75. Se expuso la base de la proyección (horas y segundos observados, costo por hora) en la API y en el panel, con una prueba. Se documentaron el supuesto 60/30/10 y el alcance de la solicitud de reentrenamiento. |
+| E | **Aprobación técnica preliminar: decisión del responsable (2026-11-25).** Se conservan las limitaciones de PREV-B-01 (capturas del panel pendientes, Docker sin reconstruir, proyección indicativa y reentrenamiento no automático). |
+| V | `tests/test_bloque_b.py` (13/13); resultado de GitHub Actions presentado en la sesión. |
+| Puntos de atención | Cálculos FinOps. |
+| Estado de la revisión | Aprobado preliminarmente por el responsable |
