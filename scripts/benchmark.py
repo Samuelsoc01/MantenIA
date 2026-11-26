@@ -1,4 +1,10 @@
-"""30 solicitudes individuales + 30 CSV de 1000 filas. No reevalúa TEST."""
+"""30 solicitudes individuales + 30 CSV de 1000 filas. No reevalúa TEST.
+
+MVP v1.0: requiere una API key de cliente en la variable indicada por --api-key-env (MANTENIA_API_KEY
+por omisión; nunca como argumento). Salida por omisión en .runtime/benchmark para no sobrescribir
+evidencias históricas.
+"""
+import os
 import argparse
 import csv
 import io
@@ -14,9 +20,10 @@ from common.config import ROOT
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--url", default="http://127.0.0.1:8000")
+    parser.add_argument("--url", default="http://127.0.0.1:8100")
     parser.add_argument("--repetitions", type=int, default=30)
-    parser.add_argument("--output", default="results/performance")
+    parser.add_argument("--output", default=".runtime/benchmark")
+    parser.add_argument("--api-key-env", default="MANTENIA_API_KEY")
     parser.add_argument("--environment", default="local")
     args = parser.parse_args()
     if args.repetitions < 1:
@@ -29,14 +36,18 @@ def main():
     if not output.is_relative_to(ROOT):
         parser.error("La salida debe estar dentro del proyecto")
     output.mkdir(parents=True, exist_ok=True)
+    api_key = os.environ.get(args.api_key_env)
+    if not api_key:
+        parser.error(f"Defina la API key de cliente en la variable {args.api_key_env}")
     demo = list(csv.DictReader((ROOT / "data/demo/demo_input.csv").open(encoding="utf-8-sig")))
     records = [{k: v if k == "Type" else float(v) for k, v in row.items()} for row in demo]
     text = io.StringIO(newline=""); writer = csv.DictWriter(text, fieldnames=demo[0].keys())
     writer.writeheader(); writer.writerows([demo[i % len(demo)] for i in range(1000)])
     csv_bytes = text.getvalue().encode("utf-8")
-    (ROOT / "data/demo/demo_1000.csv").write_bytes(csv_bytes)
+    (output / "demo_1000.csv").write_bytes(csv_bytes)
     rows = []
-    with httpx.Client(base_url=args.url, timeout=60, trust_env=False) as client:
+    with httpx.Client(base_url=args.url, timeout=60, trust_env=False,
+                      headers={"Authorization": f"Bearer {api_key}"}) as client:
         info = client.get("/model/info"); info.raise_for_status()
         before = client.get("/metrics/usage").json()
         for kind in ("individual", "csv"):

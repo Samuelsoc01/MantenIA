@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "active": {
+    "version": "rf-3a9c9f208eef",
+    "deploy_dir": "edge_service/models",
+    "promoted_utc": null,
+    "note": "Activo desde la v0.2; no promovido por el pipeline."
+  },
+  "models": [
+    {
+      "version": "rf-3a9c9f208eef",
+      "sha256": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e",
+      "model_name": "RandomForest",
+      "hyperparameters": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": 14,
+        "max_features": 1.0,
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 2,
+        "min_samples_split": 10,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "n_estimators": 250,
+        "n_jobs": 1,
+        "oob_score": false,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+      },
+      "threshold": 0.425,
+      "dataset": {
+        "raw_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
+        "train_sha256": "3e5e17508228d839e98d1ab24d12d452838ebcb32c13260e0a74ce120aa6e615"
+      },
+      "validation_metrics": {
+        "Recall": 0.7195571955719557,
+        "Precision": 0.8227848101265823,
+        "F1": 0.7677165354330708,
+        "PR_AUC": 0.8210720320082963
+      },
+      "test_metrics": {
+        "Accuracy": 0.986,
+        "Precision": 0.8225806451612904,
+        "Recall": 0.75,
+        "F1": 0.7846153846153846,
+        "ROC_AUC": 0.9726776580197297,
+        "PR_AUC": 0.8384986921947503,
+        "confusion_matrix": [
+          [
+            1921,
+            11
+          ],
+          [
+            17,
+            51
+          ]
+        ],
+        "threshold": 0.425,
+        "n_test": 2000,
+        "recall_requirement_met": true
+      },
+      "training_date_utc": "2026-09-25T04:37:23.486895+00:00",
+      "status": "accepted",
+      "gate_checks": {
+        "metadata_y_metricas": true,
+        "integridad_sha256": true,
+        "variables_metadata": true,
+        "variables_pipeline": true,
+        "artefacto_valido": true,
+        "umbral": true,
+        "recall_validacion": true
+      },
+      "registered_utc": "2026-11-26T00:02:56.278599+00:00",
+      "artifact_dir": "edge_service/models",
+      "note": "Modelo congelado v0.2 en servicio (sin reentrenar)."
+    }
+  ]
+}

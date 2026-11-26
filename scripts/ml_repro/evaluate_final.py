@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import confusion_matrix, RocCurveDisplay, PrecisionRecallDisplay
 
-from src.utils import ROOT, FEATURES, TARGET, read_json, save_json, sha256, metrics, plot_confusion
+from scripts.ml_repro.utils import ROOT, FEATURES, TARGET, read_json, save_json, sha256, metrics, plot_confusion
 
 
 def evaluate_final():

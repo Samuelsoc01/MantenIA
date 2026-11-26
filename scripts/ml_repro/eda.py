@@ -4,7 +4,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from src.utils import ROOT, NUMERIC, TARGET, FEATURES, save_json, init_dirs
+from scripts.ml_repro.utils import ROOT, NUMERIC, TARGET, FEATURES, save_json, init_dirs
 
 
 def run_eda(df):
@@ -94,5 +94,5 @@ no garantiza rendimiento prospectivo en máquinas reales ni en series temporales
 
 
 if __name__ == '__main__':
-    from src.data_preprocessing import download
+    from scripts.ml_repro.data_preprocessing import download
     run_eda(download())

@@ -4,7 +4,7 @@ import os
 import shutil
 from datetime import datetime, timezone
 
-from src.utils import ROOT, init_dirs
+from scripts.ml_repro.utils import ROOT, init_dirs
 
 
 def main():
@@ -12,9 +12,6 @@ def main():
     parser.add_argument('--rerun', action='store_true', help='Archivar ejecución previa y repetir protocolo idéntico')
     args = parser.parse_args()
     # Mantener cachés y temporales dentro de la carpeta autorizada.
-    cache = ROOT / '.runtime'; cache.mkdir(exist_ok=True)
-    for key in ['MPLCONFIGDIR', 'JOBLIB_TEMP_FOLDER', 'IPYTHONDIR', 'JUPYTER_RUNTIME_DIR', 'TEMP', 'TMP']:
-        target = cache / key.lower(); target.mkdir(exist_ok=True); os.environ[key] = str(target)
     existing = (ROOT / 'results/metrics/model_comparison.csv').exists()
     if existing and not args.rerun:
         raise SystemExit('Ya existe una ejecución. Use --rerun para archivarla y repetir el protocolo completo.')
@@ -32,15 +29,15 @@ def main():
     init_dirs()
     import matplotlib
     matplotlib.use('Agg')
-    from src.data_preprocessing import download, prepare
-    from src.eda import run_eda
-    from src.train_baseline import run_baseline
-    from src.train_models import run_candidates
-    from src.optimize_models import run_optimization
-    from src.threshold_selection import select_and_fit
-    from src.evaluate_final import evaluate_final
-    from src.report import write_report
-    from src.notebook import build_notebook
+    from scripts.ml_repro.data_preprocessing import download, prepare
+    from scripts.ml_repro.eda import run_eda
+    from scripts.ml_repro.train_baseline import run_baseline
+    from scripts.ml_repro.train_models import run_candidates
+    from scripts.ml_repro.optimize_models import run_optimization
+    from scripts.ml_repro.threshold_selection import select_and_fit
+    from scripts.ml_repro.evaluate_final import evaluate_final
+    from scripts.ml_repro.report import write_report
+    from scripts.ml_repro.notebook import build_notebook
     print('Dataset -> EDA -> limpieza -> split estratificado', flush=True)
     frame = download(); run_eda(frame); build_notebook(); prepare(frame)
     run_baseline(); run_candidates(); run_optimization()

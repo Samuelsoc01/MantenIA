@@ -1,0 +1,25 @@
+{
+  "verify_runtime": {
+    "repeticiones": 5,
+    "base": "temporal en .runtime/verify_runtime (cuentas efímeras)",
+    "grupos": {
+      "individual": {
+        "intentos": 5,
+        "exitos": 5
+      },
+      "csv": {
+        "intentos": 5,
+        "exitos": 5
+      }
+    },
+    "usage_delta": {
+      "total_requests": 10,
+      "successful_requests": 10,
+      "billable_units": 5005,
+      "total_inferences": 5005
+    }
+  },
+  "generate_evidence": "6/6 solicitudes 200 contra mantenia-v10 (:8100) con API key efímera de cliente_demo_02, revocada después; sin API key termina con error explícito",
+  "benchmark": "requiere MANTENIA_API_KEY; salida por omisión .runtime/benchmark",
+  "salidas_historicas_modificadas": false
+}

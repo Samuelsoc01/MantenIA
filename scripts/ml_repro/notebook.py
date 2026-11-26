@@ -7,7 +7,7 @@ import nbformat as nbf
 from nbclient import NotebookClient
 from jupyter_client import AsyncKernelManager
 from jupyter_client.kernelspec import KernelSpecManager
-from src.utils import ROOT
+from scripts.ml_repro.utils import ROOT
 
 
 def build_notebook():
@@ -21,7 +21,7 @@ def build_notebook():
     notebook.metadata.kernelspec = dict(name='mantenia', display_name='MantenIA Python', language='python')
     notebook.cells = [
         nbf.v4.new_markdown_cell('# MantenIA — EDA (EDT 1.2.1)\n\nAI4I 2020, UCI. Análisis descriptivo previo al split; no decide modelos ni umbrales.\n\n[Fuente y licencia CC BY 4.0](https://doi.org/10.24432/C5HS5C)'),
-        nbf.v4.new_code_cell("from pathlib import Path\nimport sys\nROOT = Path.cwd()\nif ROOT.name == 'notebooks': ROOT = ROOT.parent\nsys.path.insert(0, str(ROOT))\nimport pandas as pd\nfrom IPython.display import display, Image, Markdown\nfrom src.utils import FEATURES, NUMERIC, TARGET\ndf = pd.read_csv(ROOT / 'data/raw/ai4i2020.csv')\nprint('Dimensiones:', df.shape)\ndisplay(df.head())"),
+        nbf.v4.new_code_cell("from pathlib import Path\nimport sys\nROOT = Path.cwd()\nif ROOT.name == 'notebooks': ROOT = ROOT.parent\nsys.path.insert(0, str(ROOT))\nimport pandas as pd\nfrom IPython.display import display, Image, Markdown\nfrom scripts.ml_repro.utils import FEATURES, NUMERIC, TARGET\ndf = pd.read_csv(ROOT / 'data/raw/ai4i2020.csv')\nprint('Dimensiones:', df.shape)\ndisplay(df.head())"),
         nbf.v4.new_markdown_cell('## Calidad de datos y desbalance'),
         nbf.v4.new_code_cell("display(pd.DataFrame({'tipo': df.dtypes.astype(str), 'faltantes': df.isna().sum()}))\nprint('Duplicados exactos:', df.duplicated().sum())\nprint('Entradas duplicadas:', df.duplicated(FEATURES).sum())\ndisplay(df[TARGET].value_counts().rename('registros').to_frame().assign(porcentaje=lambda t: 100*t.registros/len(df)))\ndisplay(df['Type'].value_counts().to_frame())"),
         nbf.v4.new_markdown_cell('## Distribuciones y diferencias por falla'),

@@ -8,7 +8,10 @@ from sklearn.metrics import (accuracy_score, average_precision_score, confusion_
                              f1_score, precision_score, recall_score, roc_auc_score)
 from sklearn.model_selection import StratifiedKFold
 
-ROOT = Path(__file__).resolve().parents[1]
+from scripts.ml_repro import WORKDIR
+
+# Raíz de trabajo aislada (MANTENIA_ML_WORKDIR); antes resolvía a scripts/ (hallazgo H4).
+ROOT = WORKDIR
 SEED = 42
 NUMERIC = ['Air temperature [K]', 'Process temperature [K]',
            'Rotational speed [rpm]', 'Torque [Nm]', 'Tool wear [min]']

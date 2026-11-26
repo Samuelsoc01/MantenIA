@@ -1,9 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import RandomizedSearchCV
 
-from src.data_preprocessing import load_train
-from src.train_models import build_pipeline, register_candidate
-from src.utils import ROOT, SEED, cv, save_json, ensure_selection_open
+from scripts.ml_repro.data_preprocessing import load_train
+from scripts.ml_repro.train_models import build_pipeline, register_candidate
+from scripts.ml_repro.utils import ROOT, SEED, cv, save_json, ensure_selection_open
 
 
 def run_optimization(n_iter=8):

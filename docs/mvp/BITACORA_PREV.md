@@ -384,3 +384,33 @@ Destino: actualización del Capítulo XI de la memoria técnica final.
 | V | Salida de `git log -1 --format=fuller` y de `git ls-remote origin` presentada en la sesión. |
 | Puntos de atención | Operaciones Git. |
 | Estado de la revisión | Cierre técnico aprobado por el responsable |
+
+## PREV-A-01 — Bloque A: pipeline ML reproducible, compuerta, registro y CI/CD
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-A-01 |
+| Fecha real | 2026-11-25 |
+| Fase | Bloque A (fases 2 y 3) |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Implementar conjuntamente las fases 2 y 3 reutilizando lo existente: pipeline reproducible desde un clon limpio, compuerta (Recall ≥ 0.70 en validación), registro JSON, promoción aislada, GitHub Actions gratuito y adaptación de los scripts afectados por la autenticación, sin reemplazar el modelo congelado ni usar TEST. |
+| R | **Generó código MLOps** (`scripts/mlops/`), workflows, pruebas y el protocolo de evaluación. Reprodujo la validación OOF original (Recall 0.7196, F1 0.7677) con probabilidades idénticas al modelo congelado; el hash del archivo difiere por la serialización. Adaptó tres scripts. **Incidente:** un error en `verify_runtime` creó una base local temporal, `database/mantenia_v10.db`, con un usuario de prueba; se eliminó al detectarlo y se corrigió el script. |
+| E | **Pendiente de evaluación humana.** |
+| V | `results/mvp/bloque_a/*.json`; `tests/test_mlops.py`; regresión completa del bloque. Los workflows **no se han ejecutado en GitHub** (requieren push). Verificación realizada por la herramienta. |
+| Puntos de atención | MLOps y código generado; confirmar que el protocolo de validación (OOF de TRAIN) es aceptable para el docente; revisar la primera ejecución de Actions. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-A-02 — Cierre del Bloque A
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-A-02 |
+| Fecha real | 2026-11-25 |
+| Fase | Bloque A — Cierre |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | El responsable aprueba los resultados técnicos locales del Bloque A y autoriza el commit «feat: pipeline MLOps reproducible y automatizacion CI/CD», el push en `mvp-v1.0`, la verificación en GitHub Actions y solo las correcciones estrictamente necesarias. |
+| R | Agregó al workflow ML una verificación de que un modelo rechazado no puede promoverse; ejecutó el commit y el push y comprobó las ejecuciones de Actions. |
+| E | **Aprobación de los resultados locales: decisión del responsable (2026-11-25).** Las limitaciones se conservan (PREV-A-01). |
+| V | URLs y resultados de las ejecuciones de GitHub Actions presentados en la sesión. |
+| Puntos de atención | CI/CD. |
+| Estado de la revisión | Resultados locales aprobados por el responsable |

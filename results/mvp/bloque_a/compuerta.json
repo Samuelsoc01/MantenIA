@@ -1,0 +1,42 @@
+{
+  "modelo_congelado": {
+    "version": "rf-3a9c9f208eef",
+    "status": "accepted",
+    "checks": {
+      "metadata_y_metricas": true,
+      "integridad_sha256": true,
+      "variables_metadata": true,
+      "variables_pipeline": true,
+      "artefacto_valido": true,
+      "umbral": true,
+      "recall_validacion": true
+    }
+  },
+  "candidato_reentrenado": {
+    "version": "rf-718303950825",
+    "status": "accepted",
+    "checks": {
+      "metadata_y_metricas": true,
+      "integridad_sha256": true,
+      "variables_metadata": true,
+      "variables_pipeline": true,
+      "artefacto_valido": true,
+      "umbral": true,
+      "recall_validacion": true
+    }
+  },
+  "candidato_con_recall_0.55 (copia manipulada)": {
+    "version": "rf-718303950825",
+    "status": "rejected",
+    "checks": {
+      "metadata_y_metricas": true,
+      "integridad_sha256": true,
+      "variables_metadata": true,
+      "variables_pipeline": true,
+      "artefacto_valido": true,
+      "umbral": true,
+      "recall_validacion": false
+    }
+  },
+  "casos_de_rechazo_en_pruebas": "tests/test_mlops.py: recall bajo, hash alterado, variables, umbral, sin métricas, artefacto corrupto"
+}

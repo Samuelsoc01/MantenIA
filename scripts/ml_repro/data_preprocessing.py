@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from src.utils import ROOT, FEATURES, NUMERIC, TARGET, SEED, init_dirs, save_json, sha256, ensure_selection_open
+from scripts.ml_repro.utils import ROOT, FEATURES, NUMERIC, TARGET, SEED, init_dirs, save_json, sha256, ensure_selection_open
 
 URL = 'https://archive.ics.uci.edu/static/public/601/ai4i+2020+predictive+maintenance+dataset.zip'
 

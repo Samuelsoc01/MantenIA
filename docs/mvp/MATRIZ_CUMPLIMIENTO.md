@@ -5,6 +5,7 @@
 | v1 | 2026-11-25 | Clasificación inicial de la auditoría. |
 | v2 | 2026-11-25 | Cierre de la Fase 0: interpretación académica de los requisitos 1, 4, 6 y 7 (gasto cero, FinOps y facturación simulados) y reclasificación del requisito 10 por evidencia localizada. **No se implementó nada nuevo**: ninguna clasificación mejora por desarrollo. |
 | v4 | 2026-11-25 | Ajustes finales de la Fase 1: D16 implementada (instalaciones v0.2 y v1.0 separadas), 3 defectos de concurrencia corregidos y la interfaz recorrida en Chrome. Las clasificaciones globales no cambian. |
+| v5 | 2026-11-25 | Bloque A (MLOps y CI/CD, sin commit): pipeline reproducible, compuerta, registro, promoción aislada y workflows de GitHub Actions (pendientes de su primera ejecución en GitHub). |
 | v3 | 2026-11-25 | Fase 1 (implementada, pendiente de revisión humana): mejoran subrequisitos de los requisitos 5, 7, 8 y 9 con evidencia en `results/mvp/fase1/`. Las clasificaciones globales siguen parciales. |
 
 Estado al 2026-11-25 (Fase 0), rama `mvp-v1.0` @ `e770e28`. No sustituye a `docs/REQUIREMENTS_COMPLIANCE.md` (v0.2), que se conserva sin cambios.
@@ -56,12 +57,12 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Subrequisito | Estado | Sustento |
 |---|---|---|
 | Versionado del modelo | ✅ | Versión derivada del SHA-256 (`edge_service/app/model_loader.py:32`); metadata, `selection_locked.json`, `docs/artifact_provenance.json`; V6. |
-| Versionado de datos | 🟡 | Hashes en `docs/evidence/split_manifest.json`; el dataset no está en el repositorio (H5). |
-| Entrenamiento reproducible | ⛔ | `scripts/ml_repro` no importable (H4); faltan dependencias ML; V7. |
-| Evaluación automática | ⛔ | `evaluate_final.py` existe pero no está conectado ni es ejecutable desde el repo. |
-| Compuerta de aceptación | ⛔ | No existe CI ni bloqueo (H6). |
-| Registro del modelo | 🟡 | Tabla `model_info` registra versiones cargadas (`backend/app/database.py:17-19`); no hay estados (candidato/staging/producción) ni aprobador. |
-| Despliegue automatizado | ⛔ | No existe (H6). |
+| Versionado de datos | ✅ (Bloque A) | El dataset se obtiene de UCI o de una ruta local y se verifica por SHA-256; también las particiones (`scripts/mlops/pipeline.py`). |
+| Entrenamiento reproducible | ✅ (Bloque A) | `python -m scripts.mlops.pipeline`: split original verificado, RF con hiperparámetros congelados y validación OOF idéntica a la original (Recall 0.7196, F1 0.7677), probabilidades idénticas al modelo congelado y ejecución determinista (`results/mvp/bloque_a/pipeline_reproducible.json`). `scripts/ml_repro` es importable con un directorio aislado. |
+| Evaluación automática | ✅ (Bloque A) | Validación OOF automática en el pipeline; TEST reservado para el Bloque C (`docs/mvp/PROTOCOLO_EVALUACION.md`). |
+| Compuerta de aceptación | ✅ (Bloque A) | `scripts/mlops/gate.py`: Recall ≥ 0.70, SHA-256, variables, artefacto, metadata; aceptación y 6 tipos de rechazo probados (`tests/test_mlops.py`, `compuerta.json`). |
+| Registro del modelo | ✅ (Bloque A) | `registry/model_registry.json` (versión, hash, parámetros, hash del dataset, métricas, fecha, estado y modelo activo) y `scripts/mlops/registry.py`. |
+| Despliegue automatizado | 🟡 (Bloque A) | Promoción solo de modelos aprobados, demostrada en un destino aislado y automatizada en `.github/workflows/ml-pipeline.yml`; el despliegue remoto corresponde al Bloque C. |
 | Monitoreo de deriva | ⛔ | No existe (H16). |
 | Procedimiento de reentrenamiento | ⛔ | No documentado (H16). |
 
@@ -143,7 +144,7 @@ Ningún requisito está completo al cierre de la Fase 0.
 |---|---|---|
 | Pruebas de API | ✅ | Fase 0: 25/25. Fase 1: 110 pruebas (25 históricas + 85 nuevas) en verde en Python 3.11 y 3.12; 108 pasadas y 2 omitidas (JS) en Docker (`results/mvp/fase1/`). |
 | Pruebas de modelo | 🟡 | Integridad, equivalencia con el pipeline y adulteración del hash (`test_edge_endpoints_and_model_integrity`); falta compuerta de métricas. |
-| Ejecución con cada cambio | ⛔ | Sin CI (H6). |
+| Ejecución con cada cambio | 🟡 (Bloque A) | `.github/workflows/ci.yml` se ejecuta en cada push a `mvp-v1.0`; **pendiente de su primera ejecución en GitHub** (requiere push autorizado). |
 | Manual de operación y recuperación | ⛔ | Solo “Solución de problemas” en el README. |
 
 ### 10. Gestión del trabajo — 🟡 (v1: ⛔)
@@ -162,7 +163,7 @@ La reclasificación se debe a la evidencia de gestión localizada fuera del repo
 | Entregable | Estado | Sustento |
 |---|---|---|
 | README actualizado | 🟡 | Describe la v0.2. |
-| Scripts reproducibles | 🟡 | Scripts de servicio funcionan; los de ML no (H4); varios sobrescriben evidencias (H8). |
+| Scripts reproducibles | ✅ (Bloque A) | Pipeline ML reproducible; `benchmark`, `generate_evidence` y `verify_runtime` adaptados a la autenticación y con salidas en `.runtime/` (ya no sobrescriben evidencias históricas). |
 | Documentación técnica | 🟡 | `docs/` v0.2 completa para su alcance. |
 | Etiqueta v1.0 | ⛔ | — |
 | Video 4–6 min | ⛔ | Existe el de la v0.2. |

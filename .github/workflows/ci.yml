@@ -1,0 +1,45 @@
+# MantenIA MVP v1.0 — pruebas automatizadas (runners estándar gratuitos de GitHub).
+# Solo se ejecuta en la rama mvp-v1.0; nunca en main (D14). No entrena modelos.
+name: CI MVP v1.0
+
+on:
+  push:
+    branches: [mvp-v1.0]
+    paths-ignore: ["docs/**", "results/**", "reports/**", "**/*.md"]
+  pull_request:
+    branches: [mvp-v1.0]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-lock-docker.txt
+      - name: Instalar dependencias fijadas
+        run: pip install --no-cache-dir -r requirements-lock-docker.txt
+      - name: Compuerta sobre el modelo congelado en servicio
+        run: python -m scripts.mlops.gate --model-dir edge_service/models
+      - name: Pruebas (API, autenticación, aislamiento, MLOps)
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -m pytest -q -p no:cacheprovider --basetemp=/tmp/pytest --junitxml=ci-pytest.xml
+      - name: Guardar resultado de pruebas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-junit
+          path: ci-pytest.xml
+          retention-days: 7

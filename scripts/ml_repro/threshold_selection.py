@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 from sklearn.base import clone
 
-from src.data_preprocessing import load_train
-from src.utils import ROOT, FEATURES, EXCLUDED, metrics, fold_summary, save_json, read_json, sha256, ensure_selection_open
+from scripts.ml_repro.data_preprocessing import load_train
+from scripts.ml_repro.utils import ROOT, FEATURES, EXCLUDED, metrics, fold_summary, save_json, read_json, sha256, ensure_selection_open
 
 
 def select_and_fit():

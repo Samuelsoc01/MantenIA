@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-from src.utils import ROOT, read_json
+from scripts.ml_repro.utils import ROOT, read_json
 
 
 def markdown_table(frame):
@@ -151,7 +151,7 @@ Desde esta carpeta, Python 3.12:
 ```powershell
 python -m venv .venv
 .\\.venv\\Scripts\\python.exe -m pip install --no-cache-dir -r requirements.txt
-.\\.venv\\Scripts\\python.exe -m src.run_pipeline
+.\\.venv\\Scripts\\python.exe -m scripts.ml_repro.run_pipeline
 ```
 El entorno .venv ya está preparado en esta entrega. Si no hay Internet, colocar
 manualmente el archivo oficial en data/raw/ai4i2020.csv. La raíz se deriva de la
@@ -163,7 +163,7 @@ registra dentro de .runtime del proyecto; en un editor puede elegirse el intérp
 
 Para repetir de forma explícita el mismo experimento completo:
 ```powershell
-.\\.venv\\Scripts\\python.exe -m src.run_pipeline --rerun
+.\\.venv\\Scripts\\python.exe -m scripts.ml_repro.run_pipeline --rerun
 ```
 --rerun archiva los artefactos anteriores en runs/ antes de regenerarlos. No es una
 autorización metodológica para ajustar parámetros tras conocer TEST. Mantener el protocolo
@@ -172,11 +172,11 @@ El evaluador se niega a abrir TEST dos veces dentro de una ejecución.
 
 Predicción nueva (las seis entradas obligatorias; Type L, M o H):
 ```powershell
-.\\.venv\\Scripts\\python.exe -m src.predict --input data/processed/demo_input.csv
+.\\.venv\\Scripts\\python.exe -m scripts.ml_repro.predict --input data/processed/demo_input.csv
 ```
 Salida: probabilidad_falla y prediccion_final, usando el umbral de metadata.
 Se guarda results/predictions/demo_predictions.csv. El CSV demo tiene solo las seis
-entradas, seleccionadas de TRAIN. Desde Python: `from src.predict import predict` y `predict(dataframe)`.
+entradas, seleccionadas de TRAIN. Desde Python: `from scripts.ml_repro.predict import predict` y `predict(dataframe)`.
 Las columnas adicionales se ignoran y nunca llegan al estimador; faltantes, infinitos,
 categorías desconocidas y números negativos se rechazan en inferencia.
 

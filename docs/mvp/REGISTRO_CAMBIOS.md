@@ -202,3 +202,19 @@ Ninguna nueva. Se usan `hashlib.scrypt`, `secrets` y `hmac` de la biblioteca est
 | `results/mvp/fase1/revision/` (nuevo) | Evidencias de la revisión; las evidencias anteriores no se modificaron |
 
 **Efectos externos (locales):** se crearon el proyecto Docker `mantenia-v10` (2 contenedores en ejecución), el volumen `mantenia-v10_mantenia_db`, las redes `mantenia-v10_*` y las imágenes `mantenia-v10-*:dev`. Se creó `.runtime/credenciales/v10_demo.json` (ignorado por Git). `mantenia-v02` no se modificó. Sin dependencias nuevas, commits ni publicaciones.
+
+## Bloque A — MLOps y CI/CD (fases 2 y 3, 2026-11-25, sin commit)
+
+| Archivo | Cambio |
+|---|---|
+| `scripts/mlops/` (nuevo) | `pipeline.py` (dataset con SHA-256, split original, RF congelado, validación OOF, candidato), `gate.py` (compuerta), `registry.py` (registro JSON y promoción) |
+| `registry/model_registry.json` (nuevo) | Registro versionado con el modelo congelado `rf-3a9c9f208eef` como activo |
+| `.github/workflows/ci.yml`, `ml-pipeline.yml` (nuevos) | Pruebas en cada push a `mvp-v1.0`; pipeline ML controlado (manual o por cambios en código ML), con compuerta, registro y promoción opcional; artefactos con retención de 7 días |
+| `scripts/ml_repro/*` | Importaciones `src.*` → `scripts.ml_repro.*`; salidas en un directorio aislado (`MANTENIA_ML_WORKDIR`); ya no modifica TEMP/TMP (H4) |
+| `scripts/benchmark.py`, `generate_evidence.py`, `verify_runtime.py` | API key por variable de entorno, puerto 8100 y salidas en `.runtime/` (sin sobrescribir evidencias). `verify_runtime` usa una base temporal y cuentas efímeras |
+| `tests/test_mlops.py` (nuevo) | 11 pruebas: compuerta (aceptación y rechazos), registro, promoción y dataset con hash incorrecto |
+| `docs/mvp/PROTOCOLO_EVALUACION.md` (nuevo) | Protocolo registrado antes de usar TEST |
+| `README.md`, matriz y bitácora | Actualizaciones puntuales |
+| `results/mvp/bloque_a/` (nuevo) | Evidencias concisas |
+
+Sin dependencias nuevas; el modelo congelado y `edge_service/models` no se modificaron.

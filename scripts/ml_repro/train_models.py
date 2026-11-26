@@ -9,8 +9,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from xgboost import XGBClassifier
 
-from src.data_preprocessing import preprocessor, load_train
-from src.utils import ROOT, SEED, cv, metrics, fold_summary, ensure_selection_open
+from scripts.ml_repro.data_preprocessing import preprocessor, load_train
+from scripts.ml_repro.utils import ROOT, SEED, cv, metrics, fold_summary, ensure_selection_open
 
 
 class FoldWeightedXGBClassifier(XGBClassifier):

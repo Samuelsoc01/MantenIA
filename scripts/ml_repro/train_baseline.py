@@ -1,6 +1,6 @@
-from src.data_preprocessing import load_train
-from src.train_models import build_pipeline, register_candidate
-from src.utils import ROOT, plot_confusion, ensure_selection_open
+from scripts.ml_repro.data_preprocessing import load_train
+from scripts.ml_repro.train_models import build_pipeline, register_candidate
+from scripts.ml_repro.utils import ROOT, plot_confusion, ensure_selection_open
 import pandas as pd
 
 

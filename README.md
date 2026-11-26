@@ -1,5 +1,13 @@
 # MantenIA v0.2
 
+> **MLOps (Bloque A, rama `mvp-v1.0`):**
+> - Pipeline reproducible: `python -m scripts.mlops.pipeline`. Obtiene el dataset de UCI o de una ruta local (`--dataset`), verifica su SHA-256 y escribe en `.runtime/mlops/`.
+> - Compuerta: `python -m scripts.mlops.gate --model-dir <dir>`.
+> - Registro y promoción: `python -m scripts.mlops.registry show|register|promote`. Solo se promueven modelos aprobados.
+> - CI: `.github/workflows/ci.yml` y `ml-pipeline.yml`.
+> - Protocolo de evaluación: `docs/mvp/PROTOCOLO_EVALUACION.md`.
+> - Los scripts `benchmark`, `generate_evidence` y `verify_runtime` leen la API key de `MANTENIA_API_KEY`.
+>
 > **Nota (rama `mvp-v1.0`, decisión D16):** este README describe la versión v0.2, que sigue disponible en la rama `main` (proyecto Docker `mantenia-v02`, `http://127.0.0.1:8000`). El MVP v1.0 en desarrollo usa una instalación separada: proyecto `mantenia-v10`, `http://127.0.0.1:8100`, con volumen e imágenes propios y acceso con usuario y contraseña. Consulte `docs/mvp/FASE1_SEGURIDAD.md`. En esta rama, los comandos de este README que mencionan el puerto 8000 corresponden a la v0.2.
 
 Prototipo de mantenimiento predictivo con:

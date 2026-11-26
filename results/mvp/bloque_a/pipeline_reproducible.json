@@ -1,0 +1,61 @@
+{
+  "ejecutado_utc": "2026-11-26T00:08:17.005319+00:00",
+  "entorno": "Windows, Python 3.11.9, scikit-learn 1.7.2",
+  "ejecucion_1": {
+    "version": "rf-718303950825",
+    "split_matches_original": true,
+    "validation_recall": 0.7195571955719557,
+    "validation_f1": 0.7677165354330708,
+    "same_sha256_as_frozen": false,
+    "demo_max_abs_probability_diff": 0.0,
+    "train_max_abs_probability_diff": 0.0,
+    "dataset_origin": "archivo local"
+  },
+  "ejecucion_2": {
+    "version": "rf-718303950825",
+    "split_matches_original": true,
+    "validation_recall": 0.7195571955719557,
+    "validation_f1": 0.7677165354330708,
+    "same_sha256_as_frozen": false,
+    "demo_max_abs_probability_diff": 0.0,
+    "train_max_abs_probability_diff": 0.0,
+    "dataset_origin": "archivo local"
+  },
+  "determinista": true,
+  "dataset": {
+    "raw_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
+    "particiones_sha256_lf": {
+      "train": "17cc0b4ca843331809da2a2a47a72cabdb5c5c4d495be9186fd5ffbc55448f70",
+      "test": "6929320a1633540941917a8c2cefe88d20b4944b3b541b270c7923c17a572932"
+    }
+  },
+  "hiperparametros": {
+    "n_estimators": 250,
+    "max_depth": 14,
+    "min_samples_leaf": 2,
+    "min_samples_split": 10,
+    "max_features": 1.0,
+    "random_state": 42
+  },
+  "umbral": 0.425,
+  "validacion": {
+    "Accuracy": 0.98525,
+    "Precision": 0.8227848101265823,
+    "Recall": 0.7195571955719557,
+    "F1": 0.7677165354330708,
+    "ROC_AUC": 0.9749216899595572,
+    "PR_AUC": 0.8210720320082964,
+    "threshold": 0.425,
+    "protocol": "OOF 5-fold estratificado sobre TRAIN (semilla 42)",
+    "n_validation": 8000
+  },
+  "comparacion_con_congelado": {
+    "frozen_version": "rf-3a9c9f208eef",
+    "same_sha256": false,
+    "demo_max_abs_probability_diff": 0.0,
+    "train_max_abs_probability_diff": 0.0,
+    "note": "El SHA-256 del archivo puede diferir por la serialización (pickle); la equivalencia se verifica por las probabilidades."
+  },
+  "descarga_uci_verificada": "SHA-256 dc6630cd9b1f… coincide (prueba manual, 522,048 bytes)",
+  "test_usado": false
+}

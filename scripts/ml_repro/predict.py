@@ -1,10 +1,10 @@
-"""Inferencia por CSV: python -m src.predict --input data/processed/demo_input.csv."""
+"""Inferencia por CSV: python -m scripts.ml_repro.predict --input data/processed/demo_input.csv."""
 import argparse
 import joblib
 import pandas as pd
 
-from src.data_preprocessing import validate_inputs
-from src.utils import ROOT, read_json, sha256
+from scripts.ml_repro.data_preprocessing import validate_inputs
+from scripts.ml_repro.utils import ROOT, read_json, sha256
 
 
 def predict(frame):
