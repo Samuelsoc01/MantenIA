@@ -166,6 +166,23 @@ def cmd_list(args, kind):
     print(json.dumps(items, indent=2, ensure_ascii=False))
 
 
+def cmd_retrain_list(args):
+    db, _ = open_store()
+    print(json.dumps(db.retrain_requests(args.status, args.limit), ensure_ascii=False))
+
+
+def cmd_retrain_update(args):
+    db, store = open_store()
+    fields = {k: getattr(args, k) for k in ("candidate_version", "gate_status", "deployed_version", "detail")
+              if getattr(args, k) is not None}
+    ok = db.update_retrain_request(args.request_id, args.status, args.expected, **fields)
+    if ok:
+        store.log_event("reentrenamiento_" + args.status, "ok", detail=f"solicitud={args.request_id}")
+    print(json.dumps({"updated": ok}))
+    if not ok:
+        raise SystemExit(3)
+
+
 def build_parser():
     parser = argparse.ArgumentParser(prog="python -m backend.app.manage", description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -192,6 +209,13 @@ def build_parser():
     p.add_argument("--scopes", default="predict,read"); p.add_argument("--days", type=int)
     p.add_argument("--output"); p.add_argument("--stdout", action="store_true"); p.set_defaults(func=cmd_create_api_key)
     p = sub.add_parser("revoke-api-key"); p.add_argument("--key-id", required=True); p.set_defaults(func=cmd_revoke_api_key)
+    p = sub.add_parser("retrain-list"); p.add_argument("--status"); p.add_argument("--limit", type=int, default=20)
+    p.set_defaults(func=cmd_retrain_list)
+    p = sub.add_parser("retrain-update"); p.add_argument("--request-id", type=int, required=True)
+    p.add_argument("--status", required=True); p.add_argument("--expected")
+    for name in ("candidate-version", "gate-status", "deployed-version", "detail"):
+        p.add_argument("--" + name)
+    p.set_defaults(func=cmd_retrain_update)
     for kind in ("clients", "users", "api-keys"):
         sub.add_parser(f"list-{kind}").set_defaults(func=lambda a, k=kind: cmd_list(a, k))
     return parser

@@ -1,0 +1,10 @@
+........................................................................ [ 50%]
+.......................................................................  [100%]
+============================== warnings summary ===============================
+.runtime\python311\Lib\site-packages\starlette\testclient.py:37
+  C:\Users\soria\Downloads\MantenIA_v0.2\.runtime\python311\Lib\site-packages\starlette\testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\soria\Downloads\MantenIA_v0.2\results\mvp\bloque_c\pytest-regresion-py311.xml -
+143 passed, 1 warning in 47.53s

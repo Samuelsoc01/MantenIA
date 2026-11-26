@@ -90,5 +90,59 @@ def main():
         writer = csv.DictWriter(target, fieldnames=rows[0].keys()); writer.writeheader(); writer.writerows(rows)
     print(json.dumps({"groups": groups, "usage_delta": result["usage_delta"]}, indent=2))
     return 0 if result["overall_rnf01_pass"] else 1
+
+
+# ---------------------------------------------------------------- Bloque C: carga concurrente mixta
+def mixed_workload(pool, total, csv_every, csv_rows, seed=7):
+    """Secuencia determinista de solicitudes: una CSV cada `csv_every` peticiones (de `csv_rows` filas) y el resto
+    individuales. `pool` son registros sintéticos derivados de la referencia agregada de TRAIN (nunca TEST)."""
+    import random
+    rng = random.Random(seed)
+    fields = list(pool[0].keys())
+    work = []
+    for i in range(total):
+        if csv_every and i % csv_every == csv_every - 1:
+            text = io.StringIO(newline="")
+            writer = csv.DictWriter(text, fieldnames=fields, lineterminator=chr(10))
+            writer.writeheader(); writer.writerows(rng.sample(pool, csv_rows))
+            work.append(("csv", csv_rows, text.getvalue().encode("utf-8")))
+        else:
+            work.append(("individual", 1, rng.choice(pool)))
+    return work
+
+
+def run_level(url, headers, work, concurrency, timeout=60, abort=None):
+    """Ejecuta `work` con `concurrency` hilos (un cliente HTTP por hilo). Latencia medida desde el cliente HTTP,
+    extremo a extremo, leyendo la respuesta completa. Devuelve filas por petición y duración total."""
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+    local = threading.local()
+
+    def client():
+        if not hasattr(local, "client"):
+            local.client = httpx.Client(base_url=url, timeout=timeout, trust_env=False, headers=headers)
+        return local.client
+
+    def one(item):
+        kind, units, payload = item
+        if abort is not None and abort.is_set():
+            return {"kind": kind, "units": units, "status": -1, "ms": 0.0}  # cancelada por la parada de seguridad
+        started = perf_counter()
+        status = 0
+        try:
+            response = (client().post("/predict", json=payload) if kind == "individual" else
+                        client().post("/predict/csv", files={"file": ("lote.csv", payload, "text/csv")}))
+            response.read()
+            status = response.status_code
+        except httpx.HTTPError:
+            pass
+        return {"kind": kind, "units": units, "status": status, "ms": (perf_counter() - started) * 1000}
+
+    began = perf_counter()
+    with ThreadPoolExecutor(max_workers=concurrency) as pool:
+        rows = list(pool.map(one, work))
+    return rows, perf_counter() - began
+
+
 if __name__ == "__main__":
     raise SystemExit(main())

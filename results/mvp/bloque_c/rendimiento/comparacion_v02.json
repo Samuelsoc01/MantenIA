@@ -1,0 +1,139 @@
+{
+  "name": "comparacion_v02",
+  "target": "v02",
+  "project": "mantenia-v02-bench",
+  "url": "http://127.0.0.1:8010",
+  "started_utc": "2026-11-26T02:33:41.820970+00:00",
+  "finished_utc": "2026-11-26T02:34:16.982133+00:00",
+  "client_account": null,
+  "workload": {
+    "csv_every": 6,
+    "csv_rows": 55,
+    "warmup_per_level": 20,
+    "records": "sintéticos de la referencia agregada de TRAIN (registry/drift_reference.json)"
+  },
+  "method": "Latencia HTTP extremo a extremo medida en el cliente (httpx, un cliente por hilo, respuesta completa leída). No se mezcla con las latencias internas del backend.",
+  "environment": {
+    "host_cpu_logical": 12,
+    "host": "Windows 11 + Docker Desktop (WSL2)",
+    "note": "Cliente de carga y servicios en la misma computadora (compiten por CPU)."
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "http_requests": 500,
+      "individual_requests": 417,
+      "csv_requests": 83,
+      "analyzed_units": 4982,
+      "duration_s": 17.2,
+      "throughput_rps": 29.07,
+      "analyses_per_s": 289.6,
+      "errors": 0,
+      "error_rate": 0.0,
+      "status_codes": {
+        "200": 500
+      },
+      "latency_ms": {
+        "individual": {
+          "count": 417,
+          "mean_ms": 33.2,
+          "p50_ms": 28.5,
+          "p95_ms": 60.0,
+          "p99_ms": 83.7,
+          "max_ms": 336.3,
+          "percent_le_5s": 100.0
+        },
+        "csv": {
+          "count": 83,
+          "mean_ms": 40.5,
+          "p50_ms": 34.8,
+          "p95_ms": 85.5,
+          "p99_ms": 101.7,
+          "max_ms": 110.8,
+          "percent_le_5s": 100.0
+        }
+      },
+      "resources_docker_stats": {
+        "backend": {
+          "samples": 9,
+          "cpu_pct_avg": 24.6,
+          "cpu_pct_max": 50.32,
+          "mem_mib_avg": 39.2,
+          "mem_mib_max": 39.6
+        },
+        "edge": {
+          "samples": 9,
+          "cpu_pct_avg": 43.6,
+          "cpu_pct_max": 63.58,
+          "mem_mib_avg": 133.5,
+          "mem_mib_max": 141.2
+        }
+      },
+      "csv_within_5s_pct": 100.0,
+      "csv_requirement_90pct_met": true,
+      "host_free_memory_gib_before": 1.95,
+      "host_free_memory_gib_min_during": 1.87,
+      "aborted_low_memory": false
+    },
+    {
+      "concurrency": 4,
+      "http_requests": 500,
+      "individual_requests": 417,
+      "csv_requests": 83,
+      "analyzed_units": 4982,
+      "duration_s": 14.56,
+      "throughput_rps": 34.34,
+      "analyses_per_s": 342.1,
+      "errors": 0,
+      "error_rate": 0.0,
+      "status_codes": {
+        "200": 500
+      },
+      "latency_ms": {
+        "individual": {
+          "count": 417,
+          "mean_ms": 116.2,
+          "p50_ms": 98.7,
+          "p95_ms": 184.6,
+          "p99_ms": 317.7,
+          "max_ms": 917.8,
+          "percent_le_5s": 100.0
+        },
+        "csv": {
+          "count": 83,
+          "mean_ms": 114.8,
+          "p50_ms": 104.1,
+          "p95_ms": 198.8,
+          "p99_ms": 238.3,
+          "max_ms": 238.5,
+          "percent_le_5s": 100.0
+        }
+      },
+      "resources_docker_stats": {
+        "backend": {
+          "samples": 8,
+          "cpu_pct_avg": 38.9,
+          "cpu_pct_max": 78.13,
+          "mem_mib_avg": 42.4,
+          "mem_mib_max": 53.0
+        },
+        "edge": {
+          "samples": 8,
+          "cpu_pct_avg": 90.3,
+          "cpu_pct_max": 140.34,
+          "mem_mib_avg": 134.7,
+          "mem_mib_max": 140.2
+        }
+      },
+      "csv_within_5s_pct": 100.0,
+      "csv_requirement_90pct_met": true,
+      "host_free_memory_gib_before": 1.89,
+      "host_free_memory_gib_min_during": 1.82,
+      "aborted_low_memory": false
+    }
+  ],
+  "totals": {
+    "http_requests": 1000,
+    "analyzed_units": 9964
+  }
+}

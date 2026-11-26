@@ -35,6 +35,9 @@ class Settings:
     retention_days: int = int(os.getenv("RETENTION_DAYS", "30"))
     edge_timeout: float = float(os.getenv("EDGE_TIMEOUT_SECONDS", "30"))
     model_dir: Path = Path(os.getenv("MODEL_DIR", str(ROOT / "edge_service/models")))
+    # Bloque C: carpeta de despliegue (active.json + releases/<versión>) escrita por scripts/mlops/deploy.py.
+    # Sin active.json el Edge usa el modelo congelado de model_dir.
+    deploy_dir: str = os.getenv("DEPLOY_DIR", "")
     # Fase 1: autenticación y sesiones (ver docs/mvp/FASE1_SEGURIDAD.md).
     cookie_secure: bool = _flag("SESSION_COOKIE_SECURE", "false")
     session_ttl_minutes: int = int(os.getenv("SESSION_TTL_MINUTES", "480"))

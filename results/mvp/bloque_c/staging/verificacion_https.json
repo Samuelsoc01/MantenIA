@@ -1,0 +1,76 @@
+{
+  "verificado_utc": "2026-11-26T02:18:12.005452+00:00",
+  "url": "https://president-customs-commissioners-schedule.trycloudflare.com",
+  "nota": "Sin secretos: las credenciales se leyeron de un archivo ignorado por Git y no se registran.",
+  "checks": {
+    "health_https": 200,
+    "hsts": true,
+    "http_redirige_a_https": true,
+    "sin_autenticacion": {
+      "/admin/dashboard": 401,
+      "/predictions": 401,
+      "/billing/cliente_demo_01": 401,
+      "/model/info": 401
+    },
+    "predict_sin_credenciales": 401,
+    "no_expuestos": {
+      "/openapi.json": 404,
+      "/docs": 404,
+      "/infer": 404,
+      "/model-info": 404,
+      "/resources": 404,
+      "/database/mantenia.db": 404
+    },
+    "login_incorrecto": 401,
+    "login_admin": 200,
+    "cookies": {
+      "mantenia_session": {
+        "secure": true,
+        "httponly": true,
+        "samesite": "strict"
+      },
+      "mantenia_csrf": {
+        "secure": true,
+        "httponly": false,
+        "samesite": "strict"
+      }
+    },
+    "dashboard_admin": 200,
+    "staging": {
+      "environment": "staging",
+      "cookie_secure": true,
+      "schema_version": 4,
+      "model_version": "rf-3a9c9f208eef",
+      "edge": "ok",
+      "status": "ok"
+    },
+    "post_admin_sin_csrf": 403,
+    "clientes": {
+      "cliente01_demo": {
+        "login": 200,
+        "predict": 200,
+        "dashboard_admin": 403,
+        "billing_propio": 200,
+        "billing_ajeno": 404,
+        "historial_solo_propio": true,
+        "request_id": "e8d1266a-8e3a-410b-8705-5dc3860c0643",
+        "detalle_visible_para_otro_cliente": 404
+      },
+      "cliente02_demo": {
+        "login": 200,
+        "predict": 200,
+        "dashboard_admin": 403,
+        "billing_propio": 200,
+        "billing_ajeno": 404,
+        "historial_solo_propio": true,
+        "request_id": "a91945b9-e85e-4b5c-b080-71151a002ae7",
+        "detalle_visible_para_otro_cliente": null
+      }
+    },
+    "persistencia": {
+      "solicitudes_antes": 15,
+      "solicitudes_despues": 17,
+      "conciliacion_consistente": true
+    }
+  }
+}

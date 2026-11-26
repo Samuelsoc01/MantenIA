@@ -10,6 +10,9 @@ services:
     environment:
       MAX_CSV_ROWS: ${MAX_CSV_ROWS:-1000}
       MAX_REQUEST_BYTES: ${MAX_REQUEST_BYTES:-2097152}
+      # Bloque C: modelo desplegado por scripts/mlops/deploy.py (sin active.json se usa el congelado de la imagen).
+      DEPLOY_DIR: /app/deploy
+    volumes: ["${MANTENIA_DEPLOY_DIR:-./.runtime/deploy}:/app/deploy:ro"]
     networks: [local_only]
     read_only: true
     tmpfs: [/tmp]
@@ -51,6 +54,20 @@ services:
       LOGIN_LOCKOUT_MINUTES: ${LOGIN_LOCKOUT_MINUTES:-15}
       API_KEY_DEFAULT_DAYS: ${API_KEY_DEFAULT_DAYS:-90}
       API_KEY_MAX_DAYS: ${API_KEY_MAX_DAYS:-365}
+      # Bloque B: alertas, deriva y FinOps simulado (valores por omisión documentados en .env.example).
+      ALERT_MIN_REQUESTS: ${ALERT_MIN_REQUESTS:-20}
+      ALERT_ERROR_RATE: ${ALERT_ERROR_RATE:-0.05}
+      ALERT_P95_MS: ${ALERT_P95_MS:-2000}
+      ALERT_WINDOW_HOURS: ${ALERT_WINDOW_HOURS:-24}
+      DRIFT_WINDOW_DAYS: ${DRIFT_WINDOW_DAYS:-7}
+      DRIFT_MIN_SAMPLE: ${DRIFT_MIN_SAMPLE:-200}
+      BUDGET_MONTHLY_MXN: ${BUDGET_MONTHLY_MXN:-2200}
+      BUDGET_ALERT_RATIO: ${BUDGET_ALERT_RATIO:-0.80}
+      FINOPS_RATE_VCPU_HOUR_MXN: ${FINOPS_RATE_VCPU_HOUR_MXN:-0.9041}
+      FINOPS_RATE_GB_RAM_HOUR_MXN: ${FINOPS_RATE_GB_RAM_HOUR_MXN:-0.2260}
+      FINOPS_RATE_GB_STORAGE_MONTH_MXN: ${FINOPS_RATE_GB_STORAGE_MONTH_MXN:-4.40}
+      FINOPS_RATES_DATE: ${FINOPS_RATES_DATE:-2026-11-25}
+      FINOPS_SAMPLE_SECONDS: ${FINOPS_SAMPLE_SECONDS:-60}
     volumes: [mantenia_db:/app/database]
     networks: [local_only, ingress]
     read_only: true
@@ -65,6 +82,18 @@ services:
       timeout: 4s
       retries: 12
       start_period: 20s
+  tunnel:
+    # Bloque C: túnel HTTPS gratuito (Cloudflare Quick Tunnel, sin cuenta ni tarjeta). Imagen local fijada por
+    # digest. Solo está en la red ingress: alcanza al backend, nunca al Edge, a SQLite ni al daemon de Docker.
+    profiles: [tunnel]
+    image: cloudflare/cloudflared@sha256:b269e8abd07a5bf6f3f4be65d5050b2174eca89c56a0241a8ff32a16aec454e4
+    command: ["tunnel", "--no-autoupdate", "--url", "http://backend:8000"]
+    networks: [ingress]
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      backend:
+        condition: service_healthy
   tests:
     profiles: [test]
     image: mantenia-v10-tests:dev

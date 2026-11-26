@@ -1,0 +1,55 @@
+{
+  "nota": "Copia de la bitácora persistente .runtime/deploy/deployments.json (staging local) y resumen del registro de staging.",
+  "eventos": [
+    {
+      "utc": "2026-11-26T02:18:35.612193+00:00",
+      "action": "deploy",
+      "version": "rf-718303950825",
+      "sha256": "718303950825cb0fe3dfe86fef854722ce3b553ea3c8b4507ec6796dac9afcf7",
+      "source": "demo: copia manipulada (Recall 0.55)",
+      "gate_status": "rejected",
+      "result": "bloqueado",
+      "detail": "Solo se promueven modelos aprobados; rf-718303950825 está 'rejected'"
+    },
+    {
+      "utc": "2026-11-26T02:19:34.390831+00:00",
+      "action": "deploy",
+      "version": "rf-718303950825",
+      "sha256": "718303950825cb0fe3dfe86fef854722ce3b553ea3c8b4507ec6796dac9afcf7",
+      "source": "retrain#1",
+      "gate_status": "accepted",
+      "result": "desplegado_verificado",
+      "ok": true,
+      "edge_model_version": "rf-718303950825",
+      "backend_health": 200,
+      "reason": null
+    },
+    {
+      "utc": "2026-11-26T02:20:05.887815+00:00",
+      "action": "rollback",
+      "from_version": "rf-718303950825",
+      "version": "rf-3a9c9f208eef",
+      "result": "revertido_verificado",
+      "ok": true,
+      "edge_model_version": "rf-3a9c9f208eef",
+      "backend_health": 200,
+      "reason": null
+    }
+  ],
+  "registro_staging": {
+    "active": {
+      "version": "rf-718303950825",
+      "deploy_dir": ".runtime/deploy/releases/rf-718303950825",
+      "promoted_utc": "2026-11-26T02:19:17.979953+00:00"
+    },
+    "models": [
+      {
+        "version": "rf-718303950825",
+        "sha256": "718303950825cb0fe3dfe86fef854722ce3b553ea3c8b4507ec6796dac9afcf7",
+        "status": "accepted",
+        "note": "retrain#1",
+        "registered_utc": "2026-11-26T02:19:17.917876+00:00"
+      }
+    ]
+  }
+}

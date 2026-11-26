@@ -444,3 +444,32 @@ Destino: actualización del Capítulo XI de la memoria técnica final.
 | V | `tests/test_bloque_b.py` (13/13); resultado de GitHub Actions presentado en la sesión. |
 | Puntos de atención | Cálculos FinOps. |
 | Estado de la revisión | Aprobado preliminarmente por el responsable |
+
+## PREV-C-01 — Bloque C: despliegue y validación final
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-C-01 |
+| Fecha real | 2026-11-25/26 |
+| Fase | Bloque C (fases 6 y 7) |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Reconstruir Docker v1.0, evaluar una única vez sobre TEST contra la línea base y v0.2, desplegar gratis con HTTPS, integrar MLOps con el despliegue y la reversión, ejecutar el estrés con 36,000 análisis, comparar con v0.2 y medir FinOps bajo carga, sin gasto adicional. |
+| R | **Generó código** (`deploy.py`, `retrain_worker.py`, migración v4, carga del modelo desplegado en el Edge, scripts de estrés, de evaluación y de verificación HTTPS, y pruebas). **Decisiones propuestas por la herramienta:** línea base = definición histórica `LogisticRegression_none_baseline`, registrada antes de abrir TEST; Cloudflare Quick Tunnel con la imagen local ya existente; despliegue remoto desde GitHub descartado (requeriría exponer Docker o un runner propio) y sustituido por despliegue local controlado; mezcla de carga de una CSV de 55 filas cada 6 peticiones. **Incidencias:** la primera ejecución de estrés no registró `docker stats` por un defecto del script; se corrigió y se repitió, y la primera ejecución se conserva como `estres_v10_ejecucion1.json`. La parada de seguridad impidió iniciar el estrés con 0.56 GiB de memoria libre; el responsable cerró aplicaciones. El sistema de permisos impidió crear cuentas temporales y leer contraseñas; el responsable inició las sesiones para las capturas. |
+| E | **Pendiente de evaluación humana**, en especial la línea base, la interpretación FinOps (recursos consumidos frente a capacidad contratada) y las condiciones del túnel. |
+| V | `results/mvp/bloque_c/` (evaluación, rendimiento, FinOps, MLOps, staging, capturas, regresión 143/143). Verificación realizada por la herramienta. |
+| Puntos de atención | **Seguridad del staging público**, **cálculos FinOps**, **uso único de TEST**, despliegue y reversión de modelos. |
+| Estado de la revisión | Pendiente de evaluación humana |
+
+## PREV-C-02 — Cierre del Bloque C
+
+| Campo | Contenido |
+|---|---|
+| Identificador | PREV-C-02 |
+| Fecha real | 2026-11-26 |
+| Fase | Bloque C (cierre) |
+| Herramienta de IA | Claude Code, modelo Claude Opus 5.5 |
+| P | Commit y push del Bloque C en `mvp-v1.0`, tras la revisión del responsable. |
+| R | Revisión previa al commit (sin secretos, bases de datos, entornos virtuales ni temporales); commit «feat: despliegue staging y validacion final del MVP». |
+| E | **Aprobación técnica del responsable (Samuelsoc01) de los resultados del Bloque C, conservando las limitaciones identificadas** (URL temporal, despliegue automatizado local, reentrenamiento con el mismo dataset, estrés en la misma laptop, proyección FinOps indicativa, 503 no reproducido). |
+| V | `results/mvp/bloque_c/`; GitHub Actions del commit. |
+| Estado de la revisión | Aprobado por el responsable |

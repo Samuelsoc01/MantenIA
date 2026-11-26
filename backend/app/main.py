@@ -96,7 +96,8 @@ def create_app(settings=None, edge_transport=None):
                     response = await client.get("/model-info")
                     response.raise_for_status()
                     info = response.json()
-                    if not info.get("model_sha256") or not info.get("test_metrics"):
+                    # Un candidato desplegado puede no tener métricas TEST (protocolo: TEST se usa una vez).
+                    if not info.get("model_sha256") or "test_metrics" not in info:
                         raise RuntimeError("Información de modelo incompleta")
                     break
                 except (httpx.HTTPError, ValueError):
@@ -471,11 +472,17 @@ def create_app(settings=None, edge_transport=None):
     @app.post("/admin/drift/retrain-request", status_code=202)
     def admin_retrain_request(identity=Depends(admin_only)):
         state = drift_data()
+        request_id = app.state.db.create_retrain_request(identity.username, state["status"])
         app.state.accounts.log_event("solicitud_reentrenamiento", "ok", user_id=identity.user_id,
-                                     detail=f"deriva={state['status']}")
-        return {"requested": True, "drift_status": state["status"],
-                "next_step": "Ejecutar el workflow 'Pipeline ML' (GitHub Actions) o `python -m scripts.mlops.pipeline`; "
-                             "el candidato solo se promueve si supera la compuerta. El modelo activo no cambia automáticamente."}
+                                     detail=f"solicitud={request_id};deriva={state['status']}")
+        return {"requested": True, "request_id": request_id, "status": "pendiente", "drift_status": state["status"],
+                "next_step": "La solicitud queda en cola. El operador la procesa con `python -m scripts.mlops.retrain_worker` "
+                             "(pipeline, compuerta y despliegue solo si se autoriza con --deploy). Un candidato "
+                             "rechazado nunca se despliega."}
+
+    @app.get("/admin/retrain-requests")
+    def admin_retrain_requests(identity=Depends(admin_only)):
+        return {"items": app.state.db.retrain_requests(limit=20)}
 
     @app.get("/admin/finops")
     async def admin_finops(identity=Depends(admin_only)):
@@ -506,7 +513,8 @@ def create_app(settings=None, edge_transport=None):
             asyncio.to_thread(admin_billing_data, now.year, now.month))
         return {"status": status, "model": {k: app.state.model_info.get(k) for k in ("model_name", "version", "threshold",
                                                                                      "training_date_utc")},
-                "operations": ops, "drift": drift_state, "finops": costs, "billing": bills}
+                "operations": ops, "drift": drift_state, "finops": costs, "billing": bills,
+                "retrain_requests": await asyncio.to_thread(app.state.db.retrain_requests, None, 5)}
 
     @app.get("/admin/clients")
     def admin_clients(identity=Depends(admin_only)):

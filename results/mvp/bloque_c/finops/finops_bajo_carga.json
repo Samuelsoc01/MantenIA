@@ -1,0 +1,80 @@
+{
+  "generado_desde": "results/mvp/bloque_c/rendimiento/estres_v10.json (motor FinOps del Bloque B, ventana de la prueba)",
+  "consumo_medido": {
+    "tiempo_observado_s": 106.6,
+    "analisis_procesados": 36546,
+    "analisis_nota": "36,000 de los niveles medidos + 546 de calentamiento",
+    "cpu_segundos": {
+      "backend": 40.48,
+      "edge": 96.92
+    },
+    "vcpu_promedio_en_la_ventana": 1.29,
+    "memoria_gib_hora": {
+      "backend": 0.001673,
+      "edge": 0.005619
+    },
+    "memoria_docker_stats_mib_promedio": {
+      "16": {
+        "backend": {
+          "samples": 17,
+          "cpu_pct_avg": 52.0,
+          "cpu_pct_max": 82.91,
+          "mem_mib_avg": 57.0,
+          "mem_mib_max": 69.5
+        },
+        "edge": {
+          "samples": 17,
+          "cpu_pct_avg": 102.1,
+          "cpu_pct_max": 140.15,
+          "mem_mib_avg": 138.4,
+          "mem_mib_max": 150.1
+        }
+      }
+    },
+    "almacenamiento_sqlite_bytes": 12861440
+  },
+  "costo_recursos_consumidos": {
+    "por_componente_mxn": {
+      "almacenamiento": 2e-06,
+      "backend": 0.010544,
+      "edge": 0.02561
+    },
+    "total_ventana_mxn": 0.036156,
+    "costo_unitario_mxn_por_analisis": 9.893285174848137e-07,
+    "proyeccion_mensual_carga_continua_mxn": 879.26,
+    "proyeccion_vs_presupuesto": 0.3997,
+    "nota": "Supone operar 720 h a la carga máxima de la prueba (escenario irreal: ~1,000 millones de análisis/mes). Solo cuenta recursos consumidos × tarifas simuladas (supuesto académico 60/30/10)."
+  },
+  "costo_capacidad_contratada_hipotetica": {
+    "vm_referencia": "2 vCPU / 4 GiB / 50 GB, 730 h",
+    "costo_mensual_mxn": 2200.0,
+    "nota": "Una VM contratada se paga completa aunque se use parcialmente; no cuesta solo el % de CPU utilizado.",
+    "capacidad_observada_analisis_por_s": 393.2,
+    "costo_unitario_por_volumen_mxn": {
+      "año1_moderado_promedio_mensual": 1.4667,
+      "2x_año1_promedio_mensual": 0.7333,
+      "supuesto_historico_3_clientes": 0.7333
+    },
+    "consumo_real_a_ese_volumen_mxn_mes": {
+      "año1_moderado_promedio_mensual": 0.0015,
+      "2x_año1_promedio_mensual": 0.003,
+      "supuesto_historico_3_clientes": 0.003
+    }
+  },
+  "comparacion_supuestos_historicos": {
+    "0.7333": "= 2,200 / (3 × 1,000); coincide con el costo unitario de capacidad a 3,000 análisis/mes (2× volumen año 1).",
+    "0.60": "requeriría ≈ 3,667 análisis/mes con la misma VM (2,200 / 0.60).",
+    "consumo_medido": "≈ 1e-6 MXN/análisis: con este volumen, el costo lo domina la capacidad ociosa, no el cómputo consumido."
+  },
+  "presupuesto": {
+    "mensual_mxn": 2200.0,
+    "alerta_80_mxn": 1760.0
+  },
+  "desembolso_adicional_efectivo_mxn": 0,
+  "limitaciones": [
+    "Ventana corta (~107 s): extrapolar a un mes supone carga constante y no incluye picos, mantenimiento, red ni respaldo.",
+    "Cliente de carga y servicios en la misma laptop (compiten por CPU); el CPU del cliente no se imputa.",
+    "Tarifas simuladas derivadas del presupuesto (no cotizaciones de proveedor); costos unitarios preliminares.",
+    "Los Excel e indicadores financieros no se modificaron."
+  ]
+}

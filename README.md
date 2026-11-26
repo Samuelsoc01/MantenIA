@@ -1,5 +1,10 @@
 # MantenIA v0.2
 
+> **Despliegue y validación final (Bloque C, rama `mvp-v1.0`):**
+> - **Staging:** `docker compose --env-file deploy/staging.env up -d` (staging, cookies Secure, HSTS) y `docker compose --env-file deploy/staging.env --profile tunnel up -d tunnel`. La URL HTTPS `*.trycloudflare.com` aparece en `docker compose logs tunnel`. Es **temporal**: cambia con cada reinicio del túnel, funciona solo mientras la computadora y Docker estén encendidos y no tiene garantía de disponibilidad (Cloudflare Quick Tunnel, sin cuenta, máximo 200 peticiones simultáneas). El túnel solo expone el backend; el Edge, SQLite, Docker y la v0.2 no son accesibles. Las credenciales se entregan por un canal autorizado.
+> - **Modelos:** `python -m scripts.mlops.deploy deploy --model-dir <dir>` aplica compuerta, promoción, activación y verificación, y revierte automáticamente si algo falla. `deploy rollback` vuelve a la versión anterior o al congelado y `deploy status` muestra el estado. La bitácora persistente está en `.runtime/deploy/deployments.json`. Las solicitudes de reentrenamiento del panel quedan en cola y se procesan con `python -m scripts.mlops.retrain_worker [--deploy]`.
+> - **Evaluación final única sobre TEST:** `results/mvp/bloque_c/evaluacion/`. **Estrés y comparación con v0.2:** `scripts/mvp/estres_bloque_c.py` contra pilas locales independientes (`results/mvp/bloque_c/rendimiento/`). **FinOps bajo carga:** `results/mvp/bloque_c/finops/`.
+>
 > **MLOps (Bloque A, rama `mvp-v1.0`):**
 > - Pipeline reproducible: `python -m scripts.mlops.pipeline`. Obtiene el dataset de UCI o de una ruta local (`--dataset`), verifica su SHA-256 y escribe en `.runtime/mlops/`.
 > - Compuerta: `python -m scripts.mlops.gate --model-dir <dir>`.

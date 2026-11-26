@@ -1,0 +1,20 @@
+{
+  "registrado_utc": "2026-11-26T02:06:57Z",
+  "nota": "Configuración registrada ANTES de abrir TEST en el Bloque C. TEST se evalúa una sola vez y no se usa para elegir hiperparámetros ni umbrales.",
+  "linea_base": {
+    "nombre": "LogisticRegression_none_baseline",
+    "origen": "Misma definición que la línea base histórica del segundo parcial (scripts/ml_repro/train_models.py: build_pipeline('LogisticRegression', 'none'); report.py: 'Logistic Regression sin balanceo, umbral 0.50').",
+    "preprocesamiento": "Imputación por mediana + StandardScaler en las 5 variables numéricas; imputación por moda + one-hot en Type",
+    "modelo": "LogisticRegression(max_iter=2000, random_state=42, class_weight=None)",
+    "balanceo": "ninguno",
+    "umbral": 0.5,
+    "entrenamiento": "TRAIN completo (8,000 filas, partición original verificada por SHA-256)",
+    "variables": ["Type", "Air temperature [K]", "Process temperature [K]", "Rotational speed [rpm]", "Torque [Nm]", "Tool wear [min]"]
+  },
+  "modelos_comparados": {
+    "congelado_v02": "edge_service/models/mantenia_model.joblib (rf-3a9c9f208eef), umbral 0.425, sin cambios",
+    "reproducido_mvp_v10": ".runtime/mlops/candidates/rf-718303950825 (pipeline del Bloque A, compuerta aceptada), umbral 0.425"
+  },
+  "referencia_trivial": "Clasificador de clase mayoritaria (siempre 'sin falla'), calculado a partir de los conteos de TEST; solo para interpretar la accuracy.",
+  "particion_test": "Partición retenida del dataset original AI4I 2020 (2,000 filas), la misma usada en la evaluación histórica de la v0.2; no es un conjunto industrial externo."
+}

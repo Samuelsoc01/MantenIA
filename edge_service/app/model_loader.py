@@ -5,13 +5,28 @@ import joblib
 import numpy as np
 from common.schemas import FEATURES
 
+def resolve_model_dir(default_dir, deploy_dir):
+    """Devuelve (carpeta, sha256 esperado). Si deploy_dir/active.json existe, usa la versión desplegada;
+    si no, el modelo congelado. Falla cerrada: un despliegue inconsistente impide que el Edge arranque."""
+    from pathlib import Path
+    if deploy_dir:
+        active = Path(deploy_dir) / "active.json"
+        if active.is_file():
+            data = json.loads(active.read_text(encoding="utf-8"))
+            version = str(data["version"])
+            if not version.startswith("rf-") or not version[3:].isalnum():
+                raise RuntimeError("Versión desplegada inválida")
+            return Path(deploy_dir) / "releases" / version, data["sha256"]
+    return Path(default_dir), None
+
+
 class ModelBundle:
-    def __init__(self, folder):
+    def __init__(self, folder, expected_sha256=None):
         self.metadata = json.loads((folder / "model_metadata.json").read_text(encoding="utf-8"))
         self.test_metrics = json.loads((folder / "final_test_metrics.json").read_text(encoding="utf-8"))
         path = folder / "mantenia_model.joblib"
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if digest != self.metadata["model_sha256"]:
+        if digest != self.metadata["model_sha256"] or (expected_sha256 and digest != expected_sha256):
             raise RuntimeError("Integridad del modelo inválida")
         if self.metadata["features"] != FEATURES or self.test_metrics != self.metadata["final_test_metrics"]:
             raise RuntimeError("Metadata inconsistente con evidencia ML")

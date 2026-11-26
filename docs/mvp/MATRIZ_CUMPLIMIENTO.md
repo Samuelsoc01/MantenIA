@@ -5,6 +5,7 @@
 | v1 | 2026-11-25 | Clasificación inicial de la auditoría. |
 | v2 | 2026-11-25 | Cierre de la Fase 0: interpretación académica de los requisitos 1, 4, 6 y 7 (gasto cero, FinOps y facturación simulados) y reclasificación del requisito 10 por evidencia localizada. **No se implementó nada nuevo**: ninguna clasificación mejora por desarrollo. |
 | v4 | 2026-11-25 | Ajustes finales de la Fase 1: D16 implementada (instalaciones v0.2 y v1.0 separadas), 3 defectos de concurrencia corregidos y la interfaz recorrida en Chrome. Las clasificaciones globales no cambian. |
+| v7 | 2026-11-26 | Bloque C (sin commit): staging HTTPS gratuito, despliegue controlado de modelos con reversión, evaluación final sobre TEST, estrés con 36,000 análisis, comparación con v0.2 y FinOps bajo carga. |
 | v6 | 2026-11-25 | Bloque B (sin commit): panel de administración, observabilidad con p99 y alertas, deriva PSI, FinOps simulado medido, estados de cuenta, conciliación e idempotencia. |
 | v5 | 2026-11-25 | Bloque A (MLOps y CI/CD, sin commit): pipeline reproducible, compuerta, registro, promoción aislada y workflows de GitHub Actions (pendientes de su primera ejecución en GitHub). |
 | v3 | 2026-11-25 | Fase 1 (implementada, pendiente de revisión humana): mejoran subrequisitos de los requisitos 5, 7, 8 y 9 con evidencia en `results/mvp/fase1/`. Las clasificaciones globales siguen parciales. |
@@ -27,15 +28,15 @@ Las referencias `Hn` remiten a `AUDITORIA_INICIAL.md`; `Vn` a la validación de 
 
 | # | Requisito del docente | Clasificación global | Fase(s) |
 |---|---|---|---|
-| 1 | Despliegue en staging gratuito accesible, infraestructura reproducible, etiqueta v1.0 | 🟡 | 3, 6, 9 |
-| 2 | Pipeline MLOps completo | 🟡 | 2, 3, 4 |
-| 3 | Evaluación final contra v0.2, línea base y RNF, con análisis de errores | 🟡 / 🔍 | 2, 7 |
-| 4 | Pruebas de estrés (≥3 niveles, ≥1,000 peticiones/nivel, hasta 2× volumen año 1) | ⛔ | 7 |
-| 5 | Tablero administrativo | 🟡 | 1, 4 |
-| 6 | FinOps operativo (costos simulados a partir de consumo medido) | 🟡 | 5, 6 |
-| 7 | Medidor de uso facturable con dos clientes, estados de cuenta de demostración y conciliación | 🟡 | 1, 5 |
-| 8 | Privacidad, anonimización en origen, autenticación, autorización, secretos, licencias | 🟡 | 1, 6, 8 |
-| 9 | Pruebas automatizadas con cada cambio, manual de operación y recuperación | 🟡 | 3, 8 |
+| 1 | Despliegue en staging gratuito accesible, infraestructura reproducible, etiqueta v1.0 | 🟡 (staging ✅; falta la etiqueta v1.0) | 3, 6, 9 |
+| 2 | Pipeline MLOps completo | ✅ (despliegue automatizado local; ver limitaciones) | 2, 3, 4 |
+| 3 | Evaluación final contra v0.2, línea base y RNF, con análisis de errores | ✅ (Bloque C) | 2, 7 |
+| 4 | Pruebas de estrés (≥3 niveles, ≥1,000 peticiones/nivel, hasta 2× volumen año 1) | ✅ (Bloque C, local) | 7 |
+| 5 | Tablero administrativo | ✅ (Bloques B y C) | 1, 4 |
+| 6 | FinOps operativo (costos simulados a partir de consumo medido) | ✅ (Bloques B y C; simulado) | 5, 6 |
+| 7 | Medidor de uso facturable con dos clientes, estados de cuenta de demostración y conciliación | ✅ (Bloque B; verificado en staging) | 1, 5 |
+| 8 | Privacidad, anonimización en origen, autenticación, autorización, secretos, licencias | 🟡 (seguridad verificada en staging HTTPS; falta completar la auditoría de licencias, Bloque D) | 1, 6, 8 |
+| 9 | Pruebas automatizadas con cada cambio, manual de operación y recuperación | 🟡 (CI ✅; falta el manual, Bloque D) | 3, 8 |
 | 10 | Kanban, métricas de flujo, CFD y cronograma real contra línea base | 🟡 (reclasificado en v2 por evidencia localizada) | 0 → 9 (transversal) |
 | — | README, scripts reproducibles, documentación, etiqueta v1.0, video 4–6 min | 🟡 | 8, 9 |
 
@@ -49,8 +50,8 @@ Ningún requisito está completo al cierre de la Fase 0.
 |---|---|---|
 | Infraestructura reproducible local | ✅ | `Dockerfile` (base fijada por digest), `docker-compose.yml` con healthchecks, usuario no root, red interna; V1, V4, V5. |
 | Reproducibilidad completa del build | 🔍 | Dependencias transitivas no fijadas en el Dockerfile; build de la Fase 0 con caché (H13, H17). |
-| Staging gratuito accesible al profesor | ⛔ | Solo `127.0.0.1:8000` (H1); no hay autenticación (H1-H3), requisito previo por la restricción 11. Alternativas gratuitas en evaluación (D1, `PLAN_MVP_V1.md` §11). |
-| HTTPS y acceso controlado (sin compra de dominio) | ⛔ | No existe. |
+| Staging gratuito accesible al profesor | ✅ (Bloque C) | Docker local más Cloudflare Quick Tunnel (sin cuenta, tarjeta ni costo). La URL es temporal y depende de que la computadora esté encendida (`results/mvp/bloque_c/staging/verificacion_https.json`, capturas). |
+| HTTPS y acceso controlado (sin compra de dominio) | ✅ (Bloque C) | HTTPS con redirección desde HTTP, HSTS, cookies Secure/HttpOnly/SameSite=Strict, CSRF, roles y aislamiento verificados por HTTPS. Solo se expone el backend. |
 | Etiqueta `v1.0` | ⛔ | Solo `v0.2`. Se creará manualmente sobre el commit final validado de `mvp-v1.0`, sin fusionar con `main`; la publicará el responsable (D14, Fase 9). |
 
 ### 2. Pipeline MLOps — 🟡
@@ -63,31 +64,31 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Evaluación automática | ✅ (Bloque A) | Validación OOF automática en el pipeline; TEST reservado para el Bloque C (`docs/mvp/PROTOCOLO_EVALUACION.md`). |
 | Compuerta de aceptación | ✅ (Bloque A) | `scripts/mlops/gate.py`: Recall ≥ 0.70, SHA-256, variables, artefacto, metadata; aceptación y 6 tipos de rechazo probados (`tests/test_mlops.py`, `compuerta.json`). |
 | Registro del modelo | ✅ (Bloque A) | `registry/model_registry.json` (versión, hash, parámetros, hash del dataset, métricas, fecha, estado y modelo activo) y `scripts/mlops/registry.py`. |
-| Despliegue automatizado | 🟡 (Bloque A) | Promoción solo de modelos aprobados, demostrada en un destino aislado y automatizada en `.github/workflows/ml-pipeline.yml`; el despliegue remoto corresponde al Bloque C. |
+| Despliegue automatizado | ✅ local (Bloque C) | `scripts/mlops/deploy.py`: candidato rechazado bloqueado; aprobado desplegado y verificado en staging (versión y hash); reversión verificada; bitácora persistente (`results/mvp/bloque_c/mlops/despliegue_staging.json`). GitHub Actions genera el paquete, pero no despliega en remoto (sin runner propio ni daemon de Docker expuesto). |
 | Monitoreo de deriva | ✅ (Bloque B) | PSI por variable contra TRAIN, con muestra mínima y alerta; demostrado con datos sintéticos (`tests/test_bloque_b.py`, `results/mvp/bloque_b/deriva_sintetica.json`). |
-| Procedimiento de reentrenamiento | 🟡 (Bloque B) | `POST /admin/drift/retrain-request` registra la solicitud y remite al pipeline del Bloque A, con compuerta y sin promoción automática; el reentrenamiento con datos nuevos etiquetados no está disponible. |
+| Procedimiento de reentrenamiento | ✅ (Bloque C) | Cola `retrain_requests` desde el panel. `retrain_worker` ejecuta pipeline, compuerta y, con `--deploy`, el despliegue verificado (solicitud #1 → `rf-718303950825` desplegado y revertido). Limitación: reentrena con el mismo dataset, sin datos nuevos etiquetados. |
 
 ### 3. Evaluación final — 🟡 / 🔍
 
 | Subrequisito | Estado | Sustento |
 |---|---|---|
 | Métricas TEST del modelo v0.2 | ✅ | `final_test_metrics.json` ≡ metadata; coinciden con el enunciado (V6, `AUDITORIA_INICIAL.md` §6). Son históricas. |
-| Comparación contra línea base sobre TEST | 🔍 | Valores publicados no trazables (H10). Línea base solo con métricas CV (`docs/evidence/model_comparison.csv:2`). Requiere decisión D3. |
+| Comparación contra línea base sobre TEST | ✅ (Bloque C) | Línea base registrada antes de abrir TEST (LogReg sin balanceo, 0.50): Recall 0.1029, F1 0.1772. Congelado y reproducido: Recall 0.75, F1 0.7846, con métricas idénticas y hashes distintos (`results/mvp/bloque_c/evaluacion/`). |
 | Cumplimiento de recall ≥ 70 % | ✅ | 0.75 TEST; 0.7196 OOF. |
-| RNF-01 (≥90 % CSV ≤ 5 s) | 🟡 | Evidencia v0.2 secuencial (100 % ≤ 5 s, `results/performance/benchmark.json`); falta validación bajo concurrencia y en staging. |
+| RNF-01 (≥90 % CSV ≤ 5 s) | ✅ (Bloque C) | 100 % de los CSV (55 filas) ≤ 5 s con 4, 8 y 16 conexiones concurrentes (`estres_v10.json`). Medido en local, no a través del túnel. |
 | RNF-02 (sin envío a servicios no autorizados) | 🟡 | Procesamiento local (`docs/PRIVACY.md`); debe revalidarse para staging. |
-| Análisis de errores (FN/FP) | ⛔ | Solo matriz de confusión agregada. |
+| Análisis de errores (FN/FP) | ✅ (Bloque C) | 17 FN, de los cuales 8 son fallas por desgaste de herramienta (TWF; 2 de 10 detectadas), y 11 FP con probabilidades de 0.44 a 0.81 (`analisis_errores.json`). |
 
 ### 4. Pruebas de estrés — ⛔
 
 | Subrequisito | Estado | Sustento |
 |---|---|---|
-| ≥3 niveles de concurrencia | ⛔ | Benchmarks secuenciales (H7). |
-| ≥1,000 peticiones por nivel | ⛔ | Máximo histórico: 100 + 100 secuenciales (`reports/latency/latency_summary.json`). |
-| Carga hasta 2× volumen año 1 | ⛔ | Volumen disponible en el modelo financiero del equipo (18,000 análisis, escenario moderado); falta confirmar escenario y perfil (D5). |
-| p50, p95, p99, rendimiento, tasa de error, saturación | ⛔ | Sin p99 ni saturación (`backend/app/metrics.py:5-15`). |
-| Distinción entre peticiones HTTP, solicitudes CSV y unidades; clientes exclusivos de prueba | ⛔ | Definidos en el plan (D5); no implementados. |
-| Entorno de ejecución rotulado (remoto autorizado o local) | ⛔ | Regla definida (D5); sin ejecuciones. |
+| ≥3 niveles de concurrencia | ✅ | 4, 8 y 16 (`results/mvp/bloque_c/rendimiento/estres_v10.json`). |
+| ≥1,000 peticiones por nivel | ✅ | 1,200 por nivel: 1,000 individuales y 200 CSV. |
+| Carga hasta 2× volumen año 1 | ✅ | 36,000 análisis medidos (2 × 18,000), sin errores. |
+| p50, p95, p99, rendimiento, tasa de error, saturación | ✅ | Throughput de ~36–39 peticiones/s (~360–390 análisis/s); el Edge se satura cerca del 100 % de un núcleo y la p95 individual pasa de 161 a 598 ms. |
+| Distinción entre peticiones HTTP, solicitudes CSV y unidades; clientes exclusivos de prueba | ✅ | Reportadas por separado; cliente efímero y pila con volumen propio. |
+| Entorno de ejecución rotulado (remoto autorizado o local) | ✅ | Local (laptop i7-1355U, Docker Desktop), no a través del túnel. |
 
 ### 5. Tablero administrativo — 🟡
 
@@ -98,7 +99,7 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Errores | 🟡 | Solo conteo de solicitudes fallidas; sin desglose por código ni serie temporal. |
 | Latencia | 🟡 | Media, p50, p95, máximo; sin p99. |
 | Versión del modelo | ✅ | `/model/info`, sección “Modelo y evaluación”. |
-| Alertas | ⛔ | No existen. |
+| Alertas | ✅ (Bloque B) | Operativas, de presupuesto y de deriva (capturas del Bloque C). |
 | Acceso restringido a administradores | ✅ (Fase 1) | Rol `admin` y dependencia `admin()` en `/finops/summary` y `/admin/*`; 403 para clientes y API keys (`tests/test_isolation.py`, `verificacion_docker.json`). El tablero administrativo visual sigue pendiente (Fase 4). |
 
 ### 6. FinOps operativo — 🟡
@@ -124,7 +125,7 @@ Ningún requisito está completo al cierre de la Fase 0.
 | Tarifa fija + variable | 🟡 | `GET /billing/{client_id}` (`backend/app/main.py:122-128`); sin pruebas. |
 | Dos clientes de prueba | ✅ (Bloque B) | Estados de cuenta CSV de los dos clientes, con leyenda académica y conciliación consistente (`results/mvp/bloque_b/estado_cuenta_*.csv`). |
 | Estados de cuenta de demostración académica (con leyenda y campos requeridos) | ✅ (Bloque B) | Periodo, unidades, cuota fija, cargo variable, total y leyenda; CSV generado con el módulo `csv`, que corrige el defecto H11 (el archivo histórico de `reports/` se conserva sin cambios). |
-| Conciliación | ⛔ | No existe. |
+| Conciliación | ✅ (Bloque B) | `/admin/billing`, consistente en staging (`verificacion_https.json`). |
 | Sin integraciones monetarias reales | ✅ | No hay pasarelas, cobros ni APIs de facturación en el código (confirmado en la auditoría del backend). |
 
 ### 8. Privacidad y seguridad — 🟡
@@ -145,7 +146,7 @@ Ningún requisito está completo al cierre de la Fase 0.
 |---|---|---|
 | Pruebas de API | ✅ | Fase 0: 25/25. Fase 1: 110 pruebas (25 históricas + 85 nuevas) en verde en Python 3.11 y 3.12; 108 pasadas y 2 omitidas (JS) en Docker (`results/mvp/fase1/`). |
 | Pruebas de modelo | 🟡 | Integridad, equivalencia con el pipeline y adulteración del hash (`test_edge_endpoints_and_model_integrity`); falta compuerta de métricas. |
-| Ejecución con cada cambio | 🟡 (Bloque A) | `.github/workflows/ci.yml` se ejecuta en cada push a `mvp-v1.0`; **pendiente de su primera ejecución en GitHub** (requiere push autorizado). |
+| Ejecución con cada cambio | ✅ | `ci.yml` y `ml-pipeline.yml` en verde en los commits de los bloques A y B. Regresión del Bloque C: 143/143 en Python 3.11. |
 | Manual de operación y recuperación | ⛔ | Solo “Solución de problemas” en el README. |
 
 ### 10. Gestión del trabajo — 🟡 (v1: ⛔)

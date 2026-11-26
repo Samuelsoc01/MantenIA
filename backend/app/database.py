@@ -4,7 +4,7 @@ import time
 from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 # Valor por defecto de client_id en el esquema v0.2: todo el historial previo quedó registrado así.
 LEGACY_DEFAULT_CLIENT = "cliente_demo_01"
 TAG_DEFAULTS = {"project": "MantenIA", "environment": "development", "component": "backend", "resource": "cpu"}
@@ -174,8 +174,20 @@ def _migration_v3(conn):
         conn.execute(ddl)
 
 
+# v4: cola de solicitudes de reentrenamiento (Bloque C). Estados: pendiente -> en_proceso -> rechazada |
+# aprobada_sin_desplegar | desplegada | fallida. La procesa scripts/mlops/retrain_worker.py (activación controlada).
+RETRAIN_STATUSES = ("pendiente", "en_proceso", "rechazada", "aprobada_sin_desplegar", "desplegada", "fallida")
+
+
+def _migration_v4(conn):
+    conn.execute("""CREATE TABLE IF NOT EXISTS retrain_requests (
+        request_id INTEGER PRIMARY KEY AUTOINCREMENT, requested_at TEXT NOT NULL, requested_by TEXT,
+        drift_status TEXT, status TEXT NOT NULL DEFAULT 'pendiente', updated_at TEXT NOT NULL,
+        candidate_version TEXT, gate_status TEXT, deployed_version TEXT, detail TEXT)""")
+
+
 MIGRATIONS = [(1, "esquema_base_v0_2", _migration_v1), (2, "identidad_y_autorizacion", _migration_v2),
-              (3, "observabilidad_finops_idempotencia", _migration_v3)]
+              (3, "observabilidad_finops_idempotencia", _migration_v3), (4, "solicitudes_reentrenamiento", _migration_v4)]
 
 
 class Database:
@@ -324,6 +336,31 @@ class Database:
             rows = db.execute("SELECT feature, bin, SUM(count) c, MIN(day) first_day, MAX(day) last_day "
                               "FROM drift_counts WHERE day >= ? GROUP BY feature, bin", (since_day,)).fetchall()
         return [dict(r) for r in rows]
+
+    # -------------------------------------------------------------- reentrenamiento (Bloque C)
+    def create_retrain_request(self, requested_by, drift_status):
+        now = utcnow()
+        with self.connect() as db:
+            cur = db.execute("INSERT INTO retrain_requests(requested_at,requested_by,drift_status,status,updated_at) "
+                             "VALUES (?,?,?,'pendiente',?)", (now, requested_by, drift_status, now))
+            return cur.lastrowid
+
+    def retrain_requests(self, status=None, limit=20):
+        query = "SELECT * FROM retrain_requests" + (" WHERE status=?" if status else "") + " ORDER BY request_id DESC LIMIT ?"
+        with self.connect() as db:
+            return [dict(r) for r in db.execute(query, ((status, limit) if status else (limit,)))]
+
+    def update_retrain_request(self, request_id, status, expected=None, **fields):
+        """Cambia el estado; con `expected` solo actualiza si el estado actual coincide (evita doble proceso)."""
+        if status not in RETRAIN_STATUSES:
+            raise ValueError("Estado de reentrenamiento inválido")
+        allowed = {k: v for k, v in fields.items() if k in ("candidate_version", "gate_status", "deployed_version", "detail")}
+        sets = ", ".join(["status=?", "updated_at=?"] + [f"{k}=?" for k in allowed])
+        params = [status, utcnow(), *allowed.values(), request_id]
+        where = "request_id=?" + (" AND status=?" if expected else "")
+        with self.connect() as db:
+            return db.execute(f"UPDATE retrain_requests SET {sets} WHERE {where}",
+                              params + ([expected] if expected else [])).rowcount == 1
 
     def add_resource_sample(self, component, instance_id, cpu_seconds, rss_bytes, storage_bytes, tags, timestamp=None):
         with self.connect() as db:

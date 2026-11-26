@@ -5,14 +5,14 @@ from common.config import Settings
 from common import resources
 from common.schemas import MachineRecord, BatchInput
 from common.security import PrivacyMiddleware, validation_error
-from edge_service.app.model_loader import ModelBundle
+from edge_service.app.model_loader import ModelBundle, resolve_model_dir
 from edge_service.app.inference import InferenceService
 
 def create_app(settings=None):
     settings = settings or Settings()
     @asynccontextmanager
     async def lifespan(app):
-        app.state.bundle = ModelBundle(settings.model_dir)
+        app.state.bundle = ModelBundle(*resolve_model_dir(settings.model_dir, settings.deploy_dir))
         app.state.inference = InferenceService(app.state.bundle)
         yield
     app = FastAPI(title="MantenIA Edge", version="0.2.0", lifespan=lifespan, docs_url=None, redoc_url=None)

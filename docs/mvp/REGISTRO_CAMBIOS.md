@@ -237,3 +237,20 @@ Sin dependencias nuevas; el modelo congelado y `edge_service/models` no se modif
 | `results/mvp/bloque_b/` (nuevo) | Evidencias |
 
 Sin dependencias nuevas. Docker no se reconstruyó: los cambios se incorporan a las imágenes en la próxima reconstrucción.
+
+## Bloque C — Despliegue y validación final (fases 6 y 7, 2026-11-25/26, sin commit)
+
+| Archivo | Cambio |
+|---|---|
+| `docker-compose.yml`, `deploy/staging.env` (nuevo) | Variables del Bloque B en el backend; montaje de solo lectura `.runtime/deploy` en el Edge (`DEPLOY_DIR`); servicio `tunnel` (perfil opcional, Cloudflare Quick Tunnel, imagen local fijada por digest, solo red `ingress`); entorno de staging sin secretos |
+| `edge_service/app/model_loader.py`, `edge_service/app/main.py`, `common/config.py` | El Edge carga la versión de `active.json` y verifica su hash; si no existe `active.json`, carga el congelado; ante un despliegue inconsistente no arranca |
+| `backend/app/database.py`, `manage.py`, `main.py` | Migración v4 `retrain_requests` (cola de reentrenamiento con estados); `GET /admin/retrain-requests`; la cola aparece en el panel; se admiten candidatos sin métricas TEST |
+| `frontend/*` | Tabla de solicitudes de reentrenamiento; vista del modelo sin métricas TEST para candidatos |
+| `scripts/mlops/deploy.py`, `retrain_worker.py` (nuevos) | Despliegue controlado: compuerta, promoción, activación, verificación, reversión automática y manual, y bitácora persistente. Worker de la cola: pipeline, compuerta y despliegue autorizado con `--deploy` |
+| `scripts/benchmark.py` | Carga concurrente mixta (`mixed_workload`, `run_level`) con cancelación por seguridad |
+| `scripts/mvp/estres_bloque_c.py`, `evaluacion_final.py`, `verificar_staging.py` (nuevos) | Estrés y comparación con `docker stats` y FinOps; evaluación única sobre TEST; verificación HTTPS sin secretos |
+| `docs/mvp/PROTOCOLO_EVALUACION.md` | Línea base registrada antes de abrir TEST |
+| `tests/test_bloque_c.py` (nuevo) | 5 pruebas: despliegue, bloqueo de rechazados, reversión, hash del Edge y cola |
+| `results/mvp/bloque_c/` (nuevo) | Evidencias |
+
+Sin dependencias nuevas. Se reconstruyeron solo las imágenes `mantenia-v10-backend:dev` y `mantenia-v10-edge:dev`.

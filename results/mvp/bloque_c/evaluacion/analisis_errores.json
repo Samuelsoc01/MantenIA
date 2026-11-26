@@ -1,0 +1,60 @@
+{
+  "generado_utc": "2026-11-26T02:08:21.060357+00:00",
+  "modelo": "rf-3a9c9f208eef (idéntico en predicciones a rf-718303950825)",
+  "nota": "Análisis complementario de los errores de la evaluación única: mismas predicciones deterministas y modos de falla tomados del CSV original por source_row. No se tomó ninguna decisión de modelo ni de umbral.",
+  "fallas_por_modo_en_test": {
+    "TWF": 10,
+    "HDF": 29,
+    "PWF": 13,
+    "OSF": 16,
+    "RNF": 0
+  },
+  "detectadas_por_modo": {
+    "TWF": 2,
+    "HDF": 25,
+    "PWF": 12,
+    "OSF": 14,
+    "RNF": 0
+  },
+  "fn_por_modo": {
+    "TWF": 8,
+    "HDF": 4,
+    "PWF": 1,
+    "OSF": 2,
+    "RNF": 0
+  },
+  "fn_sin_modo_registrado": 2,
+  "fp_con_algun_modo": 0,
+  "fn_probabilidades": [
+    0.0,
+    0.0,
+    0.0,
+    0.002,
+    0.023,
+    0.031,
+    0.048,
+    0.074,
+    0.101,
+    0.15,
+    0.161,
+    0.181,
+    0.227,
+    0.246,
+    0.278,
+    0.322,
+    0.413
+  ],
+  "fp_probabilidades": [
+    0.438,
+    0.441,
+    0.539,
+    0.563,
+    0.609,
+    0.61,
+    0.643,
+    0.643,
+    0.707,
+    0.711,
+    0.805
+  ]
+}

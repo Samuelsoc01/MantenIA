@@ -8,3 +8,9 @@ Registrado: 2026-11-25, Bloque A, antes de cualquier uso de TEST en el MVP v1.0.
 4. **Hiperparámetros:** congelados (`edge_service/models/selection_locked.json`). No se repite la búsqueda; tampoco se ajusta el umbral.
 5. **TEST:** no se lee en el Bloque A (solo se verifica el hash del archivo). Se usará **una sola vez**, en la evaluación final del Bloque C, y nunca como criterio de selección. Si en el futuro se reentrena con otros datos, se debe registrar un protocolo nuevo antes de usar TEST.
 6. **Modelo activo:** `rf-3a9c9f208eef` (congelado) se mantiene en servicio. Los candidatos se guardan y se promueven solo en directorios aislados hasta que el responsable autorice un reemplazo.
+
+## Línea base de la evaluación final (registrada 2026-11-26T02:06:57Z, antes de abrir TEST)
+
+- **Línea base:** regresión logística sin balanceo, umbral 0.50, entrenada sobre TRAIN completo. Es la misma definición que la línea base histórica (`LogisticRegression_none_baseline`). La configuración está en `results/mvp/bloque_c/evaluacion/linea_base_registrada.json`.
+- **Modelos comparados:** congelado v0.2 (`rf-3a9c9f208eef`) y reproducido del MVP v1.0 (`rf-718303950825`), ambos con umbral 0.425.
+- TEST se abre una sola vez (`scripts/mvp/evaluacion_final.py`). Es la partición retenida del dataset original, la misma de la evaluación histórica de la v0.2, no un conjunto industrial externo.

@@ -1,0 +1,136 @@
+{
+  "ejecutado_utc": "2026-11-26T02:07:50.850042+00:00",
+  "protocolo": "docs/mvp/PROTOCOLO_EVALUACION.md",
+  "linea_base_config_sha256": "2273bd45c506f9cdf0bffe9e9d3287447be93af921f455f27dde14d806d29f54",
+  "test": {
+    "filas": 2000,
+    "fallas": 68,
+    "sha256_lf": "6929320a1633540941917a8c2cefe88d20b4944b3b541b270c7923c17a572932",
+    "naturaleza": "Partición retenida del dataset original AI4I 2020 (sintético), usada también en la evaluación histórica de la v0.2; no es un conjunto industrial externo."
+  },
+  "resultados": [
+    {
+      "modelo": "Línea base (LogReg sin balanceo)",
+      "umbral": 0.5,
+      "Accuracy": 0.9675,
+      "Precision": 0.6363636363636364,
+      "Recall": 0.10294117647058823,
+      "F1": 0.17721518987341772,
+      "ROC_AUC": 0.8993880160759956,
+      "PR_AUC": 0.4205369579251732,
+      "matriz_confusion": {
+        "VN": 1928,
+        "FP": 4,
+        "FN": 61,
+        "VP": 7
+      },
+      "falsos_positivos": 4,
+      "falsos_negativos": 61,
+      "cumple_recall_070": false,
+      "errores": {
+        "fn_por_modo_de_falla": {},
+        "fallas_por_modo_en_test": {},
+        "fn_probabilidad_mediana": 0.17709536812868867,
+        "fp_probabilidad_mediana": 0.6186188605744187,
+        "fn_por_tipo": {
+          "L": 35,
+          "M": 21,
+          "H": 5
+        }
+      }
+    },
+    {
+      "modelo": "Congelado v0.2 (rf-3a9c9f208eef)",
+      "umbral": 0.425,
+      "Accuracy": 0.986,
+      "Precision": 0.8225806451612904,
+      "Recall": 0.75,
+      "F1": 0.7846153846153846,
+      "ROC_AUC": 0.9726776580197297,
+      "PR_AUC": 0.8384986921947503,
+      "matriz_confusion": {
+        "VN": 1921,
+        "FP": 11,
+        "FN": 17,
+        "VP": 51
+      },
+      "falsos_positivos": 11,
+      "falsos_negativos": 17,
+      "cumple_recall_070": true,
+      "errores": {
+        "fn_por_modo_de_falla": {},
+        "fallas_por_modo_en_test": {},
+        "fn_probabilidad_mediana": 0.10073998642928804,
+        "fp_probabilidad_mediana": 0.6099975797042753,
+        "fn_por_tipo": {
+          "L": 11,
+          "M": 4,
+          "H": 2
+        }
+      }
+    },
+    {
+      "modelo": "Reproducido MVP v1.0 (rf-718303950825)",
+      "umbral": 0.425,
+      "Accuracy": 0.986,
+      "Precision": 0.8225806451612904,
+      "Recall": 0.75,
+      "F1": 0.7846153846153846,
+      "ROC_AUC": 0.9726776580197297,
+      "PR_AUC": 0.8384986921947503,
+      "matriz_confusion": {
+        "VN": 1921,
+        "FP": 11,
+        "FN": 17,
+        "VP": 51
+      },
+      "falsos_positivos": 11,
+      "falsos_negativos": 17,
+      "cumple_recall_070": true,
+      "errores": {
+        "fn_por_modo_de_falla": {},
+        "fallas_por_modo_en_test": {},
+        "fn_probabilidad_mediana": 0.10073998642928804,
+        "fp_probabilidad_mediana": 0.6099975797042753,
+        "fn_por_tipo": {
+          "L": 11,
+          "M": 4,
+          "H": 2
+        }
+      }
+    }
+  ],
+  "referencia_trivial_clase_mayoritaria": {
+    "Accuracy": 0.966,
+    "Recall": 0.0
+  },
+  "equivalencia_congelado_vs_reproducido": {
+    "sha256_congelado": "3a9c9f208eefa45055f95d3b17dc8fa62de2721ba8752b65f2f1898e8a199a4e",
+    "sha256_reproducido": "718303950825cb0fe3dfe86fef854722ce3b553ea3c8b4507ec6796dac9afcf7",
+    "hashes_identicos": false,
+    "max_diff_probabilidad_test": 0.0,
+    "predicciones_distintas_test": 0
+  },
+  "metricas_historicas_v02": {
+    "Accuracy": 0.986,
+    "Precision": 0.8225806451612904,
+    "Recall": 0.75,
+    "F1": 0.7846153846153846,
+    "ROC_AUC": 0.9726776580197297,
+    "PR_AUC": 0.8384986921947503,
+    "confusion_matrix": [
+      [
+        1921,
+        11
+      ],
+      [
+        17,
+        51
+      ]
+    ],
+    "threshold": 0.425,
+    "n_test": 2000,
+    "recall_requirement_met": true
+  },
+  "restricciones": "Sin selección de hiperparámetros, sin cambio de umbral y sin repetir la optimización."
+}

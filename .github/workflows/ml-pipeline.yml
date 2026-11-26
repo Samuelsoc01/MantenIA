@@ -131,6 +131,10 @@ jobs:
             mlops-work/despliegue/
             mlops-work/registro.json
           retention-days: 7
-      - name: Despliegue remoto (se habilita en el Bloque C)
-        if: vars.MANTENIA_DEPLOY_ENABLED == 'true'
-        run: echo "Pendiente del Bloque C — staging gratuito; requiere aprobación del responsable."
+      - name: Instrucciones de despliegue en staging (el paquete NO queda desplegado por este job)
+        run: |
+          # Bloque C: el staging es local (Docker + túnel gratuito). Un runner de GitHub no puede alcanzarlo sin exponer
+          # el daemon de Docker ni registrar runners propios, así que el despliegue lo ejecuta el operador:
+          echo "Descargar el artefacto paquete-despliegue-${{ needs.entrenar-y-evaluar.outputs.version }} y ejecutar:"
+          echo "  python -m scripts.mlops.deploy deploy --model-dir <carpeta>/despliegue --source actions:${{ github.run_id }}"
+          echo "La compuerta se vuelve a evaluar antes de activar; la reversión es: python -m scripts.mlops.deploy rollback"
