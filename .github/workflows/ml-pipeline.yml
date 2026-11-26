@@ -12,7 +12,8 @@ on:
         default: false
   push:
     branches: [mvp-v1.0]
-    paths: ["scripts/mlops/**", "scripts/ml_repro/**", "edge_service/models/selection_locked.json"]
+    paths: ["scripts/mlops/**", "scripts/ml_repro/**", "edge_service/models/selection_locked.json",
+            ".github/workflows/ml-pipeline.yml"]
 
 permissions:
   contents: read
@@ -101,7 +102,9 @@ jobs:
 
   promover:
     needs: entrenar-y-evaluar
-    if: needs.entrenar-y-evaluar.outputs.status == 'accepted' && github.event_name == 'workflow_dispatch' && inputs.promote
+    # En push se genera siempre el paquete aislado del modelo aprobado (el botón manual de GitHub solo aparece
+    # para workflows de la rama predeterminada, que no se modifica). Ejecución manual: según `promote`.
+    if: needs.entrenar-y-evaluar.outputs.status == 'accepted' && (github.event_name == 'push' || inputs.promote)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
