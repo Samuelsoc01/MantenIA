@@ -29,7 +29,7 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-lock-docker.txt
       - name: Instalar dependencias fijadas
-        run: pip install --no-cache-dir -r requirements-lock-docker.txt
+        run: pip install -r requirements-lock-docker.txt
       - name: Compuerta sobre el modelo congelado en servicio
         run: python -m scripts.mlops.gate --model-dir edge_service/models
       - name: Pruebas (API, autenticación, aislamiento, MLOps)
